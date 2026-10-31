@@ -1,0 +1,135 @@
+.site-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  background: var(--beige);
+  color: var(--green-dark);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.site-footer,
+.site-footer * {
+  box-sizing: border-box;
+}
+
+.site-footer p {
+  margin: 12px 0 0;
+  color: var(--text-muted);
+}
+
+.site-footer a {
+  color: inherit;
+}
+
+.site-footer img {
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.footer-inner {
+  max-width: 1232px;
+  margin: auto;
+  padding: 0 24px;
+}
+
+.footer-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.site-footer .footer-eyebrow {
+  margin: 0 0 8px;
+  color: var(--green);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.footer-intro h2 {
+  margin: 0;
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.4;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  padding: 32px 0;
+}
+
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.footer-brand-note {
+  display: block;
+  margin-top: 16px;
+  font-size: 12px;
+}
+
+.footer-grid h3 {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+
+.footer-categories ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.footer-categories li + li {
+  margin-top: 8px;
+}
+
+.footer-care-tip {
+  border-bottom: 1px solid var(--border);
+}
+
+.footer-care-tip summary {
+  min-height: 44px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.footer-care-tip p {
+  padding-bottom: 12px;
+  font-size: 12px;
+}
+
+.footer-bottom {
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 12px;
+}
+
+.footer-bottom p {
+  margin: 0;
+}
+
+.site-footer a:hover,
+.footer-care-tip summary:hover {
+  color: var(--green);
+}
+
+.site-footer a:focus-visible,
+.footer-care-tip summary:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 4px;
+}
+
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+}
