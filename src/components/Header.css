@@ -1,0 +1,47 @@
+.header {
+    background-color: var(--white);
+    border-bottom: 1px solid var(--border);
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--green);
+}
+
+.menu a {
+    margin: 0 12px;
+    color: var(--text);
+    font-weight: 500;
+}
+
+.menu a:hover {
+    color: var(--green);
+}
+
+.cart {
+    padding: 8px 16px;
+    border-radius: var(--radius);
+    background-color: var(--green);
+    color: var(--white);
+}
+
+.cart:hover {
+    background-color: var(--green-dark);
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
