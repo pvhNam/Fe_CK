@@ -182,18 +182,16 @@ Dừng chương trình bằng `Ctrl + C` trong Terminal.
 | --- | --- |
 | Môn học | Lập trình Frontend |
 | Tên đề tài | Thiết kế và xây dựng giao diện website bán cây giống bằng React |
-| Tên nhóm | [Điền tên nhóm] |
-| Lớp | [Điền tên lớp] |
-| Giảng viên hướng dẫn | [Điền họ tên giảng viên] |
+| Tên nhóm | Nhóm 40 |
+| Giảng viên hướng dẫn | Phan Đình Long |
 
 ### Thành viên và phân công
 
-Thêm hoặc bớt dòng theo số lượng thành viên thực tế.
-
 | Họ và tên | Mã sinh viên | Công việc phụ trách |
 | --- | --- | --- |
-| [Họ tên] | [Mã sinh viên] | [Trang / chức năng phụ trách] |
-
+| Phạm Văn Hoài Nam | 23130200 |  |
+| Ngô Quang Khánh | 23130152 |  |
+| Nguyễn Quang Thành | 23130307 |  |
 ---
 
 Dự án phục vụ mục đích học tập. Thông tin sản phẩm, giá bán, tồn kho và đơn hàng trong bản demo là dữ liệu mẫu.
