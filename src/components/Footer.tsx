@@ -1,5 +1,5 @@
-import './Footer.css'
-import footerPlant from '../assets/footer-plant.jpg'
+import '../style/Footer.css'
+import footerPlant from '../assets/images/logo/footer-plant.jpg'
 
 const plantCategories = ['Cây giống ăn quả', 'Rau & cây gia vị', 'Hoa & cây cảnh']
 
