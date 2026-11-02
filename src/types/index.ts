@@ -84,4 +84,45 @@ export type NewOrder = {
     createdAt: string
 }
 
-export type Order = NewOrder & { id: number }
+export type CartItem = {
+    productId: number;
+    quantity: number
+}
+
+export type CartQuote = {
+    items: OrderItem[];
+    subtotal: number
+}
+
+export type QuoteRequest = {
+    items: CartItem[];
+    shippingMethodId: number
+}
+
+export type OrderQuote = CartQuote & {
+    shippingMethodId: number
+    shippingFee: number
+    total: number
+}
+
+export type CreateOrderRequest = QuoteRequest & {
+    customer: Customer
+    paymentMethodId: number
+    requestId: string
+    expectedTotal: number
+}
+
+export type OrderStatusEvent = {
+    status: DeliveryStatus;
+    at: string
+}
+
+export type Order = NewOrder & {
+    id: number
+    requestId: string
+    requestFingerprint: string
+    shippingMethod: ShippingMethod
+    paymentMethod: PaymentMethod
+    updatedAt: string
+    statusHistory: OrderStatusEvent[]
+}
