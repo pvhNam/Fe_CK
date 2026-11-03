@@ -1,0 +1,417 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "Cây ăn quả"
+    },
+    {
+      "id": 2,
+      "name": "Cây rau"
+    },
+    {
+      "id": 3,
+      "name": "Cây gia vị"
+    },
+    {
+      "id": 4,
+      "name": "Hoa và cây cảnh"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Xoài cát Hòa Lộc",
+      "categoryId": 1,
+      "price": 65000,
+      "stock": 30,
+      "heightCm": 60,
+      "bagSize": "Bầu ươm",
+      "imageUrl": "/images/products/xoai.jpg",
+      "description": "Giống xoài cát nổi tiếng của miền Tây, quả thuôn dài, thịt vàng mịn, ngọt đậm và thơm. Cây giống ghép, phù hợp trồng vườn hoặc chậu lớn.",
+      "careGuide": "Ánh sáng: nắng trực tiếp cả ngày. Tưới nước: khi mặt đất khô, tránh để úng gốc. Chăm sóc: bón phân hữu cơ hoai mục 1–2 tháng/lần, tỉa cành tạo tán thông thoáng.",
+      "active": true
+    },
+    {
+      "id": 2,
+      "name": "Ổi nữ hoàng",
+      "categoryId": 1,
+      "price": 45000,
+      "stock": 40,
+      "heightCm": 50,
+      "bagSize": "Bầu ươm",
+      "imageUrl": "/images/products/oi.webp",
+      "description": "Giống ổi quả to, ruột đặc, ít hạt, ăn giòn và ngọt. Cây sinh trưởng khỏe, dễ chăm, hợp trồng vườn nhà.",
+      "careGuide": "Ánh sáng: nắng trực tiếp. Tưới nước: 1 lần/ngày khi trời nắng, giảm khi trời mưa. Chăm sóc: bón phân định kỳ, tỉa bớt cành tăm và bao trái để quả đẹp.",
+      "active": true
+    },
+    {
+      "id": 3,
+      "name": "Mít Thái",
+      "categoryId": 1,
+      "price": 75000,
+      "stock": 20,
+      "heightCm": 65,
+      "bagSize": "Bầu ươm",
+      "imageUrl": "/images/products/mit.jpg",
+      "description": "Giống mít quả lớn, múi dày, màu vàng, vị ngọt và giòn. Cây lớn nhanh, tán rộng, thích hợp đất vườn.",
+      "careGuide": "Ánh sáng: nắng trực tiếp. Tưới nước: vừa đủ ẩm, mít rất sợ úng nên đất phải thoát nước tốt. Chăm sóc: vun gốc, bón phân hữu cơ, tỉa cành sát gốc.",
+      "active": true
+    },
+    {
+      "id": 4,
+      "name": "Chanh không hạt",
+      "categoryId": 1,
+      "price": 50000,
+      "stock": 35,
+      "heightCm": 45,
+      "bagSize": "Bầu ươm",
+      "imageUrl": "/images/products/chanh.jpg",
+      "description": "Chanh quả mọng nước, vỏ mỏng, thơm và gần như không có hạt. Cây ra quả nhiều đợt trong năm.",
+      "careGuide": "Ánh sáng: nắng trực tiếp ít nhất 6 giờ/ngày. Tưới nước: giữ đất ẩm đều, không để úng. Chăm sóc: bón phân định kỳ, tỉa cành vượt, theo dõi sâu vẽ bùa trên lá non.",
+      "active": true
+    },
+    {
+      "id": 5,
+      "name": "Bưởi da xanh",
+      "categoryId": 1,
+      "price": 85000,
+      "stock": 18,
+      "heightCm": 60,
+      "bagSize": "Bầu ươm",
+      "imageUrl": "/images/products/buoi.jpg",
+      "description": "Bưởi da xanh vỏ xanh, ruột hồng, múi ráo, ngọt thanh. Giống đặc sản miền Tây được nhiều nhà vườn ưa chuộng.",
+      "careGuide": "Ánh sáng: nắng trực tiếp. Tưới nước: giữ đất ẩm, tránh đọng nước quanh gốc. Chăm sóc: bón phân hữu cơ kết hợp NPK theo giai đoạn, tỉa cành sau mỗi vụ.",
+      "active": true
+    },
+    {
+      "id": 6,
+      "name": "Mận An Phước",
+      "categoryId": 1,
+      "price": 70000,
+      "stock": 0,
+      "heightCm": 55,
+      "bagSize": "Bầu ươm",
+      "imageUrl": "/images/products/man.jpg",
+      "description": "Giống mận (roi) quả to, màu đỏ đậm, giòn và ngọt. Cây cho quả sai, tán gọn, hợp trồng vườn.",
+      "careGuide": "Ánh sáng: nắng trực tiếp. Tưới nước: cây ưa ẩm, tưới đều đặn, nhất là khi ra hoa và nuôi quả. Chăm sóc: bón phân định kỳ, tỉa cành tạo tán, bao trái để hạn chế ruồi vàng.",
+      "active": true
+    },
+    {
+      "id": 7,
+      "name": "Cà chua bi",
+      "categoryId": 2,
+      "price": 12000,
+      "stock": 100,
+      "heightCm": 15,
+      "bagSize": "Bầu nhỏ",
+      "imageUrl": "/images/products/ca-chua-bi.jpg",
+      "description": "Cà chua bi quả nhỏ, màu đỏ tươi, vị ngọt, ăn sống hoặc làm salad. Dễ trồng trong chậu ở ban công, sân thượng.",
+      "careGuide": "Ánh sáng: nắng 6–8 giờ/ngày. Tưới nước: tưới vào gốc, tránh làm ướt lá để hạn chế bệnh. Chăm sóc: cắm cọc hoặc làm giàn đỡ, tỉa bớt chồi nách.",
+      "active": true
+    },
+    {
+      "id": 8,
+      "name": "Ớt chuông",
+      "categoryId": 2,
+      "price": 18000,
+      "stock": 80,
+      "heightCm": 18,
+      "bagSize": "Bầu nhỏ",
+      "imageUrl": "/images/products/ot-chuong.jpg",
+      "description": "Ớt chuông quả to, thịt dày, giòn ngọt, có thể chín đỏ hoặc vàng. Thích hợp trồng chậu ở nơi thoáng mát.",
+      "careGuide": "Ánh sáng: nắng buổi sáng, che bớt nắng gắt buổi trưa. Tưới nước: giữ đất ẩm đều. Chăm sóc: cắm cọc đỡ khi cây ra quả, bón phân hữu cơ định kỳ.",
+      "active": true
+    },
+    {
+      "id": 9,
+      "name": "Cà tím",
+      "categoryId": 2,
+      "price": 12000,
+      "stock": 60,
+      "heightCm": 20,
+      "bagSize": "Bầu nhỏ",
+      "imageUrl": "/images/products/ca-tim.jpg",
+      "description": "Cà tím quả dài, vỏ tím bóng, dùng để nướng, xào hoặc nấu canh. Cây khỏe, cho thu hoạch nhiều lứa.",
+      "careGuide": "Ánh sáng: nắng trực tiếp. Tưới nước: 1 lần/ngày, tưới nhiều hơn vào mùa nóng. Chăm sóc: bón thúc khi cây ra hoa, cắm cọc để cây không đổ.",
+      "active": true
+    },
+    {
+      "id": 10,
+      "name": "Dưa leo",
+      "categoryId": 2,
+      "price": 10000,
+      "stock": 100,
+      "heightCm": 15,
+      "bagSize": "Bầu nhỏ",
+      "imageUrl": "/images/products/dua-leo.jpg",
+      "description": "Dưa leo sinh trưởng nhanh, quả giòn mát, phù hợp trồng chậu hoặc thùng xốp có giàn leo.",
+      "careGuide": "Ánh sáng: nắng trực tiếp. Tưới nước: 1–2 lần/ngày khi trời nóng, giữ đất ẩm. Chăm sóc: làm giàn cho dây leo, bón phân hữu cơ, hái quả sớm để cây ra lứa mới.",
+      "active": true
+    },
+    {
+      "id": 11,
+      "name": "Mướp hương",
+      "categoryId": 2,
+      "price": 10000,
+      "stock": 50,
+      "heightCm": 20,
+      "bagSize": "Bầu nhỏ",
+      "imageUrl": "/images/products/muop.jpg",
+      "description": "Mướp hương quả thơm, ruột mềm, dùng nấu canh hoặc xào. Cây leo khỏe, cho bóng mát khi làm giàn.",
+      "careGuide": "Ánh sáng: nắng trực tiếp. Tưới nước: giữ đất ẩm, không để úng. Chăm sóc: làm giàn chắc, bấm ngọn để cây ra nhánh, bón phân khi cây bắt đầu ra hoa.",
+      "active": true
+    },
+    {
+      "id": 12,
+      "name": "Bí xanh",
+      "categoryId": 2,
+      "price": 12000,
+      "stock": 40,
+      "heightCm": 20,
+      "bagSize": "Bầu nhỏ",
+      "imageUrl": "/images/products/bi-xanh.jpg",
+      "description": "Bí xanh (bí đao) quả dài, thịt trắng, dùng nấu canh hoặc nấu nước uống. Cây có thể leo giàn hoặc bò trên mặt đất.",
+      "careGuide": "Ánh sáng: nắng trực tiếp. Tưới nước: tưới đều, tránh úng. Chăm sóc: làm giàn hoặc lót rơm dưới quả, bón phân hữu cơ định kỳ.",
+      "active": true
+    },
+    {
+      "id": 13,
+      "name": "Húng quế",
+      "categoryId": 3,
+      "price": 15000,
+      "stock": 60,
+      "heightCm": 20,
+      "bagSize": "Bầu nhỏ",
+      "imageUrl": "/images/products/hung-que.jpg",
+      "description": "Húng quế lá xanh, thơm nồng, thường ăn kèm phở, bún và các món cuốn. Cây nhỏ gọn, trồng chậu dễ dàng.",
+      "careGuide": "Ánh sáng: nắng nhẹ đến nắng trực tiếp. Tưới nước: 1 lần/ngày, giữ đất ẩm. Chăm sóc: ngắt ngọn để cây ra nhiều nhánh, ngắt bỏ hoa để lá non ngon hơn.",
+      "active": true
+    },
+    {
+      "id": 14,
+      "name": "Bạc hà",
+      "categoryId": 3,
+      "price": 20000,
+      "stock": 50,
+      "heightCm": 18,
+      "bagSize": "Bầu nhỏ",
+      "imageUrl": "/images/products/bac-ha.jpg",
+      "description": "Bạc hà lá thơm mát, dùng pha trà, làm nước giải khát hoặc ăn kèm. Cây lan nhanh, phù hợp trồng chậu riêng.",
+      "careGuide": "Ánh sáng: nắng nhẹ hoặc nắng buổi sáng. Tưới nước: cây ưa ẩm, tưới đều đặn. Chăm sóc: cắt tỉa thường xuyên để cây ra lá non, nên trồng chậu riêng vì rễ lan rộng.",
+      "active": true
+    },
+    {
+      "id": 15,
+      "name": "Tía tô",
+      "categoryId": 3,
+      "price": 12000,
+      "stock": 70,
+      "heightCm": 15,
+      "bagSize": "Bầu nhỏ",
+      "imageUrl": "/images/products/tia-to.jpg",
+      "description": "Tía tô lá màu tím xanh, mùi thơm đặc trưng, dùng ăn kèm hoặc nấu cháo. Cây dễ trồng, ít sâu bệnh.",
+      "careGuide": "Ánh sáng: nắng nhẹ. Tưới nước: giữ đất ẩm. Chăm sóc: ngắt ngọn khi cây cao để ra nhiều nhánh, thu hoạch lá thường xuyên.",
+      "active": true
+    },
+    {
+      "id": 16,
+      "name": "Hương thảo",
+      "categoryId": 3,
+      "price": 45000,
+      "stock": 25,
+      "heightCm": 25,
+      "bagSize": "Bầu ươm",
+      "imageUrl": "/images/products/huong-thao.jpg",
+      "description": "Hương thảo lá nhỏ hình kim, thơm đặc trưng, dùng cho món nướng và trang trí. Cây nhỏ gọn, hợp để ở ban công nhiều nắng.",
+      "careGuide": "Ánh sáng: nắng trực tiếp. Tưới nước: chỉ tưới khi đất khô hẳn, cây chịu hạn nhưng rất sợ úng. Chăm sóc: dùng đất tơi xốp, thoát nước tốt, tỉa nhẹ để cây gọn.",
+      "active": true
+    },
+    {
+      "id": 17,
+      "name": "Sả",
+      "categoryId": 3,
+      "price": 10000,
+      "stock": 90,
+      "heightCm": 25,
+      "bagSize": "Bầu nhỏ",
+      "imageUrl": "/images/products/sa.jpg",
+      "description": "Sả dễ trồng, mùi thơm đặc trưng, dùng nấu ăn hoặc pha nước uống. Cây chịu hạn tốt, phát triển thành bụi.",
+      "careGuide": "Ánh sáng: nắng trực tiếp. Tưới nước: 2–3 lần/tuần, ít hơn khi trời mưa. Chăm sóc: cắt bớt lá già, tách bụi khi cây quá dày.",
+      "active": true
+    },
+    {
+      "id": 18,
+      "name": "Rau răm",
+      "categoryId": 3,
+      "price": 12000,
+      "stock": 0,
+      "heightCm": 15,
+      "bagSize": "Bầu nhỏ",
+      "imageUrl": "/images/products/rau-ram.jpg",
+      "description": "Rau răm vị cay thơm, thường ăn kèm trứng vịt lộn, gỏi và các món cháo. Cây ưa ẩm, lớn nhanh.",
+      "careGuide": "Ánh sáng: bóng râm nhẹ hoặc nắng buổi sáng. Tưới nước: giữ đất luôn ẩm. Chăm sóc: cắt ngọn thường xuyên để cây ra nhiều nhánh non.",
+      "active": true
+    },
+    {
+      "id": 19,
+      "name": "Hoa hồng",
+      "categoryId": 4,
+      "price": 55000,
+      "stock": 35,
+      "heightCm": 30,
+      "bagSize": "Bầu ươm",
+      "imageUrl": "/images/products/hoa-hong.jpg",
+      "description": "Hoa hồng ra hoa nhiều đợt trong năm, hương thơm nhẹ, phù hợp trồng chậu hoặc làm hàng rào hoa.",
+      "careGuide": "Ánh sáng: nắng trực tiếp ít nhất 6 giờ/ngày. Tưới nước: tưới vào gốc buổi sáng, tránh làm ướt lá buổi tối. Chăm sóc: cắt bỏ hoa tàn và cành yếu, bón phân định kỳ.",
+      "active": true
+    },
+    {
+      "id": 20,
+      "name": "Hoa giấy",
+      "categoryId": 4,
+      "price": 60000,
+      "stock": 25,
+      "heightCm": 40,
+      "bagSize": "Bầu ươm",
+      "imageUrl": "/images/products/hoa-giay.jpg",
+      "description": "Hoa giấy ra hoa rực rỡ nhiều màu, chịu nắng tốt, thường trồng ở cổng, ban công hoặc làm giàn.",
+      "careGuide": "Ánh sáng: nắng trực tiếp cả ngày. Tưới nước: tưới vừa phải, để đất hơi khô giữa các lần tưới giúp cây ra nhiều hoa. Chăm sóc: tỉa cành sau mỗi đợt hoa, uốn tạo dáng theo ý thích.",
+      "active": true
+    },
+    {
+      "id": 21,
+      "name": "Cẩm tú cầu",
+      "categoryId": 4,
+      "price": 65000,
+      "stock": 20,
+      "heightCm": 25,
+      "bagSize": "Bầu ươm",
+      "imageUrl": "/images/products/cam-tu-cau.jpg",
+      "description": "Cẩm tú cầu hoa mọc thành chùm lớn, màu hoa có thể đổi theo độ pH của đất. Hợp với nơi thoáng mát.",
+      "careGuide": "Ánh sáng: nắng buổi sáng, tránh nắng gắt buổi trưa. Tưới nước: cây cần nhiều nước, giữ đất luôn ẩm. Chăm sóc: cắt bỏ chùm hoa tàn, bón phân định kỳ.",
+      "active": true
+    },
+    {
+      "id": 22,
+      "name": "Trầu bà",
+      "categoryId": 4,
+      "price": 30000,
+      "stock": 45,
+      "heightCm": 20,
+      "bagSize": "Bầu nhỏ",
+      "imageUrl": "/images/products/trau-ba.jpg",
+      "description": "Trầu bà lá xanh bóng, dễ trồng, thường đặt trong nhà, văn phòng hoặc treo thành giỏ rủ.",
+      "careGuide": "Ánh sáng: ánh sáng tán xạ, tránh nắng gắt trực tiếp. Tưới nước: 2–3 lần/tuần khi đất khô mặt. Lưu ý: để xa tầm với của trẻ nhỏ và thú cưng vì nhựa cây có thể gây kích ứng.",
+      "active": true
+    },
+    {
+      "id": 23,
+      "name": "Lưỡi hổ",
+      "categoryId": 4,
+      "price": 35000,
+      "stock": 30,
+      "heightCm": 25,
+      "bagSize": "Bầu nhỏ",
+      "imageUrl": "/images/products/luoi-ho.jpg",
+      "description": "Lưỡi hổ lá cứng, mọc thẳng, viền vàng, rất dễ sống và chịu được bóng râm. Phù hợp đặt trong nhà.",
+      "careGuide": "Ánh sáng: chịu được bóng râm, phát triển tốt hơn ở nơi có ánh sáng tán xạ. Tưới nước: 1 lần/tuần hoặc khi đất khô hẳn, cây rất sợ úng. Chăm sóc: dùng chậu có lỗ thoát nước.",
+      "active": true
+    },
+    {
+      "id": 24,
+      "name": "Nguyệt quế",
+      "categoryId": 4,
+      "price": 50000,
+      "stock": 15,
+      "heightCm": 35,
+      "bagSize": "Bầu ươm",
+      "imageUrl": "/images/products/nguyet-que.png",
+      "description": "Nguyệt quế lá xanh bóng, hoa trắng nhỏ, thơm ngát, thường trồng làm cây cảnh, bonsai hoặc hàng rào.",
+      "careGuide": "Ánh sáng: nắng trực tiếp hoặc nắng nhẹ. Tưới nước: giữ đất hơi ẩm, không để úng. Chăm sóc: tỉa cành tạo dáng, bón phân định kỳ để cây ra hoa nhiều.",
+      "active": false
+    }
+  ],
+  "news": [
+    {
+      "id": 1,
+      "title": "Mầm Xanh giới thiệu bộ sưu tập cây giống ăn quả",
+      "summary": "Sáu giống cây ăn quả quen thuộc như xoài cát Hòa Lộc, bưởi da xanh, mít Thái đã có mặt tại Mầm Xanh.",
+      "content": "Mầm Xanh giới thiệu nhóm cây giống ăn quả gồm xoài cát Hòa Lộc, ổi nữ hoàng, mít Thái, chanh không hạt, bưởi da xanh và mận An Phước.\n\nCác cây được bán trong bầu ươm, có thông tin chiều cao, quy cách bầu và hướng dẫn chăm sóc riêng trên trang chi tiết sản phẩm.\n\nBạn có thể vào trang Sản phẩm, chọn danh mục Cây ăn quả để xem giá và số lượng hiện có của từng giống.",
+      "imageUrl": "/images/products/xoai.jpg",
+      "publishedAt": "2026-10-26T08:00:00+07:00",
+      "isPublished": true
+    },
+    {
+      "id": 2,
+      "title": "Gợi ý chọn cây giống cho ban công nhỏ",
+      "summary": "Ban công nhỏ vẫn có thể trồng rau, gia vị và cây cảnh nếu chọn đúng loại cây và chậu.",
+      "content": "Với ban công nhỏ, nên ưu tiên các cây nhỏ gọn trồng được trong chậu như cà chua bi, húng quế, bạc hà, tía tô hoặc trầu bà.\n\nTrước khi chọn cây, hãy quan sát ban công nhận nắng bao nhiêu giờ mỗi ngày. Nơi nhiều nắng hợp với cà chua bi, hương thảo, hoa giấy; nơi ít nắng hợp với trầu bà, lưỡi hổ.\n\nNên dùng chậu có lỗ thoát nước và đất tơi xốp. Mỗi trang sản phẩm tại Mầm Xanh đều có phần hướng dẫn ánh sáng và tưới nước để bạn tham khảo.",
+      "imageUrl": "/images/products/ca-chua-bi.jpg",
+      "publishedAt": "2026-10-27T08:00:00+07:00",
+      "isPublished": true
+    },
+    {
+      "id": 3,
+      "title": "Cập nhật nhóm cây rau và gia vị tại Mầm Xanh",
+      "summary": "Mầm Xanh bổ sung các loại cây rau và gia vị dễ trồng, phù hợp cho gia đình.",
+      "content": "Nhóm cây rau gồm cà chua bi, ớt chuông, cà tím, dưa leo, mướp hương và bí xanh. Nhóm cây gia vị gồm húng quế, bạc hà, tía tô, hương thảo, sả và rau răm.\n\nPhần lớn cây được bán trong bầu nhỏ, phù hợp trồng chậu, thùng xốp hoặc luống nhỏ trong vườn.\n\nMột số loại có thể tạm hết hàng; trang sản phẩm sẽ hiển thị rõ trạng thái còn hay hết để bạn chọn cây khác.",
+      "imageUrl": "/images/products/hung-que.jpg",
+      "publishedAt": "2026-10-28T08:00:00+07:00",
+      "isPublished": true
+    },
+    {
+      "id": 4,
+      "title": "Hướng dẫn mua cây và chọn phương thức giao hàng",
+      "summary": "Các bước đặt cây giống tại Mầm Xanh, từ thêm vào giỏ đến chọn cách giao và thanh toán.",
+      "content": "Bước 1: chọn cây, nhập số lượng và bấm thêm vào giỏ hàng. Bước 2: kiểm tra giỏ hàng, sau đó nhập họ tên, số điện thoại và địa chỉ nhận hàng.\n\nBước 3: chọn cách giao. Giao tiêu chuẩn có phí 30.000đ, thời gian dự kiến 3–5 ngày; giao nhanh có phí 50.000đ, thời gian dự kiến 1–2 ngày.\n\nBước 4: chọn thanh toán khi nhận hàng (COD) hoặc thanh toán online mô phỏng, rồi xác nhận đơn. Đây là website demo nên không có giao dịch tiền thật.",
+      "imageUrl": "/images/products/chanh.jpg",
+      "publishedAt": "2026-10-29T08:00:00+07:00",
+      "isPublished": true
+    },
+    {
+      "id": 5,
+      "title": "Giới thiệu góc thông tin chăm sóc cây giống",
+      "summary": "Mỗi cây giống tại Mầm Xanh đều có hướng dẫn cơ bản về ánh sáng, tưới nước và chăm sóc.",
+      "content": "Cây giống cần được chăm sóc đúng cách trong những tuần đầu sau khi trồng. Vì vậy, mỗi trang sản phẩm đều có phần hướng dẫn chăm sóc riêng.\n\nHướng dẫn tập trung vào ba ý chính: cây cần nắng nhiều hay ít, nên tưới nước thế nào và những lưu ý như tỉa cành, làm giàn hoặc bón phân.\n\nKhi mới mang cây về, hãy để cây ở nơi thoáng mát vài ngày rồi mới trồng ra chậu hoặc đất để cây quen với môi trường mới.",
+      "imageUrl": "/images/products/hoa-hong.jpg",
+      "publishedAt": "2026-10-30T08:00:00+07:00",
+      "isPublished": true
+    },
+    {
+      "id": 6,
+      "title": "Mầm Xanh giới thiệu tính năng theo dõi đơn",
+      "summary": "Sau khi đặt hàng, bạn có thể xem đơn đang ở bước nào và đã thanh toán hay chưa.",
+      "content": "Sau khi đặt hàng thành công, website hiển thị mã đơn để bạn tra cứu lại khi cần.\n\nĐơn hàng đi qua các trạng thái: chờ xác nhận, đang chuẩn bị, đang giao và đã giao. Trang theo dõi đơn cũng cho biết đơn đã thanh toán hay chưa.\n\nVới đơn thanh toán khi nhận hàng, trạng thái thanh toán sẽ được cập nhật sau khi giao hàng thành công.",
+      "imageUrl": "/images/products/trau-ba.jpg",
+      "publishedAt": "2026-10-31T08:00:00+07:00",
+      "isPublished": true
+    }
+  ],
+  "shippingMethods": [
+    {
+      "id": 1,
+      "name": "Giao tiêu chuẩn",
+      "fee": 30000,
+      "estimatedDays": "3–5 ngày"
+    },
+    {
+      "id": 2,
+      "name": "Giao nhanh",
+      "fee": 50000,
+      "estimatedDays": "1–2 ngày"
+    }
+  ],
+  "paymentMethods": [
+    {
+      "id": 1,
+      "code": "COD",
+      "name": "Thanh toán khi nhận hàng"
+    },
+    {
+      "id": 2,
+      "code": "ONLINE_DEMO",
+      "name": "Thanh toán online (mô phỏng)"
+    }
+  ],
+  "orders": []
+}
