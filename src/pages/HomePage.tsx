@@ -1,34 +1,29 @@
 import '../style/HomePage.css'
 
-import xoaiImage from '../assets/images/products/xoai.jpg'
-import chanhImage from '../assets/images/products/chanh.jpg'
-import hungQueImage from '../assets/images/products/hung-que.jpg'
-import hoaHongImage from '../assets/images/products/hoa-hong.jpg'
-
 const featuredProducts = [
     {
         id: 1,
         name: 'Xoài cát Hòa Lộc',
         price: 65000,
-        image: xoaiImage,
+        image: '/images/products/xoai.jpg',
     },
     {
         id: 2,
         name: 'Chanh không hạt',
         price: 50000,
-        image: chanhImage,
+        image: '/images/products/chanh.jpg',
     },
     {
         id: 3,
         name: 'Húng quế',
         price: 15000,
-        image: hungQueImage,
+        image: '/images/products/hung-que.jpg',
     },
     {
         id: 4,
         name: 'Hoa hồng',
         price: 55000,
-        image: hoaHongImage,
+        image: '/images/products/hoa-hong.jpg',
     },
 ]
 
@@ -66,7 +61,7 @@ function HomePage() {
 
                     <img
                         className="home-banner__image"
-                        src={hungQueImage}
+                        src="/images/products/hung-que.jpg"
                         alt="Những chậu húng quế xanh"
                         width={600}
                         height={800}
