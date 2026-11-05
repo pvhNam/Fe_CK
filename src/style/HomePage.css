@@ -174,3 +174,252 @@ banner
         height: 240px;
     }
 }
+/* ===== BANNER ẢNH NGANG ===== */
+.home-slider {
+    padding: 0;
+}
+
+.home-slider:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: -2px;
+}
+
+.home-slider > .home-container {
+    position: relative;
+    width: min(1720px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 0;
+}
+
+.home-slider-viewport {
+    height: clamp(220px, 32vw, 550px);
+    overflow: hidden;
+    background: #edf2e9;
+    touch-action: pan-y pinch-zoom;
+}
+
+.home-slider-track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.5s ease;
+}
+
+.home-slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.home-slide-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    user-select: none;
+}
+
+/* ===== NÚT CHUYỂN ĐẶT TRÊN ẢNH ===== */
+.home-slider-controls {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    padding: 0;
+    pointer-events: none;
+}
+
+.home-slider-arrow {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: rgb(255 255 255 / 75%);
+    color: #354635;
+    font-size: 34px;
+    line-height: 1;
+    transform: translateY(-50%);
+    cursor: pointer;
+    pointer-events: auto;
+    transition: background-color 0.2s;
+}
+
+.home-slider-arrow:first-child {
+    left: 24px;
+}
+
+.home-slider-arrow:last-child {
+    right: 24px;
+}
+
+.home-slider-arrow:hover {
+    background: #ffffff;
+}
+
+/* ===== CHẤM CHỌN NẰM TRÊN ẢNH ===== */
+.home-slider-dots {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    transform: translateX(-50%);
+    pointer-events: auto;
+}
+
+.home-slider-dot {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+}
+
+.home-slider-dot::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 20%);
+}
+
+.home-slider-dot.is-active::before {
+    background: #ffbf00;
+}
+
+.home-slider-arrow:focus-visible,
+.home-slider-dot:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+}
+
+/* Thông báo cho trình đọc màn hình */
+.home-slider-status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* ===== ICON NỔI ===== */
+.contact-icons {
+    position: fixed;
+    right: 22px;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    pointer-events: none;
+}
+
+.contact-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    border: 3px solid #ffffff;
+    border-radius: 50%;
+    color: #ffffff;
+    box-shadow:
+            0 0 0 7px rgb(30 100 180 / 5%),
+            0 6px 18px rgb(0 0 0 / 14%);
+}
+
+.contact-icon svg {
+    display: block;
+    width: 28px;
+    height: 28px;
+    fill: currentColor;
+}
+
+.contact-icon-phone {
+    background: #25c96c;
+}
+
+.contact-icon-zalo {
+    background: #0068ff;
+}
+
+.contact-icon-zalo svg {
+    width: 40px;
+    height: 40px;
+}
+
+.contact-icon-facebook {
+    background: #1877f2;
+}
+
+/* ===== ĐIỆN THOẠI ===== */
+@media (max-width: 600px) {
+    .home-slider > .home-container {
+        width: calc(100% - 24px);
+    }
+
+    .home-slider-viewport {
+        height: 220px;
+    }
+
+    .home-slider-arrow {
+        width: 44px;
+        height: 44px;
+        font-size: 28px;
+    }
+
+    .home-slider-arrow:first-child {
+        left: 10px;
+    }
+
+    .home-slider-arrow:last-child {
+        right: 10px;
+    }
+
+    .home-slider-dots {
+        bottom: 8px;
+    }
+
+    .contact-icons {
+        right: 12px;
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        gap: 12px;
+    }
+
+    .contact-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .contact-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .contact-icon-zalo svg {
+        width: 34px;
+        height: 34px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-slider-track {
+        transition: none;
+    }
+}
