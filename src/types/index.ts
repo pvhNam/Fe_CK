@@ -89,9 +89,16 @@ export type CartItem = {
     quantity: number
 }
 
+export type CartProduct = Pick<Product, 'id' | 'name' | 'price' | 'stock'>
+
 export type CartQuote = {
     items: OrderItem[];
     subtotal: number
+}
+
+export type CartTotals = CartQuote & {
+    shippingFee: number
+    total: number
 }
 
 export type QuoteRequest = {
@@ -99,10 +106,8 @@ export type QuoteRequest = {
     shippingMethodId: number
 }
 
-export type OrderQuote = CartQuote & {
+export type OrderQuote = CartTotals & {
     shippingMethodId: number
-    shippingFee: number
-    total: number
 }
 
 export type CreateOrderRequest = QuoteRequest & {
