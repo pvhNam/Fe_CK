@@ -1,47 +1,451 @@
-.header {
-    background-color: var(--white);
-    border-bottom: 1px solid var(--border);
+/* ===== BỐ CỤC VÀ FONT CHỮ ===== */
+.site-header,
+.site-header * {
+    box-sizing: border-box;
 }
 
-.header-content {
-    max-width: 1200px;
+.site-header {
+    position: relative;
+    z-index: 50;
+    background: #ffffff;
+    border-bottom: 1px solid #e5ece6;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    line-height: 1.5;
+}
+
+.header-container {
+    width: min(1232px, 100%);
     margin: 0 auto;
-    padding: 16px;
+    padding: 0 16px;
+}
+
+.site-header a {
+    text-decoration: none;
+}
+
+.site-header button,
+.site-header input {
+    font: inherit;
+}
+
+.site-header a:focus-visible,
+.site-header button:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 3px;
+}
+
+/* ===== THANH THÔNG TIN ===== */
+.header-topbar {
+    background: #eff6ee;
+    color: var(--green-dark);
+    font-size: 12px;
+}
+
+.header-topbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+.header-topbar a {
+    color: var(--green-dark);
+    font-weight: 600;
+}
+
+/* ===== LOGO VÀ TÌM KIẾM ===== */
+.header-main {
+    display: grid;
+    grid-template-columns: auto minmax(220px, 1fr) auto;
+    align-items: center;
+    gap: 28px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.header-brand {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 12px;
+    min-width: 0;
+    color: var(--green-dark);
 }
 
-.logo {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--green);
+.header-brand img {
+    display: block;
+    width: 56px;
+    height: 56px;
+    padding: 6px;
+    flex-shrink: 0;
+    border-radius: 16px;
+    background: #eff6ee;
+    object-fit: contain;
 }
 
-.menu a {
-    margin: 0 12px;
+.header-brand-text strong {
+    display: block;
+    padding: 2px 0;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.35;
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+}
+
+.header-brand-text span {
+    display: block;
+    color: #728071;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* Tìm kiếm */
+.header-search {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    height: 48px;
+    margin: 0;
+    padding: 4px;
+    border: 1px solid #dfe8df;
+    border-radius: 14px;
+    background: #f7faf6;
+}
+
+.header-search:focus-within {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px var(--green-light);
+}
+
+.header-search input {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0 12px;
+    border: 0;
+    outline: none;
+    background: transparent;
     color: var(--text);
-    font-weight: 500;
+    font-size: 14px;
 }
 
-.menu a:hover {
+.header-search input::placeholder {
+    color: #81907f;
+}
+
+.header-search button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 38px;
+    padding: 0;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 10px;
+    background: var(--green);
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.header-search button:hover {
+    background: var(--green-dark);
+}
+
+/* ===== BIỂU TƯỢNG VÀ CÁC NÚT ===== */
+.header-icon,
+.header-chevron {
+    display: block;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.header-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 40px;
+    color: var(--green-dark);
+}
+
+.header-action-label {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.header-action:hover {
     color: var(--green);
 }
 
-.cart {
-    padding: 8px 16px;
-    border-radius: var(--radius);
-    background-color: var(--green);
-    color: var(--white);
+.header-cart-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
-.cart:hover {
-    background-color: var(--green-dark);
+.header-cart-count {
+    position: absolute;
+    top: -9px;
+    right: -9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border: 2px solid #ffffff;
+    border-radius: 20px;
+    background: #e66453;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
 }
 
-@media (max-width: 768px) {
-    .header-content {
+.header-mobile-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid #dfe8df;
+    border-radius: 10px;
+    background: #ffffff;
+    color: var(--green-dark);
+    cursor: pointer;
+}
+
+/* ===== MENU CHÍNH ===== */
+.header-nav {
+    border-top: 1px solid #edf1ec;
+}
+
+.header-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin: 0;
+    padding: 8px 0;
+    list-style: none;
+}
+
+.header-menu-item {
+    position: relative;
+}
+
+.header-menu-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 11px 13px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #40513f;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.header-menu-link:hover,
+.header-menu-link.is-active,
+.header-dropdown-toggle[aria-expanded='true'] {
+    background: var(--green-light);
+    color: var(--green-dark);
+}
+
+.header-chevron {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.15s;
+}
+
+.header-dropdown-toggle[aria-expanded='true'] .header-chevron {
+    transform: rotate(180deg);
+}
+
+/* ===== DANH MỤC XỔ XUỐNG ===== */
+.header-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 60;
+    width: 250px;
+    margin: 0;
+    padding: 8px;
+    border: 1px solid #e4ece3;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 14px 35px rgb(30 65 35 / 14%);
+    list-style: none;
+}
+
+.header-dropdown[hidden] {
+    display: none;
+}
+
+.header-dropdown a {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: #536051;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.header-dropdown a:hover {
+    background: #f0f7ee;
+    color: var(--green-dark);
+}
+
+.header-dropdown .header-dropdown-all {
+    margin-bottom: 5px;
+    background: #f0f7ee;
+    color: var(--green-dark);
+    font-weight: 600;
+}
+
+@media (max-width: 1000px) {
+    .header-main {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 16px;
+    }
+
+    .header-search {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+
+    .header-mobile-toggle {
+        display: flex;
+    }
+
+    .header-nav {
+        display: none;
+    }
+
+    .header-nav.is-open {
+        display: block;
+    }
+
+    .header-menu {
         flex-direction: column;
-        gap: 12px;
+        align-items: stretch;
+        gap: 4px;
+        padding: 12px 0;
+    }
+
+    .header-menu-link {
+        width: 100%;
+        justify-content: space-between;
+        padding: 12px;
+    }
+
+    .header-dropdown {
+        position: static;
+        width: auto;
+        margin: 4px 0 8px 12px;
+        padding: 4px 0 4px 8px;
+        border: 0;
+        border-left: 2px solid #dce8d9;
+        border-radius: 0;
+        box-shadow: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-topbar-inner {
+        justify-content: center;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        font-size: 11px;
+    }
+
+    .header-topbar a {
+        display: none;
+    }
+
+    .header-main {
+        gap: 14px 12px;
+        padding-top: 16px;
+        padding-bottom: 16px;
+    }
+
+    .header-brand {
+        gap: 8px;
+    }
+
+    .header-brand img {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+    }
+
+    .header-brand-text strong {
+        font-size: 24px;
+    }
+
+    .header-brand-text span {
+        font-size: 10px;
+    }
+
+    .header-actions {
+        gap: 8px;
+    }
+
+    .header-action {
+        width: 32px;
+    }
+
+    .header-action-label {
+        display: none;
+    }
+
+    .header-mobile-toggle {
+        width: 36px;
+    }
+
+    .header-search input {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 400px) {
+    .header-brand img {
+        width: 36px;
+        height: 36px;
+    }
+
+    .header-brand-text strong {
+        font-size: 20px;
+    }
+
+    .header-brand-text span {
+        display: none;
     }
 }
