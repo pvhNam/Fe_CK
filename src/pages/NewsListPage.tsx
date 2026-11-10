@@ -5,11 +5,24 @@ import '../style/NewsPage.css'
 
 function NewsListPage() {
     const {data: result, retry} = useApiData(getPublishedNews)
+    const [latestNews, ...otherNews] = result?.ok ? result.data : []
 
     return (
         <main className="news-page">
             <div className="news-page__container">
-                <h1>Tin tức</h1>
+                <nav className="news-breadcrumb" aria-label="Đường dẫn">
+                    <a href="/">Trang chủ</a>
+                    <span aria-hidden="true">/</span>
+                    <span aria-current="page">Tin tức</span>
+                </nav>
+
+                <header className="news-page__intro">
+                    <p className="news-eyebrow">Góc vườn Mầm Xanh</p>
+                    <h1>Tin tức Mầm Xanh</h1>
+                    <p className="news-page__intro-description">
+                        Tin mới từ cửa hàng, gợi ý chọn cây và những cách chăm vườn dễ áp dụng.
+                    </p>
+                </header>
 
                 {result === null && (
                     <p className="news-page__status" role="status">Đang tải tin tức...</p>
@@ -22,14 +35,22 @@ function NewsListPage() {
                     </div>
                 )}
 
-                {result?.ok && (
-                    result.data.length > 0 ? (
-                        <div className="news-grid">
-                            {result.data.map((news) => <NewsCard key={news.id} news={news} />)}
+                {result?.ok && !latestNews && (
+                    <p className="news-page__status">Chưa có tin tức được đăng.</p>
+                )}
+
+                {latestNews && <NewsCard news={latestNews} featured />}
+
+                {otherNews.length > 0 && (
+                    <section className="news-section" aria-labelledby="recent-news-title">
+                        <div className="news-section__heading">
+                            <h2 id="recent-news-title">Bài viết gần đây</h2>
+                            <span>{otherNews.length} bài viết</span>
                         </div>
-                    ) : (
-                        <p className="news-page__status">Chưa có tin tức được đăng.</p>
-                    )
+                        <div className="news-grid">
+                            {otherNews.map((news) => <NewsCard key={news.id} news={news} />)}
+                        </div>
+                    </section>
                 )}
             </div>
         </main>
