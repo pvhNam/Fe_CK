@@ -1,5 +1,5 @@
-import type { Product } from '../types'
-import { formatVND } from '../utils/currency'
+import type {Product} from '../types'
+import {formatVND} from '../utils/currency'
 import '../style/ProductCard.css'
 
 type ProductCardProps = {
@@ -7,7 +7,7 @@ type ProductCardProps = {
     categoryName?: string
 }
 
-function ProductCard({ product, categoryName }: ProductCardProps) {
+function ProductCard({product, categoryName}: ProductCardProps) {
     const inStock = product.stock > 0
 
     return (

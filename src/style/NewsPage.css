@@ -1,0 +1,149 @@
+.news-page {
+    padding: 32px 0 56px;
+}
+
+.news-page__container {
+    box-sizing: border-box;
+    width: min(1232px, 100%);
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.news-page__container--article {
+    max-width: 872px;
+}
+
+.news-page h1 {
+    margin: 0 0 20px;
+    color: var(--green-dark);
+    font-size: clamp(26px, 4vw, 38px);
+    line-height: 1.25;
+}
+
+.news-page__back {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: var(--green-dark);
+    font-weight: 600;
+}
+
+.news-page__back:hover {
+    text-decoration: underline;
+}
+
+.news-page__status {
+    margin: 0;
+    padding: 20px;
+    border-radius: var(--radius);
+    background: var(--beige);
+    color: var(--text-muted);
+}
+
+.news-page__status p {
+    margin: 0 0 12px;
+}
+
+.news-page__status button {
+    padding: 10px 16px;
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--green);
+    color: var(--white);
+    font: inherit;
+    cursor: pointer;
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.news-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--white);
+}
+
+.news-card:hover {
+    box-shadow: var(--shadow);
+}
+
+.news-card:focus-within {
+    outline: 2px solid var(--green);
+    outline-offset: 2px;
+}
+
+.news-card__image,
+.news-article__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    background: var(--beige);
+    object-fit: cover;
+}
+
+.news-card__body {
+    padding: 16px;
+    line-height: 1.5;
+}
+
+.news-card time,
+.news-article time {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.news-card h3 {
+    margin: 6px 0 8px;
+    font-size: 1.125rem;
+}
+
+.news-card h3 a {
+    color: var(--green-dark);
+}
+
+.news-card h3 a::after {
+    position: absolute;
+    inset: 0;
+    content: '';
+}
+
+.news-card__body p {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.news-article time {
+    margin-bottom: 8px;
+}
+
+.news-article__summary {
+    font-size: 1.125rem;
+    line-height: 1.6;
+}
+
+.news-article__image {
+    border-radius: 12px;
+}
+
+.news-article__content {
+    white-space: pre-line;
+    line-height: 1.8;
+}
+
+@media (max-width: 800px) {
+    .news-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    .news-grid {
+        grid-template-columns: 1fr;
+    }
+}

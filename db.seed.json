@@ -1,4 +1,27 @@
 {
+  "banners": [
+    {
+      "id": 1,
+      "imageUrl": "/images/products/hung-que.jpg",
+      "alt": "Những chậu húng quế xanh",
+      "href": "/san-pham?danhMuc=3",
+      "active": true
+    },
+    {
+      "id": 2,
+      "imageUrl": "/images/products/xoai.jpg",
+      "alt": "Cây giống xoài",
+      "href": "/san-pham?danhMuc=1",
+      "active": true
+    },
+    {
+      "id": 3,
+      "imageUrl": "/images/products/hoa-giay.jpg",
+      "alt": "Hoa giấy",
+      "href": "/san-pham?danhMuc=4",
+      "active": true
+    }
+  ],
   "categories": [
     {
       "id": 1,
@@ -22,6 +45,7 @@
       "id": 1,
       "name": "Xoài cát Hòa Lộc",
       "categoryId": 1,
+      "featured": true,
       "price": 65000,
       "stock": 30,
       "heightCm": 60,
@@ -61,6 +85,7 @@
       "id": 4,
       "name": "Chanh không hạt",
       "categoryId": 1,
+      "featured": true,
       "price": 50000,
       "stock": 35,
       "heightCm": 45,
@@ -178,6 +203,7 @@
       "id": 13,
       "name": "Húng quế",
       "categoryId": 3,
+      "featured": true,
       "price": 15000,
       "stock": 60,
       "heightCm": 20,
@@ -256,6 +282,7 @@
       "id": 19,
       "name": "Hoa hồng",
       "categoryId": 4,
+      "featured": true,
       "price": 55000,
       "stock": 35,
       "heightCm": 30,

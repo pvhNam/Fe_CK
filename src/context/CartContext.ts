@@ -1,5 +1,5 @@
-import { createContext } from 'react'
-import type { CartItem, CartProduct, CartTotals } from '../types'
+import {createContext} from 'react'
+import type {CartItem, CartProduct, CartTotals} from '../types'
 
 export type CartContextValue = {
     items: readonly Readonly<CartItem>[]

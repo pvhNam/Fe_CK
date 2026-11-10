@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import {useEffect, useRef, useState} from 'react'
 import '../style/Header.css'
 import plantLogo from '../assets/images/logo/footer-plant.jpg'
 
@@ -137,7 +137,7 @@ function Header() {
                     href="/"
                     aria-label="Mầm Xanh — Trang chủ"
                 >
-                    <img src={plantLogo} alt="" width={56} height={56} />
+                    <img src={plantLogo} alt="" width={56} height={56}/>
 
                     <div className="header-brand-text">
                         <strong>Mầm Xanh</strong>
@@ -160,8 +160,8 @@ function Header() {
 
                     <button type="submit" aria-label="Tìm kiếm">
                         <svg className="header-icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <circle cx="10.5" cy="10.5" r="6.5" />
-                            <path d="m16 16 5 5" />
+                            <circle cx="10.5" cy="10.5" r="6.5"/>
+                            <path d="m16 16 5 5"/>
                         </svg>
                     </button>
                 </form>
@@ -173,8 +173,8 @@ function Header() {
                         aria-label="Đăng nhập tài khoản"
                     >
                         <svg className="header-icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <circle cx="12" cy="8" r="4" />
-                            <path d="M4 21v-2a8 8 0 0 1 16 0v2" />
+                            <circle cx="12" cy="8" r="4"/>
+                            <path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
                         </svg>
 
                         <span className="header-action-label">Tài khoản</span>
@@ -187,9 +187,9 @@ function Header() {
                     >
             <span className="header-cart-icon">
               <svg className="header-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M2 3h3l3 12h11l3-9H6" />
-                <circle cx="9" cy="20" r="1" />
-                <circle cx="18" cy="20" r="1" />
+                <path d="M2 3h3l3 12h11l3-9H6"/>
+                <circle cx="9" cy="20" r="1"/>
+                <circle cx="18" cy="20" r="1"/>
               </svg>
 
               <span className="header-cart-count" aria-hidden="true">
@@ -279,7 +279,7 @@ function Header() {
                                                 viewBox="0 0 24 24"
                                                 aria-hidden="true"
                                             >
-                                                <path d="m6 9 6 6 6-6" />
+                                                <path d="m6 9 6 6 6-6"/>
                                             </svg>
                                         </button>
 

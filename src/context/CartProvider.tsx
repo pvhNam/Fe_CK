@@ -1,21 +1,22 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
-import type { ReactNode } from 'react'
-import type { CartItem, CartProduct } from '../types'
-import { calculateCartTotals } from '../utils/cart'
-import { addCartItem, removeCartItem, setCartItemQuantity } from '../utils/cartState'
-import { readStoredCart, writeStoredCart } from '../utils/cartStorage'
-import { CartContext } from './CartContext'
-import type { CartContextValue } from './CartContext'
+import {useCallback, useMemo, useRef, useState} from 'react'
+import type {ReactNode} from 'react'
+import type {CartItem, CartProduct} from '../types'
+import {calculateCartTotals} from '../utils/cart'
+import {addCartItem, removeCartItem, setCartItemQuantity} from '../utils/cartState'
+import {readStoredCart, writeStoredCart} from '../utils/cartStorage'
+import {CartContext} from './CartContext'
+import type {CartContextValue} from './CartContext'
 
-export default function CartProvider({ children }: { children: ReactNode }) {
+export default function CartProvider({children}: { children: ReactNode }) {
     const [initial] = useState(readStoredCart)
     const [items, setItems] = useState(initial.items)
     const [storageError, setStorageError] = useState(initial.error)
     const currentItems = useRef(initial.items)
 
     const commit = useCallback((next: CartItem[]) => {
-        try { writeStoredCart(next) }
-        catch (error) {
+        try {
+            writeStoredCart(next)
+        } catch (error) {
             setStorageError(error instanceof Error ? error.message : 'Không lưu được giỏ hàng')
             throw error
         }
