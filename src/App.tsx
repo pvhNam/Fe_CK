@@ -1,5 +1,6 @@
 import Header from './components/Header'
 import Footer from './components/Footer'
+import ContactIcons from './components/ContactIcons'
 import './style/App.css'
 import HomePage from './pages/HomePage'
 import ProductListPage from './pages/ProductListPage'
@@ -42,6 +43,7 @@ function App() {
             <Header />
             {renderPage()}
             <Footer />
+            <ContactIcons />
         </div>
     )
 }

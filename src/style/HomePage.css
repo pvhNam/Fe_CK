@@ -344,56 +344,6 @@ banner
     white-space: nowrap;
 }
 
-/* ===== ICON NỔI ===== */
-.contact-icons {
-    position: fixed;
-    right: 22px;
-    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    pointer-events: none;
-}
-
-.contact-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 58px;
-    height: 58px;
-    border: 3px solid #ffffff;
-    border-radius: 50%;
-    color: #ffffff;
-    box-shadow:
-            0 0 0 7px rgb(30 100 180 / 5%),
-            0 6px 18px rgb(0 0 0 / 14%);
-}
-
-.contact-icon svg {
-    display: block;
-    width: 28px;
-    height: 28px;
-    fill: currentColor;
-}
-
-.contact-icon-phone {
-    background: #25c96c;
-}
-
-.contact-icon-zalo {
-    background: #0068ff;
-}
-
-.contact-icon-zalo svg {
-    width: 40px;
-    height: 40px;
-}
-
-.contact-icon-facebook {
-    background: #1877f2;
-}
-
 /* ===== ĐIỆN THOẠI ===== */
 @media (max-width: 600px) {
     .home-slider > .home-container {
@@ -420,27 +370,6 @@ banner
 
     .home-slider-dots {
         bottom: 8px;
-    }
-
-    .contact-icons {
-        right: 12px;
-        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-        gap: 12px;
-    }
-
-    .contact-icon {
-        width: 48px;
-        height: 48px;
-    }
-
-    .contact-icon svg {
-        width: 24px;
-        height: 24px;
-    }
-
-    .contact-icon-zalo svg {
-        width: 34px;
-        height: 34px;
     }
 }
 
