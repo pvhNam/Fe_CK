@@ -3,6 +3,14 @@ export type Category = {
     name: string
 }
 
+export type Banner = {
+    id: number
+    imageUrl: string
+    alt: string
+    href: string
+    active: boolean
+}
+
 export type BagSize = 'Bầu ươm' | 'Bầu nhỏ'
 
 export type NewProduct = {
@@ -16,6 +24,7 @@ export type NewProduct = {
     description: string
     careGuide: string
     active: boolean
+    featured?: boolean
 }
 
 export type Product = NewProduct & { id: number }

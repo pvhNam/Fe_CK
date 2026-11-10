@@ -14,6 +14,10 @@ export function getActiveProducts(categoryId?: number) {
     return getJson<Product[]>(`/products?active=true${filter}`)
 }
 
+export function getFeaturedProducts() {
+    return getJson<Product[]>('/products?active=true&featured=true&_limit=4')
+}
+
 export function getProductById(id: number) {
     return getJson<Product>(`/products/${id}`)
 }
