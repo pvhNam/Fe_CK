@@ -9,6 +9,18 @@ import '../style/ProductListPage.css'
 
 const PAGE_SIZE = 8
 
+const categoryGroups = new Map([
+    ['cay-an-qua', [1]],
+    ['rau-gia-vi', [2, 3]],
+    ['hoa-cay-canh', [4]],
+])
+
+function readCategoryScope(): number[] {
+    const param = new URLSearchParams(window.location.search).get('danhMuc')
+    if (!param) return []
+    return categoryGroups.get(param) ?? [Number(param)]
+}
+
 function readFiltersFromUrl(): ProductFilterValues {
     const keyword = new URLSearchParams(window.location.search).get('q') ?? ''
     return { ...DEFAULT_FILTERS, keyword }
@@ -20,6 +32,7 @@ function ProductListPage() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
     const [reloadKey, setReloadKey] = useState(0)
+    const [categoryScope] = useState(readCategoryScope)
     const [filters, setFilters] = useState<ProductFilterValues>(readFiltersFromUrl)
     const [page, setPage] = useState(1)
 
@@ -70,7 +83,18 @@ function ProductListPage() {
 
     const categoryNames = new Map(categories.map((category) => [category.id, category.name]))
 
-    const visibleProducts = filterProducts(products, filters)
+    const isScoped = categoryScope.length > 0
+    const scopedProducts = isScoped
+        ? products.filter((product) => categoryScope.includes(product.categoryId))
+        : products
+    const scopedCategories = isScoped
+        ? categories.filter((category) => categoryScope.includes(category.id))
+        : categories
+    const heading = scopedCategories.length > 0 && isScoped
+        ? scopedCategories.map((category) => category.name).join(' và ')
+        : 'Cây giống'
+
+    const visibleProducts = filterProducts(scopedProducts, filters)
     const totalPages = Math.max(1, Math.ceil(visibleProducts.length / PAGE_SIZE))
     const currentPage = Math.min(page, totalPages)
     const start = (currentPage - 1) * PAGE_SIZE
@@ -82,12 +106,17 @@ function ProductListPage() {
         <main className="product-page">
             <div className="product-page__container">
                 <header className="product-page__heading">
-                    <h1 ref={headingRef}>Cây giống</h1>
+                    <h1 ref={headingRef}>{heading}</h1>
                     {ready && visibleProducts.length > 0 && (
                         <p>
                             Hiển thị {start + 1}–{start + pageProducts.length} trong{' '}
                             {visibleProducts.length} cây
                         </p>
+                    )}
+                    {isScoped && (
+                        <a className="product-page__back" href="/san-pham">
+                            Xem tất cả cây giống
+                        </a>
                     )}
                 </header>
 
@@ -106,15 +135,19 @@ function ProductListPage() {
                     </div>
                 )}
 
-                {ready && products.length === 0 && (
-                    <p className="product-page__status">Hiện chưa có cây giống nào đang bán.</p>
+                {ready && scopedProducts.length === 0 && (
+                    <p className="product-page__status">
+                        {isScoped
+                            ? 'Không tìm thấy cây giống phù hợp.'
+                            : 'Hiện chưa có cây giống nào đang bán.'}
+                    </p>
                 )}
 
-                {ready && products.length > 0 && (
+                {ready && scopedProducts.length > 0 && (
                     <>
                         <ProductFilterBar
                             filters={filters}
-                            categories={categories}
+                            categories={scopedCategories}
                             onChange={changeFilters}
                             onReset={resetFilters}
                         />
