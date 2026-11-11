@@ -1,4 +1,5 @@
 import {useEffect, useRef, useState} from 'react'
+import {useCart} from '../hooks/useCart'
 import '../style/Header.css'
 import plantLogo from '../assets/images/logo/footer-plant.jpg'
 
@@ -69,7 +70,7 @@ function Header() {
     const headerRef = useRef<HTMLElement>(null)
 
     const currentPath = window.location.pathname
-    const cartCount = 0
+    const {itemCount: cartCount} = useCart()
 
     // Đóng menu khi bấm ra ngoài hoặc nhấn Escape
     useEffect(() => {
