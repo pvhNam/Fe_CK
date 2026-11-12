@@ -2,7 +2,10 @@ import {useCallback} from 'react'
 import {useApiData} from '../hooks/useApiData'
 import {getProductById} from '../services/productService'
 import {formatVND} from '../utils/currency'
+import {parseCareGuide} from '../utils/careGuide'
+import AddToCartForm from '../components/AddToCartForm'
 import '../style/ProductListPage.css'
+import '../style/ProductDetailPage.css'
 
 function ProductDetailPage({productId}: { productId: number }) {
     const load = useCallback(() => getProductById(productId), [productId])
@@ -56,9 +59,17 @@ function ProductDetailPage({productId}: { productId: number }) {
                                     <dd>{product.stock > 0 ? `Còn ${product.stock} cây` : 'Hết hàng'}</dd>
                                 </div>
                             </dl>
+                            <AddToCartForm product={product} />
                             <p>{product.description}</p>
                             <h2>Hướng dẫn chăm sóc</h2>
-                            <p>{product.careGuide}</p>
+                            <ul className="care-guide">
+                                {parseCareGuide(product.careGuide).map((step) => (
+                                    <li key={step.label + step.text}>
+                                        {step.label && <strong>{step.label}</strong>}
+                                        <span>{step.text}</span>
+                                    </li>
+                                ))}
+                            </ul>
                             <a className="product-page__back" href={`/san-pham?danhMuc=${product.categoryId}`}>
                                 Xem cây cùng danh mục →
                             </a>
