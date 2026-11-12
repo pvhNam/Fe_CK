@@ -1,0 +1,27 @@
+.care-guide {
+    display: grid;
+    gap: 12px;
+    margin: 0 0 24px;
+    padding: 0;
+    list-style: none;
+}
+
+.care-guide li {
+    padding: 12px 16px;
+    border-left: 4px solid var(--green);
+    border-radius: var(--radius);
+    background: var(--beige);
+}
+
+.care-guide strong {
+    display: block;
+    color: var(--green-dark);
+}
+
+.care-guide strong + span::first-letter {
+    text-transform: uppercase;
+}
+
+.care-guide span {
+    display: block;
+}
