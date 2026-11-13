@@ -236,6 +236,10 @@
     width: 100%;
 }
 
+.cart-summary__checkout {
+    margin-bottom: 12px;
+}
+
 .cart-button:hover {
     background: var(--green-dark);
 }
