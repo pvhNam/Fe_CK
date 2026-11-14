@@ -9,21 +9,26 @@ import NewsListPage from './pages/NewsListPage'
 import NewsDetailPage from './pages/NewsDetailPage'
 import CartPage from './pages/CartPage'
 import CheckoutRecipientPage from './pages/CheckoutRecipientPage'
+import AboutPage from './pages/AboutPage'
+import ContactPage from './pages/ContactPage'
+
 function renderPage() {
     const path = window.location.pathname.replace(/\/+$/, '') || '/'
 
-    if (path === '/') return <HomePage />
-    if (path === '/san-pham') return <ProductListPage />
-    if (path === '/tin-tuc') return <NewsListPage />
-    if (path === '/gio-hang') return <CartPage />
-    if (path === '/thanh-toan') return <CheckoutRecipientPage />
+    if (path === '/') return <HomePage/>
+    if (path === '/san-pham') return <ProductListPage/>
+    if (path === '/tin-tuc') return <NewsListPage/>
+    if (path === '/gioi-thieu') return <AboutPage/>
+    if (path === '/lien-he') return <ContactPage/>
+    if (path === '/gio-hang') return <CartPage/>
+    if (path === '/thanh-toan') return <CheckoutRecipientPage/>
     const detail = path.match(/^\/(san-pham|tin-tuc)\/([1-9]\d*)$/)
     if (detail) {
         const id = Number(detail[2])
         if (Number.isSafeInteger(id)) {
             return detail[1] === 'san-pham'
-                ? <ProductDetailPage key={id} productId={id} />
-                : <NewsDetailPage key={id} newsId={id} />
+                ? <ProductDetailPage key={id} productId={id}/>
+                : <NewsDetailPage key={id} newsId={id}/>
         }
     }
 
@@ -42,10 +47,10 @@ function renderPage() {
 function App() {
     return (
         <div className="app-shell" id="top">
-            <Header />
+            <Header/>
             {renderPage()}
-            <Footer />
-            <ContactIcons />
+            <Footer/>
+            <ContactIcons/>
         </div>
     )
 }
