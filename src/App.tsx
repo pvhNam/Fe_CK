@@ -11,6 +11,7 @@ import CartPage from './pages/CartPage'
 import CheckoutRecipientPage from './pages/CheckoutRecipientPage'
 import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
+import CheckoutShippingPage from './pages/CheckoutShippingPage'
 
 function renderPage() {
     const path = window.location.pathname.replace(/\/+$/, '') || '/'
@@ -22,6 +23,7 @@ function renderPage() {
     if (path === '/lien-he') return <ContactPage/>
     if (path === '/gio-hang') return <CartPage/>
     if (path === '/thanh-toan') return <CheckoutRecipientPage/>
+    if (path === '/thanh-toan/giao-hang') return <CheckoutShippingPage />
     const detail = path.match(/^\/(san-pham|tin-tuc)\/([1-9]\d*)$/)
     if (detail) {
         const id = Number(detail[2])
