@@ -181,7 +181,11 @@ function CartContents() {
                         <strong>{total === null ? '—' : formatVND(total)}</strong>
                     </div>
                     {totalError && <p className="cart-error" role="alert">{totalError}</p>}
-                    <p>Phí vận chuyển được tính ở bước chọn giao hàng.</p>
+                    {total !== null && (
+                        <a className="cart-button cart-summary__checkout" href="/thanh-toan">
+                            Nhập thông tin người nhận
+                        </a>
+                    )}
                     <a className="cart-button" href="/san-pham">Tiếp tục mua sắm</a>
                 </aside>
             </div>
