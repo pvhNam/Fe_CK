@@ -46,6 +46,11 @@ function Footer() {
                         <span className="footer-brand-note">
               Một chút xanh cho cuộc sống
             </span>
+                        <nav className="footer-page-links" aria-label="Thông tin cửa hàng">
+                            <a href="/gioi-thieu">Giới thiệu Mầm Xanh</a>
+                            <a href="/lien-he">Liên hệ</a>
+                            <a href="/gioi-thieu#chinh-sach-mua-hang">Chính sách mua và giao cây</a>
+                        </nav>
                     </div>
 
                     <section className="footer-categories" aria-labelledby="footer-categories-title">

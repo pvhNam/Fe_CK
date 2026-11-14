@@ -61,6 +61,11 @@ const menuItems: MenuItem[] = [
         label: 'Giới thiệu',
         href: '/gioi-thieu',
     },
+    {
+        id: 'contact',
+        label: 'Liên hệ',
+        href: '/lien-he',
+    },
 ]
 
 function Header() {
