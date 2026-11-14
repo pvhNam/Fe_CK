@@ -9,6 +9,7 @@ import NewsListPage from './pages/NewsListPage'
 import NewsDetailPage from './pages/NewsDetailPage'
 import CartPage from './pages/CartPage'
 import CheckoutRecipientPage from './pages/CheckoutRecipientPage'
+import CheckoutShippingPage from './pages/CheckoutShippingPage'
 function renderPage() {
     const path = window.location.pathname.replace(/\/+$/, '') || '/'
 
@@ -17,6 +18,7 @@ function renderPage() {
     if (path === '/tin-tuc') return <NewsListPage />
     if (path === '/gio-hang') return <CartPage />
     if (path === '/thanh-toan') return <CheckoutRecipientPage />
+    if (path === '/thanh-toan/giao-hang') return <CheckoutShippingPage />
     const detail = path.match(/^\/(san-pham|tin-tuc)\/([1-9]\d*)$/)
     if (detail) {
         const id = Number(detail[2])

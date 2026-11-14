@@ -163,7 +163,123 @@
     outline-offset: 3px;
 }
 
+.recipient-shipping {
+    margin-top: 24px;
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--white);
+}
+
+.recipient-shipping__methods {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.recipient-shipping__methods legend {
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.recipient-shipping__method {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.recipient-shipping__method:has(input:checked) {
+    border-color: var(--green);
+    background: var(--green-light);
+}
+
+.recipient-shipping__method input {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--green);
+}
+
+.recipient-shipping__method > span {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.recipient-shipping__method span span {
+    display: block;
+    margin-top: 6px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.recipient-shipping__totals {
+    margin: 24px 0;
+    padding: 20px;
+    border-radius: var(--radius);
+    background: var(--beige);
+}
+
+.recipient-shipping__totals > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.recipient-shipping__totals > div:last-child {
+    margin: 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    color: var(--green-dark);
+    font-weight: 700;
+}
+
+.recipient-shipping__totals dd {
+    margin: 0;
+    text-align: right;
+}
+
+.recipient-shipping a {
+    color: var(--green-dark);
+    font-weight: 600;
+}
+
+.recipient-shipping__retry {
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--green);
+    color: var(--white);
+    font: inherit;
+    cursor: pointer;
+}
+
 @media (max-width: 600px) {
+    .recipient-shipping {
+        padding: 20px 64px 20px 16px;
+    }
+
+    .recipient-shipping__method {
+        flex-wrap: wrap;
+        padding: 12px;
+    }
+
+    .recipient-shipping__method > strong {
+        margin-left: 30px;
+    }
+
+    .recipient-shipping__totals {
+        padding: 16px;
+    }
+
     .recipient-form {
         padding: 20px 16px;
     }

@@ -11,12 +11,10 @@ export default function CheckoutRecipientPage() {
     const [customer, setCustomer] = useState<Customer>(initial.customer)
     const [errors, setErrors] = useState<RecipientErrors>({})
     const [storageError, setStorageError] = useState(initial.error)
-    const [saved, setSaved] = useState(false)
 
     function updateField(field: RecipientField, value: string) {
         const next = {...customer, [field]: value}
         setCustomer(next)
-        setSaved(false)
         if (errors[field]) {
             const message = validateRecipient(next)[field]
             setErrors(current => ({...current, [field]: message}))
@@ -37,7 +35,6 @@ export default function CheckoutRecipientPage() {
 
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        setSaved(false)
         const normalized = normalizeRecipient(customer)
         const validation = validateRecipient(normalized)
         setErrors(validation)
@@ -53,7 +50,7 @@ export default function CheckoutRecipientPage() {
             writeRecipientDraft(normalized)
             setCustomer(normalized)
             setStorageError(null)
-            setSaved(true)
+            window.location.assign('/thanh-toan/giao-hang')
         } catch (error) {
             setStorageError(error instanceof Error ? error.message : 'Chưa lưu được thông tin người nhận.')
         }
@@ -66,6 +63,7 @@ export default function CheckoutRecipientPage() {
                     <ol>
                         <li><a href="/gio-hang">Giỏ hàng</a></li>
                         <li aria-current="step">Người nhận</li>
+                        <li>Giao hàng</li>
                     </ol>
                 </nav>
                 <header className="recipient-heading">
@@ -160,11 +158,6 @@ export default function CheckoutRecipientPage() {
                         </div>
                     </div>
 
-                    {saved && (
-                        <p className="recipient-message is-success" role="status">
-                            Đã lưu thông tin người nhận
-                        </p>
-                    )}
                     <div className="recipient-actions">
                         <a href="/gio-hang">← Quay lại giỏ hàng</a>
                         <button type="submit">Lưu thông tin người nhận</button>
