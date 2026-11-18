@@ -28,9 +28,13 @@ function NewsCard({news, featured = false}: { news: News; featured?: boolean }) 
                     <a href={`/tin-tuc/${news.id}`}>{news.title}</a>
                 </Title>
                 <p>{news.summary}</p>
-                <span className="news-card__read-more" aria-hidden="true">
-                    Đọc bài viết <span>→</span>
-                </span>
+                <a
+                    className="news-card__read-more"
+                    href={`/tin-tuc/${news.id}`}
+                    aria-label={`Đọc bài viết ${news.title}`}
+                >
+                    Đọc bài viết <span aria-hidden="true">→</span>
+                </a>
             </div>
         </article>
     )

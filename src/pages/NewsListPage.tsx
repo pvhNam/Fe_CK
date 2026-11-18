@@ -10,19 +10,12 @@ function NewsListPage() {
     return (
         <main className="news-page">
             <div className="news-page__container">
+                <h1 className="news-visually-hidden">Tin tức Mầm Xanh</h1>
                 <nav className="news-breadcrumb" aria-label="Đường dẫn">
                     <a href="/">Trang chủ</a>
                     <span aria-hidden="true">/</span>
                     <span aria-current="page">Tin tức</span>
                 </nav>
-
-                <header className="news-page__intro">
-                    <p className="news-eyebrow">Góc vườn Mầm Xanh</p>
-                    <h1>Tin tức Mầm Xanh</h1>
-                    <p className="news-page__intro-description">
-                        Tin mới từ cửa hàng, gợi ý chọn cây và những cách chăm vườn dễ áp dụng.
-                    </p>
-                </header>
 
                 {result === null && (
                     <p className="news-page__status" role="status">Đang tải tin tức...</p>
