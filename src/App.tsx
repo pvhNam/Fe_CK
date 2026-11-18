@@ -12,6 +12,7 @@ import CheckoutRecipientPage from './pages/CheckoutRecipientPage'
 import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
 import CheckoutShippingPage from './pages/CheckoutShippingPage'
+import CheckoutPaymentPage from './pages/CheckoutPaymentPage'
 import ProductAdminPage from './pages/ProductAdminPage'
 
 function renderPage() {
@@ -25,6 +26,7 @@ function renderPage() {
     if (path === '/gio-hang') return <CartPage/>
     if (path === '/thanh-toan') return <CheckoutRecipientPage/>
     if (path === '/thanh-toan/giao-hang') return <CheckoutShippingPage />
+    if (path === '/thanh-toan/phuong-thuc-thanh-toan') return <CheckoutPaymentPage />
     if (path === '/quan-ly/san-pham') return <ProductAdminPage/>
     const detail = path.match(/^\/(san-pham|tin-tuc)\/([1-9]\d*)$/)
     if (detail) {
