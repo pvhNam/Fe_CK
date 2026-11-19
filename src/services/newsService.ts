@@ -6,13 +6,15 @@ export function getNews() {
     return getJson<News[]>('/news')
 }
 
+export function compareNewsByNewest(first: News, second: News) {
+    return Date.parse(second.publishedAt) - Date.parse(first.publishedAt) || second.id - first.id
+}
+
 export async function getPublishedNews(limit?: number): Promise<ApiResult<News[]>> {
     const result = await getJson<News[]>('/news?isPublished=true')
     if (!result.ok) return result
 
-    const news = [...result.data].sort(
-        (first, second) => Date.parse(second.publishedAt) - Date.parse(first.publishedAt),
-    )
+    const news = [...result.data].sort(compareNewsByNewest)
     return { ok: true, data: news.slice(0, limit) }
 }
 

@@ -77,6 +77,7 @@ function ProductAdminPage() {
                 <header className="product-page__heading">
                     <h1>Quản lý cây giống</h1>
                     <p>Dữ liệu mẫu từ fake API, gồm cả cây đang ẩn.</p>
+                    <a className="product-page__back" href="/quan-ly/tin-tuc">Quản lý tin tức →</a>
                 </header>
 
                 {data === null && (
