@@ -33,7 +33,8 @@ function PaymentStep({customer, shippingMethodId}: {customer: Customer; shipping
         </div>
     )
 
-    const checkoutKey = JSON.stringify([normalizeRecipient(customer), shippingMethod.id, totals.shippingFee, totals.items])
+    const recipient = normalizeRecipient(customer)
+    const checkoutKey = JSON.stringify([recipient, shippingMethod.id, totals.shippingFee, totals.items])
 
     return (
         <>
@@ -42,7 +43,8 @@ function PaymentStep({customer, shippingMethodId}: {customer: Customer; shipping
                 <div><dt>Phí giao hàng</dt><dd>{formatVND(totals.shippingFee)}</dd></div>
                 <div><dt>Tổng thanh toán</dt><dd>{formatVND(totals.total)}</dd></div>
             </dl>
-            <CheckoutPaymentMethods key={checkoutKey} checkoutKey={checkoutKey} total={totals.total} />
+            <CheckoutPaymentMethods key={checkoutKey} checkoutKey={checkoutKey}
+                customer={recipient} shippingMethod={shippingMethod} totals={totals} />
         </>
     )
 }

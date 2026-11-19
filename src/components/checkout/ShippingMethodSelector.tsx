@@ -1,29 +1,30 @@
 import {useState} from 'react'
-import type {CartTotals} from '../../types'
 import {useCart} from '../../hooks/useCart'
 import {useApiData} from '../../hooks/useApiData'
 import {getShippingMethods} from '../../services/checkoutService'
-import {getProducts} from '../../services/productService'
-import {calculateCartTotals} from '../../utils/cart'
+import {useCheckoutTotals} from '../../hooks/useCheckoutTotals'
+import {readShippingMethodId, writeShippingMethodId} from '../../utils/checkoutStorage'
 import {formatVND} from '../../utils/currency'
 
 export default function ShippingMethodSelector() {
     const {items, storageError} = useCart()
     const shipping = useApiData(getShippingMethods)
-    const products = useApiData(getProducts)
-    const [selectedId, setSelectedId] = useState<number | null>(null)
+    const [selectedId, setSelectedId] = useState(readShippingMethodId)
+    const [saveError, setSaveError] = useState(false)
     const methods = shipping.data?.ok ? shipping.data.data : []
     const selected = methods.find(method => method.id === selectedId)
 
-    let totals: CartTotals | null = null
-    let totalsError: string | null = products.data && !products.data.ok ? products.data.message : null
-    if (products.data?.ok) {
+    const {totals, error: totalsError, loading, retry} = useCheckoutTotals(items, selected?.fee ?? 0)
+
+    function continueToPayment() {
+        if (!selected || !totals?.items.length) return
         try {
-            if (!Array.isArray(products.data.data)) throw new TypeError('Dữ liệu sản phẩm không hợp lệ.')
-            totals = calculateCartTotals(items, products.data.data.filter(product => product?.active === true), selected?.fee ?? 0)
-        } catch (error) {
-            totalsError = error instanceof Error ? error.message : 'Chưa tính được tiền giỏ hàng.'
+            writeShippingMethodId(selected.id)
+        } catch {
+            setSaveError(true)
+            return
         }
+        window.location.assign('/thanh-toan/phuong-thuc-thanh-toan')
     }
 
     return (
@@ -57,11 +58,11 @@ export default function ShippingMethodSelector() {
                             ))}
                         </fieldset>
                     )}
-                    {products.data === null && <p role="status">Đang tải tiền hàng…</p>}
+                    {loading && <p role="status">Đang tải tiền hàng…</p>}
                     {totalsError && (
                         <div className="recipient-message is-error" role="alert">
                             <p>{totalsError}</p>
-                            <button className="recipient-shipping__retry" type="button" onClick={products.retry}>Thử lại giỏ hàng</button>
+                            <button className="recipient-shipping__retry" type="button" onClick={retry}>Thử lại giỏ hàng</button>
                         </div>
                     )}
                     {totals && (
@@ -73,7 +74,11 @@ export default function ShippingMethodSelector() {
                     )}
                 </>
             )}
-            <a href="/gio-hang">Quay lại giỏ hàng</a>
+            {saveError && <p className="recipient-message is-error" role="alert">Không lưu được cách giao hàng. Vui lòng thử lại.</p>}
+            <div className="recipient-actions">
+                <a href="/gio-hang">Quay lại giỏ hàng</a>
+                {items.length > 0 && <button type="button" disabled={!selected || !totals} onClick={continueToPayment}>Tiếp tục thanh toán</button>}
+            </div>
         </section>
     )
 }

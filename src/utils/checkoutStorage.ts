@@ -11,6 +11,8 @@ export type PaymentDraft = {
     code: PaymentCode
     paymentStatus: PaymentStatus
     onlineResult: OnlinePaymentResult | null
+    requestId?: string
+    orderId?: number
 }
 
 function isMethodId(value: unknown): value is number {
@@ -42,8 +44,10 @@ export function readPaymentDraft(): PaymentDraft | null {
         if (result !== null && result !== 'success' && result !== 'failure' && result !== 'cancelled') return null
         const paymentStatus = result === 'success' ? 'paid' : 'unpaid'
         if (draft.paymentStatus !== paymentStatus) return null
+        const requestId = typeof draft.requestId === 'string' && draft.requestId ? draft.requestId : undefined
+        const orderId = requestId && isMethodId(draft.orderId) ? draft.orderId : undefined
         return {checkoutKey: draft.checkoutKey, paymentMethodId: draft.paymentMethodId, code: draft.code,
-            paymentStatus, onlineResult: result}
+            paymentStatus, onlineResult: result, requestId, orderId}
     } catch {
         return null
     }
@@ -51,4 +55,8 @@ export function readPaymentDraft(): PaymentDraft | null {
 
 export function writePaymentDraft(draft: PaymentDraft): void {
     window.sessionStorage.setItem(PAYMENT_KEY, JSON.stringify(draft))
+}
+
+export function clearCompletedPayment(): void {
+    if (readPaymentDraft()?.orderId) window.sessionStorage.removeItem(PAYMENT_KEY)
 }
