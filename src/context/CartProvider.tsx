@@ -49,7 +49,18 @@ export default function CartProvider({children}: { children: ReactNode }) {
         commit(removeCartItem(currentItems.current, productId))
     }, [commit])
 
-    const clearCart = useCallback(() => commit([]), [commit])
+    const clearCart = useCallback((purchased?: readonly CartItem[]) => {
+        if (!purchased) return commit([])
+        // Một tab khác có thể thêm cây trong lúc checkout đang chờ API.
+        const stored = readStoredCart()
+        if (stored.error) throw new Error(stored.error)
+        const bought = new Map(purchased.map(item => [item.productId, item.quantity]))
+        const remaining = stored.items.map(item => ({
+            productId: item.productId,
+            quantity: item.quantity - (bought.get(item.productId) ?? 0),
+        })).filter(item => item.quantity > 0)
+        commit(remaining)
+    }, [commit])
     const clearStorageError = useCallback(() => setStorageError(null), [])
     const getTotals = useCallback((products: readonly CartProduct[], shippingFee = 0) => {
         return calculateCartTotals(currentItems.current, products, shippingFee)
