@@ -16,6 +16,7 @@ import CheckoutPaymentPage from './pages/CheckoutPaymentPage'
 import OrderConfirmationPage from './pages/OrderConfirmationPage'
 import ProductAdminPage from './pages/ProductAdminPage'
 import NewsAdminPage from './pages/NewsAdminPage'
+import OrderAdminPage from './pages/OrderAdminPage'
 
 function renderPage() {
     const path = window.location.pathname.replace(/\/+$/, '') || '/'
@@ -34,6 +35,7 @@ function renderPage() {
         return <OrderConfirmationPage orderId={Number(confirmation[1])} />
     }
     if (path === '/quan-ly/san-pham') return <ProductAdminPage/>
+    if (path === '/quan-ly/don-hang') return <OrderAdminPage/>
     if (path === '/quan-ly/tin-tuc') return <NewsAdminPage/>
     const detail = path.match(/^\/(san-pham|tin-tuc)\/([1-9]\d*)$/)
     if (detail) {
