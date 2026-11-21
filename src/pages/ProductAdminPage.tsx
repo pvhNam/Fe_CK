@@ -5,6 +5,7 @@ import { formatVND } from '../utils/currency'
 import { DEFAULT_FILTERS, filterProducts } from '../utils/productFilters'
 import { EMPTY_PRODUCT_FORM, toFormValues } from '../utils/productForm'
 import Pagination from '../components/Pagination'
+import StatePanel from '../components/StatePanel'
 import ProductForm from '../components/ProductForm'
 import '../style/ProductListPage.css'
 import '../style/ProductAdminPage.css'
@@ -166,8 +167,6 @@ function ProductAdminPage() {
         <main className="product-page">
             <div className="product-page__container">
                 <header className="product-page__heading">
-                    <h1>Quản lý cây giống</h1>
-
                     <div className="product-admin__intro">
                         <h1>Quản lý cây giống</h1>
                         <p>Cây không bán nữa thì ẩn đi thay vì xóa, để các đơn đã đặt vẫn giữ đúng thông tin.</p>
@@ -181,15 +180,12 @@ function ProductAdminPage() {
                     )}
                 </header>
 
-                {loading && (
-                    <p className="product-page__status" role="status">Đang tải danh sách cây...</p>
-                )}
+                {loading && <StatePanel variant="loading">Đang tải danh sách cây...</StatePanel>}
 
                 {!loading && loadError && (
-                    <div className="product-page__status is-error" role="alert">
-                        <p>{loadError}</p>
-                        <button type="button" onClick={retry}>Thử lại</button>
-                    </div>
+                    <StatePanel variant="error" title="Chưa tải được danh sách cây" actionLabel="Thử lại" onAction={retry}>
+                        {loadError}
+                    </StatePanel>
                 )}
 
                 {ready && (
@@ -276,10 +272,9 @@ function ProductAdminPage() {
                         </p>
 
                         {rows.length === 0 ? (
-                            <div className="product-page__status">
-                                <p>Không có cây nào khớp cùng lúc: {activeFilters.join(', ')}.</p>
-                                <button type="button" onClick={resetFilters}>Xóa lọc</button>
-                            </div>
+                            <StatePanel variant="empty" title="Không tìm thấy cây phù hợp" actionLabel="Xóa bộ lọc" onAction={resetFilters}>
+                                Không có cây nào khớp cùng lúc: {activeFilters.join(', ')}.
+                            </StatePanel>
                         ) : (
                             <>
                                 <div className="product-admin__table-wrap">
@@ -302,26 +297,26 @@ function ProductAdminPage() {
                                                 key={product.id}
                                                 className={`${product.active ? '' : 'is-hidden'} ${product.id === savedId ? 'is-saved' : ''}`}
                                             >
-                                                <td>#{product.id}</td>
-                                                <td>
+                                                <td data-label="Mã">#{product.id}</td>
+                                                <td data-label="Cây giống" className="is-name">
                                                     <div className="product-admin__product">
                                                         <img src={product.imageUrl} alt="" width={48} height={48} loading="lazy" />
                                                         <span>{product.name}</span>
                                                     </div>
                                                 </td>
-                                                <td>{categoryNames.get(product.categoryId) ?? `Danh mục ${product.categoryId}`}</td>
-                                                <td className="is-number">{formatVND(product.price)}</td>
-                                                <td className="is-number">
+                                                <td data-label="Danh mục">{categoryNames.get(product.categoryId) ?? `Danh mục ${product.categoryId}`}</td>
+                                                <td data-label="Giá" className="is-number">{formatVND(product.price)}</td>
+                                                <td data-label="Tồn kho mẫu" className="is-number">
                                                     {product.stock > 0 ? product.stock : (
                                                         <span className="product-admin__badge is-out">Hết hàng</span>
                                                     )}
                                                 </td>
-                                                <td>
+                                                <td data-label="Trạng thái">
                                                         <span className={`product-admin__badge ${product.active ? 'is-active' : 'is-hidden'}`}>
                                                             {product.active ? STATUS_LABELS.active : STATUS_LABELS.hidden}
                                                         </span>
                                                 </td>
-                                                <td>
+                                                <td className="is-actions">
                                                     <div className="product-admin__actions">
                                                         <button
                                                             type="button"

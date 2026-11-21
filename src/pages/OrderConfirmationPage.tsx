@@ -4,6 +4,7 @@ import {getOrderById} from '../services/orderService'
 import type {DeliveryStatus, Order} from '../types'
 import {formatVND} from '../utils/currency'
 import '../style/OrderConfirmationPage.css'
+import StatePanel from '../components/StatePanel'
 
 const deliveryLabels: Record<DeliveryStatus, string> = {
     pending: 'Chờ xác nhận',
@@ -69,12 +70,16 @@ export default function OrderConfirmationPage({orderId}: {orderId: number}) {
                 <p>Mã đơn <strong>#{orderId}</strong></p>
             </header>
             {checkCart && <p role="alert">Đơn đã được lưu. Vui lòng kiểm tra lại giỏ hàng và thông tin checkout trước lần mua tiếp theo.</p>}
-            {data === null && <p role="status">Đang tải thông tin đơn hàng…</p>}
+            {data === null && <StatePanel variant="loading">Đang tải thông tin đơn hàng...</StatePanel>}
             {data && !data.ok && (
-                <div className="order-confirmation__panel">
-                    <p role="alert">{data.status === 404 ? `Không tìm thấy đơn hàng #${orderId}.` : data.message}</p>
-                    <button type="button" onClick={retry}>Tải lại đơn hàng</button>
-                </div>
+                <StatePanel
+                    variant={data.status === 404 ? 'empty' : 'error'}
+                    title={data.status === 404 ? `Không tìm thấy đơn hàng #${orderId}` : 'Chưa tải được đơn hàng'}
+                    actionLabel={data.status === 404 ? undefined : 'Tải lại đơn hàng'}
+                    onAction={data.status === 404 ? undefined : retry}
+                >
+                    {data.status === 404 ? 'Kiểm tra lại mã đơn trong đường dẫn.' : data.message}
+                </StatePanel>
             )}
             {data?.ok && <OrderDetails order={data.data} />}
             <a className="order-confirmation__continue" href="/san-pham">Tiếp tục mua sắm</a>

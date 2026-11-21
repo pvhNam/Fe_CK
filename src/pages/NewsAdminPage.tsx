@@ -4,6 +4,7 @@ import { compareNewsByNewest, createNews, getNews, updateNews } from '../service
 import type { News, NewNews } from '../types'
 import '../style/ProductListPage.css'
 import '../style/NewsAdminPage.css'
+import StatePanel from '../components/StatePanel'
 
 const vietnamDate = new Intl.DateTimeFormat('vi-VN', {
     timeZone: 'Asia/Ho_Chi_Minh',
@@ -206,15 +207,16 @@ function NewsAdminPage() {
 
                 {notice && <p className={`news-admin__feedback${notice.error ? ' is-error' : ''}`}
                     role={notice.error ? 'alert' : 'status'}>{notice.text}</p>}
-                {data === null && <p className="product-page__status" role="status">Đang tải tin tức…</p>}
+                {data === null && <StatePanel variant="loading">Đang tải tin tức...</StatePanel>}
                 {data && !data.ok && (
-                    <div className="product-page__status is-error" role="alert">
-                        <p>Chưa tải được danh sách bài viết.</p>
-                        <button type="button" onClick={retry}>Thử lại</button>
-                    </div>
+                    <StatePanel variant="error" title="Chưa tải được danh sách bài viết" actionLabel="Thử lại" onAction={retry}>
+                        Kiểm tra kết nối rồi thử lại.
+                    </StatePanel>
                 )}
                 {data?.ok && (articles.length === 0 ? (
-                    <p className="product-page__status">Chưa có bài viết. Chọn “Thêm tin” để viết bài đầu tiên.</p>
+                    <StatePanel variant="empty" title="Chưa có bài viết">
+                        Chọn “Thêm tin” để viết bài đầu tiên.
+                    </StatePanel>
                 ) : (
                     <div className="news-admin__panel">
                         <table className="news-admin__table" aria-label="Danh sách bài viết">

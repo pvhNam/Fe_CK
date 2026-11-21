@@ -10,6 +10,7 @@ import {formatVND} from '../utils/currency'
 import {normalizeRecipient, validateRecipient} from '../utils/recipient'
 import {readRecipientDraft} from '../utils/recipientStorage'
 import '../style/CheckoutRecipientPage.css'
+import StatePanel from '../components/StatePanel'
 
 function PaymentStep({customer, shippingMethodId}: {customer: Customer; shippingMethodId: number}) {
     const {items} = useCart()
@@ -17,20 +18,22 @@ function PaymentStep({customer, shippingMethodId}: {customer: Customer; shipping
     const shippingMethod = shipping.data?.ok ? shipping.data.data.find(method => method.id === shippingMethodId) : undefined
     const {totals, error, loading, retry} = useCheckoutTotals(items, shippingMethod?.fee ?? 0)
 
-    if (shipping.data === null) return <p role="status">Đang tải cách giao hàng…</p>
+    if (shipping.data === null) return <StatePanel variant="loading">Đang tải cách giao hàng...</StatePanel>
     if (!shipping.data.ok) return (
-        <div className="recipient-message is-error" role="alert">
-            <p>{shipping.data.message}</p>
-            <button className="recipient-shipping__retry" type="button" onClick={shipping.retry}>Thử lại giao hàng</button>
-        </div>
+        <StatePanel variant="error" title="Chưa tải được cách giao hàng" actionLabel="Thử lại giao hàng" onAction={shipping.retry}>
+            {shipping.data.message}
+        </StatePanel>
     )
-    if (!shippingMethod) return <p role="alert">Cách giao hàng đã chọn không còn. <a href="/thanh-toan/giao-hang">Chọn lại cách giao hàng</a></p>
-    if (loading) return <p role="status">Đang tải tiền hàng…</p>
+    if (!shippingMethod) return (
+        <StatePanel variant="empty" title="Cách giao hàng đã chọn không còn" actionLabel="Chọn lại cách giao hàng" actionHref="/thanh-toan/giao-hang">
+            Chọn lại để tiếp tục thanh toán.
+        </StatePanel>
+    )
+    if (loading) return <StatePanel variant="loading">Đang tải tiền hàng...</StatePanel>
     if (error || !totals) return (
-        <div className="recipient-message is-error" role="alert">
-            <p>{error ?? 'Chưa tính được tiền giỏ hàng.'}</p>
-            <button className="recipient-shipping__retry" type="button" onClick={retry}>Thử lại giỏ hàng</button>
-        </div>
+        <StatePanel variant="error" title="Chưa tính được tiền giỏ hàng" actionLabel="Thử lại giỏ hàng" onAction={retry}>
+            {error ?? 'Kiểm tra kết nối rồi thử lại.'}
+        </StatePanel>
     )
 
     const recipient = normalizeRecipient(customer)
@@ -76,9 +79,21 @@ export default function CheckoutPaymentPage() {
                 </header>
                 <section className="recipient-shipping" aria-label="Thanh toán">
                     {storageError && <p className="recipient-message is-error" role="alert">{storageError}</p>}
-                    {!items.length && <p role="status">Giỏ hàng đang trống.</p>}
-                    {items.length > 0 && !validRecipient && <p role="alert">Vui lòng lưu thông tin người nhận trước khi thanh toán.</p>}
-                    {items.length > 0 && validRecipient && shippingMethodId === null && <p role="alert">Vui lòng chọn cách giao hàng trước khi thanh toán.</p>}
+                    {!items.length && (
+                        <StatePanel variant="empty" title="Giỏ hàng đang trống" actionLabel="Tiếp tục mua sắm" actionHref="/san-pham">
+                            Thêm cây vào giỏ để thanh toán.
+                        </StatePanel>
+                    )}
+                    {items.length > 0 && !validRecipient && (
+                        <StatePanel variant="empty" title="Chưa có thông tin người nhận" actionLabel="Nhập thông tin người nhận" actionHref="/thanh-toan">
+                            Vui lòng lưu thông tin người nhận trước khi thanh toán.
+                        </StatePanel>
+                    )}
+                    {items.length > 0 && validRecipient && shippingMethodId === null && (
+                        <StatePanel variant="empty" title="Chưa chọn cách giao hàng" actionLabel="Chọn cách giao hàng" actionHref="/thanh-toan/giao-hang">
+                            Vui lòng chọn cách giao hàng trước khi thanh toán.
+                        </StatePanel>
+                    )}
                     {items.length > 0 && validRecipient && shippingMethodId !== null && (
                         <PaymentStep customer={draft.customer} shippingMethodId={shippingMethodId} />
                     )}

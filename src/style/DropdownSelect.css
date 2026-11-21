@@ -83,7 +83,7 @@
     overscroll-behavior: contain;
     scroll-margin-bottom: 12px;
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     background: var(--white);
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
     list-style: none;

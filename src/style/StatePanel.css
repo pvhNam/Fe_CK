@@ -1,0 +1,107 @@
+.state-panel,
+.cart-empty {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-2);
+    padding: var(--space-8) var(--space-5);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--beige);
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.state-panel.is-loading {
+    border-style: solid;
+    border-color: transparent;
+}
+
+.state-panel.is-error {
+    border: 1px solid #f1c6c1;
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.state-panel__title,
+.cart-empty h2 {
+    margin: 0;
+    color: var(--green-dark);
+    font-size: 1.15rem;
+    line-height: 1.35;
+}
+
+.state-panel.is-error .state-panel__title {
+    color: var(--danger);
+}
+
+.state-panel__text,
+.cart-empty p {
+    max-width: 46ch;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.state-panel .ui-button,
+.cart-empty .cart-button {
+    margin-top: var(--space-3);
+}
+
+.state-panel__spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid var(--green-light);
+    border-top-color: var(--green);
+    border-radius: 50%;
+    animation: state-panel-spin 0.8s linear infinite;
+}
+
+@keyframes state-panel-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.product-skeleton {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--white);
+}
+
+.product-skeleton__media,
+.product-skeleton__line {
+    background: linear-gradient(90deg, var(--beige) 25%, #fbf8f1 50%, var(--beige) 75%);
+    background-size: 200% 100%;
+    animation: product-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.product-skeleton__media {
+    aspect-ratio: 1 / 1;
+}
+
+.product-skeleton__body {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-4);
+}
+
+.product-skeleton__line {
+    display: block;
+    height: 14px;
+    border-radius: 999px;
+}
+
+.product-skeleton__line.is-short {
+    width: 40%;
+}
+
+.product-skeleton__line.is-price {
+    width: 55%;
+    height: 18px;
+}
+
+@keyframes product-skeleton-shimmer {
+    to {
+        background-position: -200% 0;
+    }
+}

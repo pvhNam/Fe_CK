@@ -17,7 +17,7 @@ import OrderConfirmationPage from './pages/OrderConfirmationPage'
 import ProductAdminPage from './pages/ProductAdminPage'
 import NewsAdminPage from './pages/NewsAdminPage'
 import OrderAdminPage from './pages/OrderAdminPage'
-
+import './style/ui.css'
 function renderPage() {
     const path = window.location.pathname.replace(/\/+$/, '') || '/'
 

@@ -5,6 +5,7 @@ import ProductCard from '../components/ProductCard'
 import {useApiData} from '../hooks/useApiData'
 import {getHomeData} from '../services/homeService'
 import '../style/HomePage.css'
+import StatePanel from '../components/StatePanel'
 
 function HomePage() {
     const {data, retry} = useApiData(getHomeData)
@@ -71,25 +72,23 @@ function HomePage() {
 
             {data === null && (
                 <div className="home-container">
-                    <p className="home-message" role="status">Đang tải trang chủ...</p>
+                    <StatePanel variant="loading">Đang tải trang chủ...</StatePanel>
                 </div>
             )}
 
             {hasLoadError && (
                 <div className="home-container">
-                    <div className="home-message" role="alert">
-                        <p>Chưa tải được đầy đủ nội dung trang chủ.</p>
-                        <button
-                            className="home-button"
-                            type="button"
-                            onClick={() => {
-                                setCurrentSlide(0)
-                                retry()
-                            }}
-                        >
-                            Thử lại
-                        </button>
-                    </div>
+                    <StatePanel
+                        variant="error"
+                        title="Chưa tải được đầy đủ nội dung trang chủ"
+                        actionLabel="Thử lại"
+                        onAction={() => {
+                            setCurrentSlide(0)
+                            retry()
+                        }}
+                    >
+                        Kiểm tra kết nối rồi thử lại.
+                    </StatePanel>
                 </div>
             )}
 
@@ -205,7 +204,7 @@ function HomePage() {
                                 ))}
                             </div>
                         ) : (
-                            <p className="home-message">Chưa có danh mục cây giống.</p>
+                            <StatePanel variant="empty" title="Chưa có danh mục cây giống">Danh mục sẽ được cập nhật sớm.</StatePanel>
                         )}
                     </div>
                 </section>
@@ -234,7 +233,7 @@ function HomePage() {
                                 ))}
                             </div>
                         ) : (
-                            <p className="home-message">Chưa có cây giống nổi bật.</p>
+                            <StatePanel variant="empty" title="Chưa có cây giống nổi bật">Xem toàn bộ cây giống ở trang sản phẩm.</StatePanel>
                         )}
                     </div>
                 </section>
@@ -255,7 +254,7 @@ function HomePage() {
                                 ))}
                             </div>
                         ) : (
-                            <p className="home-message">Chưa có tin tức được đăng.</p>
+                            <StatePanel variant="empty" title="Chưa có tin tức được đăng">Bài viết mới sẽ xuất hiện ở đây.</StatePanel>
                         )}
                     </div>
                 </section>

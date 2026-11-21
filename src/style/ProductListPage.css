@@ -95,7 +95,7 @@
     height: auto;
     aspect-ratio: 1;
     object-fit: cover;
-    border-radius: 14px;
+    border-radius: var(--radius-lg);
     background: var(--beige);
 }
 

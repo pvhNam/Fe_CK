@@ -13,6 +13,7 @@ import {
 } from '../utils/orderDisplay'
 import type { OrderChanges } from '../utils/orderStatus'
 import OrderDetail from '../components/OrderDetail'
+import StatePanel from '../components/StatePanel'
 import '../style/ProductListPage.css'
 import '../style/ProductAdminPage.css'
 import '../style/OrderAdminPage.css'
@@ -114,21 +115,18 @@ function OrderAdminPage() {
                     )}
                 </header>
 
-                {loading && (
-                    <p className="product-page__status" role="status">Đang tải danh sách đơn...</p>
-                )}
+                {loading && <StatePanel variant="loading">Đang tải danh sách đơn...</StatePanel>}
 
                 {!loading && loadError && (
-                    <div className="product-page__status is-error" role="alert">
-                        <p>{loadError}</p>
-                        <button type="button" onClick={reload}>Thử lại</button>
-                    </div>
+                    <StatePanel variant="error" title="Chưa tải được danh sách đơn" actionLabel="Thử lại" onAction={reload}>
+                        {loadError}
+                    </StatePanel>
                 )}
 
                 {ready && rows.length === 0 && (
-                    <div className="product-page__status">
-                        <p>Chưa có đơn hàng nào. Đơn sẽ hiện ở đây sau khi khách đặt hàng.</p>
-                    </div>
+                    <StatePanel variant="empty" title="Chưa có đơn hàng nào">
+                        Đơn sẽ hiện ở đây sau khi khách đặt hàng.
+                    </StatePanel>
                 )}
 
                 {ready && rows.length > 0 && (

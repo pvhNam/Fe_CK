@@ -79,7 +79,7 @@
 
 .news-admin__panel {
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     background: var(--white);
 }
 
@@ -152,7 +152,7 @@
     max-height: calc(100dvh - 24px);
     padding: clamp(18px, 4vw, 32px);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     background: var(--white);
     color: var(--text);
     box-shadow: 0 18px 60px rgb(20 52 30 / 20%);
