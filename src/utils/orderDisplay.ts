@@ -15,7 +15,7 @@ export const PAYMENT_LABELS: Record<PaymentStatus, string> = {
 
 export const PAYMENT_SHORT_NAMES: Record<PaymentCode, string> = {
     COD: 'Trả khi nhận hàng',
-    ONLINE_DEMO: 'Online (mô phỏng)',
+    ONLINE_DEMO: 'Thanh toán Online',
 }
 
 const TIME_ZONE = 'Asia/Ho_Chi_Minh'

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { Order, PaymentMethod, ShippingMethod } from '../types'
-import { getOrders } from '../services/orderService'
+import type { Order, PaymentCode, PaymentMethod, ShippingMethod } from '../types'
+import { getOrders, updateOrder } from '../services/orderService'
 import { getPaymentMethods, getShippingMethods } from '../services/checkoutService'
 import { formatVND } from '../utils/currency'
 import {
@@ -11,6 +11,7 @@ import {
     formatTime,
     summarizeItems,
 } from '../utils/orderDisplay'
+import type { OrderChanges } from '../utils/orderStatus'
 import OrderDetail from '../components/OrderDetail'
 import '../style/ProductListPage.css'
 import '../style/ProductAdminPage.css'
@@ -69,14 +70,27 @@ function OrderAdminPage() {
         return order.paymentMethod?.name ?? paymentNames.get(order.paymentMethodId) ?? `Cách trả #${order.paymentMethodId}`
     }
 
-    function paymentShortNameOf(order: Order) {
-        const code = order.paymentMethod?.code
+    function paymentCodeOf(order: Order): PaymentCode | null {
+        return order.paymentMethod?.code
             ?? paymentMethods.find((method) => method.id === order.paymentMethodId)?.code
+            ?? null
+    }
+
+    function paymentShortNameOf(order: Order) {
+        const code = paymentCodeOf(order)
         return code ? PAYMENT_SHORT_NAMES[code] : paymentNameOf(order)
     }
 
     function shippingNameOf(order: Order) {
         return order.shippingMethod?.name ?? shippingNames.get(order.shippingMethodId) ?? `Cách giao #${order.shippingMethodId}`
+    }
+
+    async function saveOrder(id: number, changes: OrderChanges): Promise<string | null> {
+        const result = await updateOrder(id, changes)
+        if (!result.ok) return result.message
+
+        setOrders((list) => list.map((order) => (order.id === result.data.id ? result.data : order)))
+        return null
     }
 
     const ready = !loading && !loadError
@@ -124,7 +138,9 @@ function OrderAdminPage() {
                                 key={selected.id}
                                 order={selected}
                                 paymentName={paymentNameOf(selected)}
+                                paymentCode={paymentCodeOf(selected)}
                                 shippingName={shippingNameOf(selected)}
+                                onUpdate={(changes) => saveOrder(selected.id, changes)}
                                 onClose={() => setSelectedId(null)}
                             />
                         )}

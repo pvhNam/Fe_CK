@@ -129,6 +129,7 @@ export type CreateOrderRequest = QuoteRequest & {
 export type OrderStatusEvent = {
     status: DeliveryStatus;
     at: string
+    note?: string
 }
 
 export type Order = NewOrder & {
