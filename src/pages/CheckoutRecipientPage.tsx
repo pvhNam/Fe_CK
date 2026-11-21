@@ -4,6 +4,7 @@ import type {Customer} from '../types'
 import {normalizeRecipient, RECIPIENT_LIMITS, validateRecipient} from '../utils/recipient'
 import type {RecipientErrors, RecipientField} from '../utils/recipient'
 import {readRecipientDraft, writeRecipientDraft} from '../utils/recipientStorage'
+import {clearCompletedPayment} from '../utils/checkoutStorage'
 import '../style/CheckoutRecipientPage.css'
 
 export default function CheckoutRecipientPage() {
@@ -48,6 +49,7 @@ export default function CheckoutRecipientPage() {
 
         try {
             writeRecipientDraft(normalized)
+            clearCompletedPayment()
             setCustomer(normalized)
             setStorageError(null)
             window.location.assign('/thanh-toan/giao-hang')
