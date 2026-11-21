@@ -1,4 +1,5 @@
 import type {PaymentCode, PaymentStatus} from '../types'
+import {RECIPIENT_STORAGE_KEY} from './recipientStorage'
 
 const SHIPPING_KEY = 'mam-xanh.checkout.shipping.v1'
 const PAYMENT_KEY = 'mam-xanh.checkout.payment.v1'
@@ -59,4 +60,11 @@ export function writePaymentDraft(draft: PaymentDraft): void {
 
 export function clearCompletedPayment(): void {
     if (readPaymentDraft()?.orderId) window.sessionStorage.removeItem(PAYMENT_KEY)
+}
+
+export function clearCheckoutDrafts(): void {
+    const storage = window.sessionStorage
+    storage.removeItem(RECIPIENT_STORAGE_KEY)
+    storage.removeItem(SHIPPING_KEY)
+    storage.removeItem(PAYMENT_KEY)
 }

@@ -1,9 +1,10 @@
 import {useRef, useState} from 'react'
 import type {CartTotals, Customer, PaymentMethod, ShippingMethod} from '../../types'
 import {useApiData} from '../../hooks/useApiData'
+import {useCart} from '../../hooks/useCart'
 import {getPaymentMethods} from '../../services/checkoutService'
 import {submitCheckoutOrder} from '../../services/orderService'
-import {readPaymentDraft, writePaymentDraft} from '../../utils/checkoutStorage'
+import {clearCheckoutDrafts, readPaymentDraft, writePaymentDraft} from '../../utils/checkoutStorage'
 import type {OnlinePaymentResult, PaymentDraft} from '../../utils/checkoutStorage'
 import {formatVND} from '../../utils/currency'
 
@@ -15,6 +16,7 @@ type Props = {
 }
 
 export default function CheckoutPaymentMethods({checkoutKey, customer, shippingMethod, totals}: Props) {
+    const {clearCart} = useCart()
     const {data, retry} = useApiData(getPaymentMethods)
     const [draft, setDraft] = useState(readPaymentDraft)
     const [saveError, setSaveError] = useState(false)
@@ -94,6 +96,15 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
                 paymentStatus: order.paymentStatus, onlineResult: order.paymentStatus === 'paid' ? 'success' : null,
             }
             if (!persist(completed)) setDraft(completed)
+            const confirmationUrl = `/don-hang/${order.id}/xac-nhan`
+            try {
+                clearCart(totals.items)
+                clearCheckoutDrafts()
+            } catch {
+                window.location.replace(`${confirmationUrl}?kiem-tra-gio=1`)
+                return
+            }
+            window.location.replace(confirmationUrl)
         } catch {
             setOrderError('Chưa xác nhận được đơn hàng. Vui lòng thử lại.')
         } finally {
@@ -103,7 +114,9 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
     }
 
     if (draft?.checkoutKey === checkoutKey && draft.orderId) {
-        return <p className="recipient-message is-success" role="status">Đặt hàng thành công. Mã đơn #{draft.orderId}.</p>
+        return <p className="recipient-message is-success" role="status">
+            Đặt hàng thành công. <a href={`/don-hang/${draft.orderId}/xac-nhan`}>Xem đơn #{draft.orderId}</a>
+        </p>
     }
     if (data === null) return <p role="status">Đang tải phương thức thanh toán…</p>
     if (!data.ok) return (

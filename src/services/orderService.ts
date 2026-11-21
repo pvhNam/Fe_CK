@@ -6,8 +6,17 @@ export function getOrders() {
     return getJson<Order[]>('/orders')
 }
 
-export function getOrderById(id: number) {
-    return getJson<Order>(`/orders/${id}`)
+export async function getOrderById(id: number): Promise<ApiResult<Order>> {
+    const result = await getJson<Order>(`/orders/${id}`)
+    if (!result.ok) return result
+    const order = result.data
+    if (order?.id !== id || !order.customer || !Array.isArray(order.items) || !order.items.length
+        || ![order.subtotal, order.shippingFee, order.total, order.discount ?? 0].every(Number.isFinite)
+        || !order.items.every(item => item && typeof item.name === 'string' && Number.isFinite(item.unitPrice)
+            && Number.isSafeInteger(item.quantity) && item.quantity > 0)) {
+        return {ok: false, status: 200, message: 'Thông tin đơn hàng trả về không hợp lệ.'}
+    }
+    return result
 }
 
 export function createOrder(order: Omit<Order, 'id'>) {
