@@ -166,9 +166,13 @@ function ProductAdminPage() {
         <main className="product-page">
             <div className="product-page__container">
                 <header className="product-page__heading">
+                    <h1>Quản lý cây giống</h1>
+
                     <div className="product-admin__intro">
                         <h1>Quản lý cây giống</h1>
                         <p>Cây không bán nữa thì ẩn đi thay vì xóa, để các đơn đã đặt vẫn giữ đúng thông tin.</p>
+                        <a className="product-page__back" href="/quan-ly/tin-tuc">Quản lý tin tức →</a>
+
                     </div>
                     {ready && (
                         <button type="button" className="product-admin__add" onClick={() => openForm({ mode: 'add' })}>
