@@ -18,6 +18,8 @@ import ProductAdminPage from './pages/ProductAdminPage'
 import NewsAdminPage from './pages/NewsAdminPage'
 import OrderAdminPage from './pages/OrderAdminPage'
 import './style/ui.css'
+import FavoritesPage from './pages/FavoritesPage'
+
 function renderPage() {
     const path = window.location.pathname.replace(/\/+$/, '') || '/'
 
@@ -27,6 +29,7 @@ function renderPage() {
     if (path === '/gioi-thieu') return <AboutPage/>
     if (path === '/lien-he') return <ContactPage/>
     if (path === '/gio-hang') return <CartPage/>
+    if (path === '/yeu-thich') return <FavoritesPage/>
     if (path === '/thanh-toan') return <CheckoutRecipientPage/>
     if (path === '/thanh-toan/giao-hang') return <CheckoutShippingPage />
     if (path === '/thanh-toan/phuong-thuc-thanh-toan') return <CheckoutPaymentPage />

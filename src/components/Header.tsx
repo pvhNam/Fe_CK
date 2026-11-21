@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from 'react'
 import {useCart} from '../hooks/useCart'
 import '../style/Header.css'
 import plantLogo from '../assets/images/logo/footer-plant.jpg'
+import {useFavorites} from '../hooks/useFavorites'
 
 type MenuItem = {
     id: string
@@ -76,6 +77,7 @@ function Header() {
 
     const currentPath = window.location.pathname
     const {itemCount: cartCount} = useCart()
+    const {count: favoriteCount} = useFavorites()
 
     // Đóng menu khi bấm ra ngoài hoặc nhấn Escape
     useEffect(() => {
@@ -185,7 +187,26 @@ function Header() {
 
                         <span className="header-action-label">Tài khoản</span>
                     </a>
+                    <a
+                        className="header-action"
+                        href="/yeu-thich"
+                        aria-label={`Cây yêu thích, đã lưu ${favoriteCount} cây`}
+                        aria-current={currentPath === '/yeu-thich' ? 'page' : undefined}
+                    >
+                        <span className="header-cart-icon">
+                            <svg className="header-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 20.5s-7.5-4.6-9.3-9.2C1.5 8 3.6 4.5 7.1 4.5c2 0 3.6 1.1 4.9 2.9 1.3-1.8 2.9-2.9 4.9-2.9 3.5 0 5.6 3.5 4.4 6.8-1.8 4.6-9.3 9.2-9.3 9.2Z"/>
+                            </svg>
 
+                            {favoriteCount > 0 && (
+                                <span className="header-cart-count" aria-hidden="true">
+                                    {favoriteCount}
+                                </span>
+                            )}
+                        </span>
+
+                        <span className="header-action-label">Yêu thích</span>
+                    </a>
                     <a
                         className="header-action"
                         href="/gio-hang"

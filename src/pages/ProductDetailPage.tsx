@@ -7,6 +7,8 @@ import AddToCartForm from '../components/AddToCartForm'
 import '../style/ProductListPage.css'
 import '../style/ProductDetailPage.css'
 import StatePanel from '../components/StatePanel'
+import FavoriteButton from '../components/FavoriteButton'
+
 
 function ProductDetailPage({productId}: { productId: number }) {
     const load = useCallback(() => getProductById(productId), [productId])
@@ -60,6 +62,7 @@ function ProductDetailPage({productId}: { productId: number }) {
                                 </div>
                             </dl>
                             <AddToCartForm product={product} />
+                            <FavoriteButton product={product} variant="detail" />
                             <p>{product.description}</p>
                             <h2>Hướng dẫn chăm sóc</h2>
                             <ul className="care-guide">

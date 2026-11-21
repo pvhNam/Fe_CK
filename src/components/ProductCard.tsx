@@ -1,6 +1,7 @@
 import type {Product} from '../types'
 import {formatVND} from '../utils/currency'
 import '../style/ProductCard.css'
+import FavoriteButton from './FavoriteButton'
 
 type ProductCardProps = {
     product: Product
@@ -24,6 +25,7 @@ function ProductCard({product, categoryName}: ProductCardProps) {
                 <span className={`product-card__stock ${inStock ? 'is-in-stock' : 'is-out'}`}>
                     {inStock ? `Còn ${product.stock} cây` : 'Hết hàng'}
                 </span>
+                <FavoriteButton product={product}/>
             </div>
 
             <div className="product-card__body">
