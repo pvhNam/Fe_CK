@@ -6,6 +6,9 @@ import {parseCareGuide} from '../utils/careGuide'
 import AddToCartForm from '../components/AddToCartForm'
 import '../style/ProductListPage.css'
 import '../style/ProductDetailPage.css'
+import StatePanel from '../components/StatePanel'
+import FavoriteButton from '../components/FavoriteButton'
+
 
 function ProductDetailPage({productId}: { productId: number }) {
     const load = useCallback(() => getProductById(productId), [productId])
@@ -18,19 +21,18 @@ function ProductDetailPage({productId}: { productId: number }) {
             <div className="product-page__container">
                 <a className="product-page__back" href="/san-pham">← Danh sách cây giống</a>
 
-                {result === null && (
-                    <p className="product-page__status" role="status">Đang tải thông tin cây...</p>
-                )}
+                {result === null && <StatePanel variant="loading">Đang tải thông tin cây...</StatePanel>}
 
                 {notFound && (
-                    <p className="product-page__status" role="alert">Không tìm thấy cây giống này.</p>
+                    <StatePanel variant="empty" titleAs="h1" title="Không tìm thấy cây giống này" actionLabel="Xem tất cả cây giống" actionHref="/san-pham">
+                        Cây có thể đã ngừng bán hoặc đường dẫn chưa đúng.
+                    </StatePanel>
                 )}
 
                 {result && !result.ok && !notFound && (
-                    <div className="product-page__status is-error" role="alert">
-                        <p>Chưa tải được thông tin cây giống.</p>
-                        <button type="button" onClick={retry}>Thử lại</button>
-                    </div>
+                    <StatePanel variant="error" title="Chưa tải được thông tin cây giống" actionLabel="Thử lại" onAction={retry}>
+                        Kiểm tra kết nối rồi thử lại.
+                    </StatePanel>
                 )}
 
                 {product && (
@@ -60,6 +62,7 @@ function ProductDetailPage({productId}: { productId: number }) {
                                 </div>
                             </dl>
                             <AddToCartForm product={product} />
+                            <FavoriteButton product={product} variant="detail" />
                             <p>{product.description}</p>
                             <h2>Hướng dẫn chăm sóc</h2>
                             <ul className="care-guide">

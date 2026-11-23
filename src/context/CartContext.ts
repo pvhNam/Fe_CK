@@ -10,7 +10,7 @@ export type CartContextValue = {
     increaseQuantity: (product: CartProduct) => void
     decreaseQuantity: (product: CartProduct) => void
     removeItem: (productId: number) => void
-    clearCart: () => void
+    clearCart: (purchased?: readonly CartItem[]) => void
     getTotals: (products: readonly CartProduct[], shippingFee?: number) => CartTotals
     clearStorageError: () => void
 }

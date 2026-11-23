@@ -6,7 +6,8 @@ import ProductFilterBar from '../components/ProductFilterBar'
 import Pagination from '../components/Pagination'
 import { DEFAULT_FILTERS, filterProducts, type ProductFilterValues } from '../utils/productFilters'
 import '../style/ProductListPage.css'
-
+import ProductGridSkeleton from '../components/ProductGridSkeleton'
+import StatePanel from '../components/StatePanel'
 const PAGE_SIZE = 8
 
 const categoryGroups = new Map([
@@ -121,26 +122,27 @@ function ProductListPage() {
                 </header>
 
                 {loading && (
-                    <p className="product-page__status" role="status">
-                        Đang tải danh sách cây...
-                    </p>
+                    <>
+                        <p className="ui-visually-hidden" role="status">Đang tải danh sách cây...</p>
+                        <ProductGridSkeleton />
+                    </>
                 )}
 
                 {!loading && error && (
-                    <div className="product-page__status is-error" role="alert">
-                        <p>{error}</p>
-                        <button type="button" onClick={retry}>
-                            Thử lại
-                        </button>
-                    </div>
+                    <StatePanel variant="error" title="Chưa tải được danh sách cây" actionLabel="Thử lại" onAction={retry}>
+                        {error}
+                    </StatePanel>
                 )}
 
                 {ready && scopedProducts.length === 0 && (
-                    <p className="product-page__status">
-                        {isScoped
-                            ? 'Không tìm thấy cây giống phù hợp.'
-                            : 'Hiện chưa có cây giống nào đang bán.'}
-                    </p>
+                    <StatePanel
+                        variant="empty"
+                        title={isScoped ? 'Không tìm thấy cây giống phù hợp' : 'Chưa có cây giống nào đang bán'}
+                        actionLabel={isScoped ? 'Xem tất cả cây giống' : undefined}
+                        actionHref={isScoped ? '/san-pham' : undefined}
+                    >
+                        {isScoped ? 'Thử đổi từ khóa hoặc chọn danh mục khác.' : 'Cửa hàng sẽ sớm cập nhật thêm cây giống.'}
+                    </StatePanel>
                 )}
 
                 {ready && scopedProducts.length > 0 && (
@@ -153,12 +155,9 @@ function ProductListPage() {
                         />
 
                         {visibleProducts.length === 0 ? (
-                            <div className="product-page__status" role="status">
-                                <p>Không tìm thấy cây phù hợp với bộ lọc.</p>
-                                <button type="button" onClick={resetFilters}>
-                                    Xóa bộ lọc
-                                </button>
-                            </div>
+                            <StatePanel variant="empty" title="Không tìm thấy cây phù hợp" actionLabel="Xóa bộ lọc" onAction={resetFilters}>
+                                Thử bỏ bớt điều kiện lọc để xem nhiều cây hơn.
+                            </StatePanel>
                         ) : (
                             <>
                                 <div className="product-grid">

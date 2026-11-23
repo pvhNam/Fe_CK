@@ -1,0 +1,70 @@
+.order-confirmation {
+    flex: 1;
+    box-sizing: border-box;
+    width: min(960px, 100%);
+    margin: 0 auto;
+    padding: 32px 20px 56px;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+}
+
+.order-confirmation h1, .order-confirmation h2 {
+    margin: 0;
+    color: var(--green-dark);
+}
+
+.order-confirmation h1 { font-size: clamp(1.6rem, 4vw, 2.15rem); }
+.order-confirmation h2 { margin-bottom: 12px; font-size: 1.15rem; }
+.order-confirmation header p { margin: 4px 0 22px; }
+
+.order-confirmation__details {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.order-confirmation__panel {
+    padding: 22px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--white);
+}
+
+.order-confirmation__panel section + section, .order-confirmation__totals {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+.order-confirmation__panel p { margin: 4px 0; }
+.order-confirmation__note, .order-confirmation__items small { color: var(--text-muted); }
+.order-confirmation__items { margin: 0; padding: 0; list-style: none; }
+.order-confirmation__items small { display: block; }
+.order-confirmation__items li, .order-confirmation__totals div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 5px 0;
+}
+.order-confirmation__items li > strong, .order-confirmation__totals dd { margin: 0; white-space: nowrap; }
+.order-confirmation__totals { margin-bottom: 0; }
+.order-confirmation__totals div:last-child { font-weight: 700; color: var(--green-dark); }
+
+.order-confirmation__continue, .order-confirmation button {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--green);
+    color: var(--white);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+.order-confirmation__continue:hover, .order-confirmation button:hover { background: var(--green-dark); }
+@media (max-width: 680px) {
+    .order-confirmation__details { grid-template-columns: 1fr; }
+    .order-confirmation__panel { padding: 16px; }
+}

@@ -1,0 +1,27 @@
+.favorites-page__note {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    margin: 0 0 20px;
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    background: var(--beige);
+    color: var(--text);
+}
+
+.favorites-page__note.is-warning {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.favorites-page__note button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--green-dark);
+    font: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+}

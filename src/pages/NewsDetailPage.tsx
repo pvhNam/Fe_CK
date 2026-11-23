@@ -3,6 +3,7 @@ import NewsCard from '../components/NewsCard'
 import {useApiData} from '../hooks/useApiData'
 import {getNewsById, getPublishedNews} from '../services/newsService'
 import '../style/NewsPage.css'
+import StatePanel from '../components/StatePanel'
 
 function NewsDetailPage({newsId}: { newsId: number }) {
     const load = useCallback(() => getNewsById(newsId), [newsId])
@@ -25,22 +26,18 @@ function NewsDetailPage({newsId}: { newsId: number }) {
                     <span aria-current="page">Bài viết</span>
                 </nav>
 
-                {result === null && (
-                    <p className="news-page__status" role="status">Đang tải bài viết...</p>
-                )}
+                {result === null && <StatePanel variant="loading">Đang tải bài viết...</StatePanel>}
 
                 {notFound && (
-                    <div className="news-page__status" role="alert">
-                        <h1>Không tìm thấy bài viết</h1>
-                        <a className="news-page__back" href="/tin-tuc">← Về danh sách tin tức</a>
-                    </div>
+                    <StatePanel variant="empty" titleAs="h1" title="Không tìm thấy bài viết" actionLabel="Về danh sách tin tức" actionHref="/tin-tuc">
+                        Bài viết có thể đã được ẩn hoặc đường dẫn chưa đúng.
+                    </StatePanel>
                 )}
 
                 {result && !result.ok && !notFound && (
-                    <div className="news-page__status" role="alert">
-                        <p>Chưa tải được bài viết.</p>
-                        <button type="button" onClick={retry}>Thử lại</button>
-                    </div>
+                    <StatePanel variant="error" title="Chưa tải được bài viết" actionLabel="Thử lại" onAction={retry}>
+                        Kiểm tra kết nối rồi thử lại.
+                    </StatePanel>
                 )}
 
                 {news && (

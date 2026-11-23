@@ -21,5 +21,5 @@ export function useApiData<T>(load: () => Promise<T>) {
         setReloadKey((key) => key + 1)
     }
 
-    return { data, retry }
+    return { data, setData, retry }
 }

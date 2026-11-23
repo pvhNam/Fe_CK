@@ -27,6 +27,7 @@ export default function CheckoutShippingPage() {
                         <li><a href="/gio-hang">Giỏ hàng</a></li>
                         <li><a href="/thanh-toan">Người nhận</a></li>
                         <li aria-current="step">Giao hàng</li>
+                        <li>Thanh toán</li>
                     </ol>
                 </nav>
                 <header className="recipient-heading">

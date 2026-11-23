@@ -6,7 +6,7 @@ import type {CartItem, Product} from '../types'
 import {calculateCartTotals, calculateItemTotal} from '../utils/cart'
 import {formatVND} from '../utils/currency'
 import '../style/CartPage.css'
-
+import StatePanel from '../components/StatePanel'
 function CartRow({item, product, catalogReady}: {
     item: Readonly<CartItem>
     product: Product | undefined
@@ -155,12 +155,11 @@ function CartContents() {
 
     return (
         <>
-            {result === null && <p className="cart-message" role="status">Đang tải thông tin cây...</p>}
+            {result === null && <StatePanel variant="loading">Đang tải thông tin cây...</StatePanel>}
             {loadError && (
-                <div className="cart-message cart-error" role="alert">
-                    <p>{loadError}</p>
-                    <button className="cart-button" type="button" onClick={retry}>Thử lại</button>
-                </div>
+                <StatePanel variant="error" title="Chưa tải được thông tin cây" actionLabel="Thử lại" onAction={retry}>
+                    {loadError}
+                </StatePanel>
             )}
             <div className="cart-layout">
                 <div>

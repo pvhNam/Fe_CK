@@ -24,6 +24,25 @@ export async function getShippingMethods(): Promise<ApiResult<ShippingMethod[]>>
         : result
 }
 
-export function getPaymentMethods() {
-    return getJson<PaymentMethod[]>('/paymentMethods')
+export async function getPaymentMethods(): Promise<ApiResult<PaymentMethod[]>> {
+    const result = await getJson<PaymentMethod[]>('/paymentMethods')
+    if (!result.ok) return result
+
+    const ids = new Set<number>()
+    const codes = new Set<string>()
+    const invalid = !Array.isArray(result.data) || result.data.some(method => {
+        if (!method || typeof method !== 'object'
+            || !Number.isSafeInteger(method.id) || method.id <= 0 || ids.has(method.id)
+            || (method.code !== 'COD' && method.code !== 'ONLINE_DEMO') || codes.has(method.code)
+            || typeof method.name !== 'string' || !method.name.trim()) {
+            return true
+        }
+        ids.add(method.id)
+        codes.add(method.code)
+        return false
+    })
+
+    return invalid
+        ? {ok: false, status: 200, message: 'Dữ liệu phương thức thanh toán không hợp lệ.'}
+        : result
 }

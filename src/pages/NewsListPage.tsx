@@ -2,6 +2,7 @@ import NewsCard from '../components/NewsCard'
 import {useApiData} from '../hooks/useApiData'
 import {getPublishedNews} from '../services/newsService'
 import '../style/NewsPage.css'
+import StatePanel from '../components/StatePanel'
 
 function NewsListPage() {
     const {data: result, retry} = useApiData(getPublishedNews)
@@ -17,19 +18,18 @@ function NewsListPage() {
                     <span aria-current="page">Tin tức</span>
                 </nav>
 
-                {result === null && (
-                    <p className="news-page__status" role="status">Đang tải tin tức...</p>
-                )}
+                {result === null && <StatePanel variant="loading">Đang tải tin tức...</StatePanel>}
 
                 {result && !result.ok && (
-                    <div className="news-page__status" role="alert">
-                        <p>Chưa tải được tin tức.</p>
-                        <button type="button" onClick={retry}>Thử lại</button>
-                    </div>
+                    <StatePanel variant="error" title="Chưa tải được tin tức" actionLabel="Thử lại" onAction={retry}>
+                        Kiểm tra kết nối rồi thử lại.
+                    </StatePanel>
                 )}
 
                 {result?.ok && !latestNews && (
-                    <p className="news-page__status">Chưa có tin tức được đăng.</p>
+                    <StatePanel variant="empty" title="Chưa có tin tức được đăng">
+                        Bài viết mới sẽ xuất hiện ở đây.
+                    </StatePanel>
                 )}
 
                 {latestNews && <NewsCard news={latestNews} featured />}
