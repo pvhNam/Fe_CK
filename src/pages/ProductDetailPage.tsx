@@ -11,7 +11,7 @@ import StatePanel from '../components/StatePanel'
 import FavoriteButton from '../components/FavoriteButton'
 import { useRouteId } from '../hooks/useRouteId'
 import RouteError from '../route/Error'
-
+import RelatedProducts from '../components/RelatedProducts'
 
 function ProductDetail({productId}: { productId: number }) {
     const load = useCallback(() => getProductById(productId), [productId])
@@ -76,12 +76,11 @@ function ProductDetail({productId}: { productId: number }) {
                                     </li>
                                 ))}
                             </ul>
-                            <Link className="product-page__back" to={`/san-pham?danhMuc=${product.categoryId}`}>
-                                Xem cây cùng danh mục →
-                            </Link>
                         </div>
                     </article>
                 )}
+
+                {product && <RelatedProducts product={product} />}
             </div>
         </main>
     )
