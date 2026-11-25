@@ -4,7 +4,7 @@ import { useCart } from '../hooks/useCart'
 import QuantityInput from './QuantityInput'
 import '../style/AddToCartForm.css'
 
-function AddToCartForm({ product }: { product: Product }) {
+function AddToCartForm({ product, showQuantity = true }: { product: Product; showQuantity?: boolean }) {
     const { items, addItem } = useCart()
     const [quantity, setQuantity] = useState(1)
     const [message, setMessage] = useState('')
@@ -26,30 +26,32 @@ function AddToCartForm({ product }: { product: Product }) {
         }
     }
 
-    if (product.stock <= 0) {
+    if (product.stock <= 0 && showQuantity) {
         return <p className="add-to-cart__note is-error">Cây này tạm hết hàng, bạn quay lại sau nhé.</p>
     }
 
     return (
         <div className="add-to-cart">
             <div className="add-to-cart__row">
-                <QuantityInput
-                    value={selected}
-                    max={remaining}
-                    onChange={setQuantity}
-                    disabled={remaining === 0}
-                />
+                {showQuantity && (
+                    <QuantityInput
+                        value={selected}
+                        max={remaining}
+                        onChange={setQuantity}
+                        disabled={remaining === 0}
+                    />
+                )}
                 <button
                     type="button"
                     className="add-to-cart__button"
                     onClick={handleAdd}
                     disabled={remaining === 0}
                 >
-                    Thêm vào giỏ
+                    {product.stock <= 0 ? 'Hết hàng' : 'Thêm vào giỏ'}
                 </button>
             </div>
 
-            {inCart > 0 && (
+            {inCart > 0 && (showQuantity || remaining === 0) && (
                 <p className="add-to-cart__note">
                     Trong giỏ đã có {inCart} cây
                     {remaining === 0 ? ', bằng số cây còn lại của vườn.' : '.'}

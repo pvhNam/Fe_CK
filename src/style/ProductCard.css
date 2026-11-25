@@ -108,6 +108,16 @@
     color: var(--green);
 }
 
+.product-card .add-to-cart {
+    position: relative;
+    z-index: 1;
+    margin: 6px 0 0;
+}
+
+.product-card .add-to-cart__button {
+    padding-inline: 8px;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .product-card {
         transition: none;

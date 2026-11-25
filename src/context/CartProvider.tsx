@@ -1,9 +1,9 @@
-import {useCallback, useMemo, useRef, useState} from 'react'
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
 import type {ReactNode} from 'react'
 import type {CartItem, CartProduct} from '../types'
 import {calculateCartTotals} from '../utils/cart'
 import {addCartItem, removeCartItem, setCartItemQuantity} from '../utils/cartState'
-import {readStoredCart, writeStoredCart} from '../utils/cartStorage'
+import {CART_STORAGE_KEY, readStoredCart, writeStoredCart} from '../utils/cartStorage'
 import {CartContext} from './CartContext'
 import type {CartContextValue} from './CartContext'
 
@@ -12,6 +12,27 @@ export default function CartProvider({children}: { children: ReactNode }) {
     const [items, setItems] = useState(initial.items)
     const [storageError, setStorageError] = useState(initial.error)
     const currentItems = useRef(initial.items)
+
+    useEffect(() => {
+        function refreshCart() {
+            const stored = readStoredCart()
+            currentItems.current = stored.items
+            setItems(stored.items)
+            setStorageError(stored.error)
+        }
+        function onStorage(event: StorageEvent) {
+            if (event.storageArea === window.localStorage && (event.key === CART_STORAGE_KEY || event.key === null)) refreshCart()
+        }
+        function onPageShow(event: PageTransitionEvent) {
+            if (event.persisted) refreshCart()
+        }
+        window.addEventListener('storage', onStorage)
+        window.addEventListener('pageshow', onPageShow)
+        return () => {
+            window.removeEventListener('storage', onStorage)
+            window.removeEventListener('pageshow', onPageShow)
+        }
+    }, [])
 
     const commit = useCallback((next: CartItem[]) => {
         try {
