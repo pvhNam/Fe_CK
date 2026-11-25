@@ -1,3 +1,4 @@
+import {Link} from 'react-router-dom'
 import type {News} from '../types'
 import '../style/NewsPage.css'
 
@@ -25,16 +26,16 @@ function NewsCard({news, featured = false}: { news: News; featured?: boolean }) 
                     </time>
                 </div>
                 <Title className="news-card__title">
-                    <a href={`/tin-tuc/${news.id}`}>{news.title}</a>
+                    <Link to={`/tin-tuc/${news.id}`}>{news.title}</Link>
                 </Title>
                 <p>{news.summary}</p>
-                <a
+                <Link
                     className="news-card__read-more"
-                    href={`/tin-tuc/${news.id}`}
+                    to={`/tin-tuc/${news.id}`}
                     aria-label={`Đọc bài viết ${news.title}`}
                 >
                     Đọc bài viết <span aria-hidden="true">→</span>
-                </a>
+                </Link>
             </div>
         </article>
     )

@@ -1,11 +1,14 @@
+import {Link} from 'react-router-dom'
 import {useCallback} from 'react'
 import NewsCard from '../components/NewsCard'
 import {useApiData} from '../hooks/useApiData'
 import {getNewsById, getPublishedNews} from '../services/newsService'
 import '../style/NewsPage.css'
 import StatePanel from '../components/StatePanel'
+import {useRouteId} from '../hooks/useRouteId'
+import RouteError from '../route/Error'
 
-function NewsDetailPage({newsId}: { newsId: number }) {
+function NewsDetail({newsId}: { newsId: number }) {
     const load = useCallback(() => getNewsById(newsId), [newsId])
     const {data: result, retry} = useApiData(load)
     const {data: publishedNews} = useApiData(getPublishedNews)
@@ -19,9 +22,9 @@ function NewsDetailPage({newsId}: { newsId: number }) {
         <main className="news-page news-page--detail">
             <div className="news-page__container">
                 <nav className="news-breadcrumb" aria-label="Đường dẫn">
-                    <a href="/">Trang chủ</a>
+                    <Link to="/">Trang chủ</Link>
                     <span aria-hidden="true">/</span>
-                    <a href="/tin-tuc">Tin tức</a>
+                    <Link to="/tin-tuc">Tin tức</Link>
                     <span aria-hidden="true">/</span>
                     <span aria-current="page">Bài viết</span>
                 </nav>
@@ -29,7 +32,8 @@ function NewsDetailPage({newsId}: { newsId: number }) {
                 {result === null && <StatePanel variant="loading">Đang tải bài viết...</StatePanel>}
 
                 {notFound && (
-                    <StatePanel variant="empty" titleAs="h1" title="Không tìm thấy bài viết" actionLabel="Về danh sách tin tức" actionHref="/tin-tuc">
+                    <StatePanel variant="empty" titleAs="h1" title="Không tìm thấy bài viết"
+                                actionLabel="Về danh sách tin tức" actionHref="/tin-tuc">
                         Bài viết có thể đã được ẩn hoặc đường dẫn chưa đúng.
                     </StatePanel>
                 )}
@@ -68,7 +72,7 @@ function NewsDetailPage({newsId}: { newsId: number }) {
                             </div>
 
                             <footer className="news-article__footer">
-                                <a className="news-page__back" href="/tin-tuc">← Về danh sách tin tức</a>
+                                <Link className="news-page__back" to="/tin-tuc">← Về danh sách tin tức</Link>
                             </footer>
                         </article>
 
@@ -76,10 +80,10 @@ function NewsDetailPage({newsId}: { newsId: number }) {
                             <section className="news-section" aria-labelledby="more-news-title">
                                 <div className="news-section__heading">
                                     <h2 id="more-news-title">Đọc thêm</h2>
-                                    <a href="/tin-tuc">Xem tất cả tin tức →</a>
+                                    <Link to="/tin-tuc">Xem tất cả tin tức →</Link>
                                 </div>
                                 <div className="news-grid">
-                                    {moreNews.map((item) => <NewsCard key={item.id} news={item} />)}
+                                    {moreNews.map((item) => <NewsCard key={item.id} news={item}/>)}
                                 </div>
                             </section>
                         )}
@@ -90,4 +94,7 @@ function NewsDetailPage({newsId}: { newsId: number }) {
     )
 }
 
-export default NewsDetailPage
+export default function NewsDetailPage() {
+    const newsId = useRouteId()
+    return newsId === null ? <RouteError/> : <NewsDetail key={newsId} newsId={newsId}/>
+}

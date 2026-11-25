@@ -57,6 +57,7 @@ Hướng dẫn thao tác chi tiết có ảnh nằm ở [docs/huong-dan-quan-ly.
 | Công nghệ / công cụ | Mục đích |
 | --- | --- |
 | React 19 | Xây dựng giao diện theo component |
+| React Router DOM 6 | Khai báo đường dẫn và chuyển trang trong ứng dụng |
 | TypeScript | Kiểu dữ liệu cho sản phẩm, đơn hàng và các hàm xử lý |
 | Vite 8 | Chạy môi trường phát triển và đóng gói |
 | JSON Server 0.17.4 | Fake API đọc và ghi `db.json` |
@@ -159,16 +160,24 @@ npm run db:reset
 
 ### 7.6 Địa chỉ các trang
 
+Các đường dẫn được khai báo bằng JSX với `BrowserRouter`, `Routes` và `Route`. [Router.tsx](src/route/Router.tsx)
+
+Layout dùng `Outlet` để hiển thị trang con giữa header và footer. Trong nhánh `tin-tuc`, route `index` mở danh sách bài viết, còn route `:id` mở bài có mã tương ứng. [Layout.tsx](src/route/Layout.tsx)
+
+`Error.tsx` hiển thị trang “Không tìm thấy trang” khi đường dẫn hoặc mã trong URL không hợp lệ. [Error.tsx](src/route/Error.tsx)
+
 | Trang | Đường dẫn |
 | --- | --- |
 | Trang chủ | `/` |
 | Danh sách cây | `/san-pham` |
 | Chi tiết cây | `/san-pham/1` |
 | Tin tức | `/tin-tuc` |
+| Chi tiết tin | `/tin-tuc/1` |
 | Giới thiệu, liên hệ | `/gioi-thieu`, `/lien-he` |
 | Giỏ hàng | `/gio-hang` |
 | Cây yêu thích | `/yeu-thich` |
 | Đặt hàng | `/thanh-toan` |
+| Giao hàng, thanh toán | `/thanh-toan/giao-hang`, `/thanh-toan/phuong-thuc-thanh-toan` |
 | Xác nhận đơn | `/don-hang/1/xac-nhan` |
 | Quản lý cây giống | `/quan-ly/san-pham` |
 | Quản lý tin tức | `/quan-ly/tin-tuc` |

@@ -193,7 +193,11 @@
     white-space: nowrap;
 }
 
-.header-action:hover {
+.header-action[aria-disabled="true"] {
+    color: var(--text-muted);
+}
+
+a.header-action:hover {
     color: var(--green);
 }
 

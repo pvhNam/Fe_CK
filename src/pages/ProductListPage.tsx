@@ -1,13 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
-import type { Category, Product } from '../types'
-import { getCategories, getProducts } from '../services/productService'
+import {Link, useSearchParams} from 'react-router-dom'
+import {useRef, useState} from 'react'
+import {useApiData} from '../hooks/useApiData'
+import {getCategories, getProducts} from '../services/productService'
 import ProductCard from '../components/ProductCard'
 import ProductFilterBar from '../components/ProductFilterBar'
 import Pagination from '../components/Pagination'
-import { DEFAULT_FILTERS, filterProducts, type ProductFilterValues } from '../utils/productFilters'
+import {DEFAULT_FILTERS, filterProducts, type ProductFilterValues} from '../utils/productFilters'
 import '../style/ProductListPage.css'
 import ProductGridSkeleton from '../components/ProductGridSkeleton'
 import StatePanel from '../components/StatePanel'
+
 const PAGE_SIZE = 8
 
 const categoryGroups = new Map([
@@ -16,57 +18,29 @@ const categoryGroups = new Map([
     ['hoa-cay-canh', [4]],
 ])
 
-function readCategoryScope(): number[] {
-    const param = new URLSearchParams(window.location.search).get('danhMuc')
-    if (!param) return []
-    return categoryGroups.get(param) ?? [Number(param)]
+async function loadProductList() {
+    const [products, categories] = await Promise.all([getProducts(), getCategories()])
+    return {products, categories}
 }
 
-function readFiltersFromUrl(): ProductFilterValues {
-    const keyword = new URLSearchParams(window.location.search).get('q') ?? ''
-    return { ...DEFAULT_FILTERS, keyword }
+type ProductListProps = {
+    searchParams: URLSearchParams
+    data: Awaited<ReturnType<typeof loadProductList>> | null
+    retry: () => void
 }
 
-function ProductListPage() {
-    const [products, setProducts] = useState<Product[]>([])
-    const [categories, setCategories] = useState<Category[]>([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState('')
-    const [reloadKey, setReloadKey] = useState(0)
-    const [categoryScope] = useState(readCategoryScope)
-    const [filters, setFilters] = useState<ProductFilterValues>(readFiltersFromUrl)
+function ProductList({searchParams, data, retry}: ProductListProps) {
+    const category = searchParams.get('danhMuc')
+    const categoryScope = category ? categoryGroups.get(category) ?? [Number(category)] : []
+    const [filters, setFilters] = useState<ProductFilterValues>(() => ({
+        ...DEFAULT_FILTERS, keyword: searchParams.get('q') ?? '',
+    }))
     const [page, setPage] = useState(1)
-
     const headingRef = useRef<HTMLHeadingElement>(null)
-
-    useEffect(() => {
-        let ignore = false
-
-        Promise.all([getProducts(), getCategories()]).then(([productResult, categoryResult]) => {
-            if (ignore) return
-
-            if (productResult.ok) {
-                setProducts(productResult.data.filter((product) => product.active))
-                setError('')
-            } else {
-                setError(productResult.message)
-            }
-
-            if (categoryResult.ok) setCategories(categoryResult.data)
-
-            setLoading(false)
-        })
-
-        return () => {
-            ignore = true
-        }
-    }, [reloadKey])
-
-    function retry() {
-        setLoading(true)
-        setError('')
-        setReloadKey((key) => key + 1)
-    }
+    const products = data?.products.ok ? data.products.data.filter((product) => product.active) : []
+    const categories = data?.categories.ok ? data.categories.data : []
+    const loading = data === null
+    const error = data && !data.products.ok ? data.products.message : ''
 
     function changeFilters(nextFilters: ProductFilterValues) {
         setFilters(nextFilters)
@@ -79,7 +53,7 @@ function ProductListPage() {
 
     function goToPage(nextPage: number) {
         setPage(nextPage)
-        headingRef.current?.scrollIntoView({ block: 'start' })
+        headingRef.current?.scrollIntoView({block: 'start'})
     }
 
     const categoryNames = new Map(categories.map((category) => [category.id, category.name]))
@@ -115,21 +89,22 @@ function ProductListPage() {
                         </p>
                     )}
                     {isScoped && (
-                        <a className="product-page__back" href="/san-pham">
+                        <Link className="product-page__back" to="/san-pham">
                             Xem tất cả cây giống
-                        </a>
+                        </Link>
                     )}
                 </header>
 
                 {loading && (
                     <>
                         <p className="ui-visually-hidden" role="status">Đang tải danh sách cây...</p>
-                        <ProductGridSkeleton />
+                        <ProductGridSkeleton/>
                     </>
                 )}
 
                 {!loading && error && (
-                    <StatePanel variant="error" title="Chưa tải được danh sách cây" actionLabel="Thử lại" onAction={retry}>
+                    <StatePanel variant="error" title="Chưa tải được danh sách cây" actionLabel="Thử lại"
+                                onAction={retry}>
                         {error}
                     </StatePanel>
                 )}
@@ -155,7 +130,8 @@ function ProductListPage() {
                         />
 
                         {visibleProducts.length === 0 ? (
-                            <StatePanel variant="empty" title="Không tìm thấy cây phù hợp" actionLabel="Xóa bộ lọc" onAction={resetFilters}>
+                            <StatePanel variant="empty" title="Không tìm thấy cây phù hợp" actionLabel="Xóa bộ lọc"
+                                        onAction={resetFilters}>
                                 Thử bỏ bớt điều kiện lọc để xem nhiều cây hơn.
                             </StatePanel>
                         ) : (
@@ -184,4 +160,8 @@ function ProductListPage() {
     )
 }
 
-export default ProductListPage
+export default function ProductListPage() {
+    const [searchParams] = useSearchParams()
+    const {data, retry} = useApiData(loadProductList)
+    return <ProductList key={searchParams.toString()} searchParams={searchParams} data={data} retry={retry}/>
+}

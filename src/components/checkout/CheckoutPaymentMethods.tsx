@@ -1,4 +1,5 @@
-import {useRef, useState} from 'react'
+import {Link, useNavigate} from 'react-router-dom'
+import {useEffect, useRef, useState} from 'react'
 import type {CartTotals, Customer, PaymentMethod, ShippingMethod} from '../../types'
 import {useApiData} from '../../hooks/useApiData'
 import {useCart} from '../../hooks/useCart'
@@ -16,6 +17,7 @@ type Props = {
 }
 
 export default function CheckoutPaymentMethods({checkoutKey, customer, shippingMethod, totals}: Props) {
+    const navigate = useNavigate()
     const {clearCart} = useCart()
     const {data, retry} = useApiData(getPaymentMethods)
     const [draft, setDraft] = useState(readPaymentDraft)
@@ -24,6 +26,13 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
     const [orderError, setOrderError] = useState('')
     const sending = useRef(false)
     const dialogRef = useRef<HTMLDialogElement>(null)
+    const mounted = useRef(false)
+    useEffect(() => {
+        mounted.current = true
+        return () => {
+            mounted.current = false
+        }
+    }, [])
     const selected = data?.ok && draft?.checkoutKey === checkoutKey
         ? data.data.find(method => method.id === draft.paymentMethodId && method.code === draft.code)
         : undefined
@@ -86,6 +95,7 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
                 requestId,
                 requestFingerprint: JSON.stringify([checkoutKey, selected.id]),
             }, Boolean(draft.requestId))
+            if (!mounted.current) return
             if (!result.ok) {
                 setOrderError(result.message)
                 return
@@ -101,10 +111,10 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
                 clearCart(totals.items)
                 clearCheckoutDrafts()
             } catch {
-                window.location.replace(`${confirmationUrl}?kiem-tra-gio=1`)
+                navigate(`${confirmationUrl}?kiem-tra-gio=1`, {replace: true})
                 return
             }
-            window.location.replace(confirmationUrl)
+            navigate(confirmationUrl, {replace: true})
         } catch {
             setOrderError('Chưa xác nhận được đơn hàng. Vui lòng thử lại.')
         } finally {
@@ -115,7 +125,7 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
 
     if (draft?.checkoutKey === checkoutKey && draft.orderId) {
         return <p className="recipient-message is-success" role="status">
-            Đặt hàng thành công. <a href={`/don-hang/${draft.orderId}/xac-nhan`}>Xem đơn #{draft.orderId}</a>
+            Đặt hàng thành công. <Link to={`/don-hang/${draft.orderId}/xac-nhan`}>Xem đơn #{draft.orderId}</Link>
         </p>
     }
     if (data === null) return <p role="status">Đang tải phương thức thanh toán…</p>
@@ -148,27 +158,31 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
                 {data.data.map(method => (
                     <label className="recipient-shipping__method" key={method.id}>
                         <input type="radio" name="paymentMethod" value={method.id}
-                            checked={selected?.id === method.id} onChange={() => choose(method)} />
+                               checked={selected?.id === method.id} onChange={() => choose(method)}/>
                         <strong>{method.name}</strong>
                     </label>
                 ))}
             </fieldset>
             {message && <p className={`recipient-message${paid ? ' is-success' : ''}`} role="status">{message}</p>}
-            {saveError && <p className="recipient-message is-error" role="alert">Không lưu được lựa chọn thanh toán. Vui lòng thử lại.</p>}
+            {saveError &&
+                <p className="recipient-message is-error" role="alert">Không lưu được lựa chọn thanh toán. Vui lòng thử
+                    lại.</p>}
             {selected?.code === 'ONLINE_DEMO' && !paid && (
-                <button className="recipient-shipping__retry" type="button" onClick={() => choose(selected)}>Mô phỏng lại thanh toán</button>
+                <button className="recipient-shipping__retry" type="button" onClick={() => choose(selected)}>Mô phỏng
+                    lại thanh toán</button>
             )}
             {orderError && <p className="recipient-message is-error" role="alert">{orderError}</p>}
             <div className="recipient-actions">
-                <button type="button" onClick={placeOrder} disabled={!canPlaceOrder || submitting} aria-busy={submitting}>
+                <button type="button" onClick={placeOrder} disabled={!canPlaceOrder || submitting}
+                        aria-busy={submitting}>
                     {submitting ? 'Đang gửi đơn…' : 'Đặt hàng'}
                 </button>
             </div>
             <dialog ref={dialogRef} className="checkout-payment__dialog" aria-labelledby="payment-demo-title"
-                onCancel={event => {
-                    event.preventDefault()
-                    finishSimulation('cancelled')
-                }}>
+                    onCancel={event => {
+                        event.preventDefault()
+                        finishSimulation('cancelled')
+                    }}>
                 <h2 id="payment-demo-title">Thanh toán online mô phỏng</h2>
                 <p>Tổng thanh toán <strong>{formatVND(totals.total)}</strong></p>
                 <div className="recipient-actions checkout-payment__dialog-actions">

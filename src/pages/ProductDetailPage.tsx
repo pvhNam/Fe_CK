@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import {useCallback} from 'react'
 import {useApiData} from '../hooks/useApiData'
 import {getProductById} from '../services/productService'
@@ -8,9 +9,11 @@ import '../style/ProductListPage.css'
 import '../style/ProductDetailPage.css'
 import StatePanel from '../components/StatePanel'
 import FavoriteButton from '../components/FavoriteButton'
+import { useRouteId } from '../hooks/useRouteId'
+import RouteError from '../route/Error'
 
 
-function ProductDetailPage({productId}: { productId: number }) {
+function ProductDetail({productId}: { productId: number }) {
     const load = useCallback(() => getProductById(productId), [productId])
     const {data: result, retry} = useApiData(load)
     const product = result?.ok && result.data.active ? result.data : null
@@ -19,7 +22,7 @@ function ProductDetailPage({productId}: { productId: number }) {
     return (
         <main className="product-page">
             <div className="product-page__container">
-                <a className="product-page__back" href="/san-pham">← Danh sách cây giống</a>
+                <Link className="product-page__back" to="/san-pham">← Danh sách cây giống</Link>
 
                 {result === null && <StatePanel variant="loading">Đang tải thông tin cây...</StatePanel>}
 
@@ -73,9 +76,9 @@ function ProductDetailPage({productId}: { productId: number }) {
                                     </li>
                                 ))}
                             </ul>
-                            <a className="product-page__back" href={`/san-pham?danhMuc=${product.categoryId}`}>
+                            <Link className="product-page__back" to={`/san-pham?danhMuc=${product.categoryId}`}>
                                 Xem cây cùng danh mục →
-                            </a>
+                            </Link>
                         </div>
                     </article>
                 )}
@@ -84,4 +87,7 @@ function ProductDetailPage({productId}: { productId: number }) {
     )
 }
 
-export default ProductDetailPage
+export default function ProductDetailPage() {
+    const productId = useRouteId()
+    return productId === null ? <RouteError /> : <ProductDetail key={productId} productId={productId} />
+}

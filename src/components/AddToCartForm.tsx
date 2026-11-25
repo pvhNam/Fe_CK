@@ -1,11 +1,12 @@
-import { useState } from 'react'
-import type { Product } from '../types'
-import { useCart } from '../hooks/useCart'
+import {Link} from 'react-router-dom'
+import {useState} from 'react'
+import type {Product} from '../types'
+import {useCart} from '../hooks/useCart'
 import QuantityInput from './QuantityInput'
 import '../style/AddToCartForm.css'
 
-function AddToCartForm({ product, showQuantity = true }: { product: Product; showQuantity?: boolean }) {
-    const { items, addItem } = useCart()
+function AddToCartForm({product, showQuantity = true}: { product: Product; showQuantity?: boolean }) {
+    const {items, addItem} = useCart()
     const [quantity, setQuantity] = useState(1)
     const [message, setMessage] = useState('')
     const [error, setError] = useState('')
@@ -60,7 +61,7 @@ function AddToCartForm({ product, showQuantity = true }: { product: Product; sho
 
             {message && (
                 <p className="add-to-cart__note is-success" role="status">
-                    {message} <a href="/gio-hang">Xem giỏ hàng →</a>
+                    {message} <Link to="/gio-hang">Xem giỏ hàng →</Link>
                 </p>
             )}
 

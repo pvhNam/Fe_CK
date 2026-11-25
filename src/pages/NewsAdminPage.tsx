@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { useApiData } from '../hooks/useApiData'
-import { compareNewsByNewest, createNews, getNews, updateNews } from '../services/newsService'
-import type { News, NewNews } from '../types'
+import {Link} from 'react-router-dom'
+import {useEffect, useRef, useState, type FormEvent} from 'react'
+import {useApiData} from '../hooks/useApiData'
+import {compareNewsByNewest, createNews, getNews, updateNews} from '../services/newsService'
+import type {News, NewNews} from '../types'
 import '../style/ProductListPage.css'
 import '../style/NewsAdminPage.css'
 import StatePanel from '../components/StatePanel'
@@ -43,7 +44,7 @@ type EditorProps = {
     onSaved: (article: News) => void
 }
 
-function NewsEditor({ article, onClose, onSaved }: EditorProps) {
+function NewsEditor({article, onClose, onSaved}: EditorProps) {
     const dialogRef = useRef<HTMLDialogElement>(null)
     const [initialDate] = useState(() => toDateInput(article?.publishedAt ?? new Date().toISOString()))
     const [saving, setSaving] = useState(false)
@@ -111,44 +112,45 @@ function NewsEditor({ article, onClose, onSaved }: EditorProps) {
 
     return (
         <dialog ref={dialogRef} className="news-editor" aria-labelledby="news-editor-title"
-            onCancel={(event) => {
-                event.preventDefault()
-                if (!saving) closeEditor()
-            }}>
+                onCancel={(event) => {
+                    event.preventDefault()
+                    if (!saving) closeEditor()
+                }}>
             <h2 id="news-editor-title">{article ? 'Sửa tin tức' : 'Thêm tin tức'}</h2>
             <form onSubmit={save}>
                 <fieldset disabled={saving} className="news-editor__fields">
                     <label>
                         Tiêu đề
-                        <input name="title" defaultValue={article?.title} required />
+                        <input name="title" defaultValue={article?.title} required/>
                     </label>
                     <label>
                         Tóm tắt
-                        <textarea name="summary" rows={2} defaultValue={article?.summary} required />
+                        <textarea name="summary" rows={2} defaultValue={article?.summary} required/>
                     </label>
                     <div className="news-editor__meta">
                         <label>
                             Đường dẫn ảnh bìa
                             <input name="imageUrl" defaultValue={article?.imageUrl}
-                                placeholder="/images/products/xoai.jpg" required />
+                                   placeholder="/images/products/xoai.jpg" required/>
                         </label>
                         <label>
                             Ngày đăng (giờ Việt Nam)
-                            <input type="datetime-local" name="publishedAt" defaultValue={initialDate} required />
+                            <input type="datetime-local" name="publishedAt" defaultValue={initialDate} required/>
                         </label>
                     </div>
                     <label>
                         Nội dung bài viết
-                        <textarea name="content" rows={5} defaultValue={article?.content} required />
+                        <textarea name="content" rows={5} defaultValue={article?.content} required/>
                     </label>
                     <label className="news-editor__visibility">
-                        <input type="checkbox" name="isPublished" defaultChecked={article?.isPublished ?? false} />
+                        <input type="checkbox" name="isPublished" defaultChecked={article?.isPublished ?? false}/>
                         Xuất bản bài viết
                     </label>
                 </fieldset>
                 {error && <p className="news-admin__feedback is-error" role="alert">{error}</p>}
                 <div className="news-editor__actions">
-                    <button type="button" className="news-admin__button" disabled={saving} onClick={closeEditor}>Hủy</button>
+                    <button type="button" className="news-admin__button" disabled={saving} onClick={closeEditor}>Hủy
+                    </button>
                     <button type="submit" className="news-admin__button is-primary" disabled={saving}>
                         {saving ? 'Đang lưu…' : 'Lưu bài viết'}
                     </button>
@@ -159,7 +161,7 @@ function NewsEditor({ article, onClose, onSaved }: EditorProps) {
 }
 
 function NewsAdminPage() {
-    const { data, setData, retry } = useApiData(getNews)
+    const {data, setData, retry} = useApiData(getNews)
     const [editor, setEditor] = useState<News | 'new' | null>(null)
     const [pendingId, setPendingId] = useState<number | null>(null)
     const [notice, setNotice] = useState<{ text: string; error?: boolean } | null>(null)
@@ -174,19 +176,19 @@ function NewsAdminPage() {
     function showSaved(saved: News, message: string) {
         setData((current) => {
             if (!current?.ok) return current
-            return { ok: true, data: [...current.data.filter((item) => item.id !== saved.id), saved] }
+            return {ok: true, data: [...current.data.filter((item) => item.id !== saved.id), saved]}
         })
-        setNotice({ text: message })
+        setNotice({text: message})
     }
 
     async function togglePublished(article: News) {
         if (busy) return
         setPendingId(article.id)
         setNotice(null)
-        const result = await updateNews(article.id, { isPublished: !article.isPublished })
+        const result = await updateNews(article.id, {isPublished: !article.isPublished})
         setPendingId(null)
         if (!result.ok) {
-            setNotice({ text: 'Chưa đổi được trạng thái bài viết. Vui lòng thử lại.', error: true })
+            setNotice({text: 'Chưa đổi được trạng thái bài viết. Vui lòng thử lại.', error: true})
             return
         }
         showSaved(result.data, `Đã ${result.data.isPublished ? 'hiện' : 'ẩn'} bài “${result.data.title}”.`)
@@ -195,21 +197,23 @@ function NewsAdminPage() {
     return (
         <main className="product-page news-admin">
             <div className="product-page__container">
-                <a className="product-page__back" href="/quan-ly/san-pham">← Quản lý cây giống</a>
+                <Link className="product-page__back" to="/quan-ly/san-pham">← Quản lý cây giống</Link>
                 <header className="product-page__heading">
                     <h1>Quản lý tin tức</h1>
                     <div className="news-admin__actions">
-                        <a href="/tin-tuc">Xem trang tin tức →</a>
+                        <Link to="/tin-tuc">Xem trang tin tức →</Link>
                         <button type="button" className="news-admin__button is-primary"
-                            disabled={!data?.ok || busy} onClick={() => openEditor('new')}>Thêm tin</button>
+                                disabled={!data?.ok || busy} onClick={() => openEditor('new')}>Thêm tin
+                        </button>
                     </div>
                 </header>
 
                 {notice && <p className={`news-admin__feedback${notice.error ? ' is-error' : ''}`}
-                    role={notice.error ? 'alert' : 'status'}>{notice.text}</p>}
+                              role={notice.error ? 'alert' : 'status'}>{notice.text}</p>}
                 {data === null && <StatePanel variant="loading">Đang tải tin tức...</StatePanel>}
                 {data && !data.ok && (
-                    <StatePanel variant="error" title="Chưa tải được danh sách bài viết" actionLabel="Thử lại" onAction={retry}>
+                    <StatePanel variant="error" title="Chưa tải được danh sách bài viết" actionLabel="Thử lại"
+                                onAction={retry}>
                         Kiểm tra kết nối rồi thử lại.
                     </StatePanel>
                 )}
@@ -221,43 +225,48 @@ function NewsAdminPage() {
                     <div className="news-admin__panel">
                         <table className="news-admin__table" aria-label="Danh sách bài viết">
                             <thead>
-                                <tr>
-                                    <th scope="col">Bài viết</th>
-                                    <th scope="col" aria-sort="descending">Ngày đăng</th>
-                                    <th scope="col">Trạng thái</th>
-                                    <th scope="col">Thao tác</th>
-                                </tr>
+                            <tr>
+                                <th scope="col">Bài viết</th>
+                                <th scope="col" aria-sort="descending">Ngày đăng</th>
+                                <th scope="col">Trạng thái</th>
+                                <th scope="col">Thao tác</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                {articles.map((article) => (
-                                    <tr key={article.id}>
-                                        <th scope="row">
-                                            <div className="news-admin__article">
-                                                <img src={article.imageUrl} alt="" width={60} height={48} loading="lazy" />
-                                                {article.isPublished
-                                                    ? <a href={`/tin-tuc/${article.id}`}>{article.title}</a>
-                                                    : <span>{article.title}</span>}
-                                            </div>
-                                        </th>
-                                        <td><time dateTime={article.publishedAt}>
+                            {articles.map((article) => (
+                                <tr key={article.id}>
+                                    <th scope="row">
+                                        <div className="news-admin__article">
+                                            <img src={article.imageUrl} alt="" width={60} height={48} loading="lazy"/>
+                                            {article.isPublished
+                                                ? <Link to={`/tin-tuc/${article.id}`}>{article.title}</Link>
+                                                : <span>{article.title}</span>}
+                                        </div>
+                                    </th>
+                                    <td>
+                                        <time dateTime={article.publishedAt}>
                                             {displayDate(article.publishedAt)}
-                                        </time></td>
-                                        <td><span className={`news-admin__badge${article.isPublished ? ' is-published' : ''}`}>
+                                        </time>
+                                    </td>
+                                    <td><span
+                                        className={`news-admin__badge${article.isPublished ? ' is-published' : ''}`}>
                                             {article.isPublished ? 'Đã xuất bản' : 'Đã ẩn'}
                                         </span></td>
-                                        <td>
-                                            <div className="news-admin__actions">
-                                                <button type="button" className="news-admin__button" disabled={busy}
-                                                    aria-label={`Sửa tin ${article.title}`} onClick={() => openEditor(article)}>Sửa</button>
-                                                <button type="button" className="news-admin__button" disabled={busy}
+                                    <td>
+                                        <div className="news-admin__actions">
+                                            <button type="button" className="news-admin__button" disabled={busy}
+                                                    aria-label={`Sửa tin ${article.title}`}
+                                                    onClick={() => openEditor(article)}>Sửa
+                                            </button>
+                                            <button type="button" className="news-admin__button" disabled={busy}
                                                     aria-label={`${article.isPublished ? 'Ẩn' : 'Hiện'} tin ${article.title}`}
                                                     onClick={() => togglePublished(article)}>
-                                                    {pendingId === article.id ? 'Đang lưu…' : article.isPublished ? 'Ẩn tin' : 'Hiện tin'}
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
+                                                {pendingId === article.id ? 'Đang lưu…' : article.isPublished ? 'Ẩn tin' : 'Hiện tin'}
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
                             </tbody>
                         </table>
                     </div>
@@ -265,10 +274,10 @@ function NewsAdminPage() {
             </div>
             {editor !== null && (
                 <NewsEditor article={editor === 'new' ? null : editor} onClose={() => setEditor(null)}
-                    onSaved={(saved) => {
-                        setEditor(null)
-                        showSaved(saved, `Đã ${editor === 'new' ? 'thêm' : 'cập nhật'} bài “${saved.title}”.`)
-                    }} />
+                            onSaved={(saved) => {
+                                setEditor(null)
+                                showSaved(saved, `Đã ${editor === 'new' ? 'thêm' : 'cập nhật'} bài “${saved.title}”.`)
+                            }}/>
             )}
         </main>
     )

@@ -1,3 +1,4 @@
+import {Link} from 'react-router-dom'
 import '../style/InfoPage.css'
 
 const contactDetails = [
@@ -12,7 +13,7 @@ function ContactPage() {
         <main className="info-page">
             <div className="info-container">
                 <nav className="info-breadcrumb" aria-label="Đường dẫn">
-                    <a href="/">Trang chủ</a>
+                    <Link to="/">Trang chủ</Link>
                     <span aria-hidden="true">/</span>
                     <span aria-current="page">Liên hệ</span>
                 </nav>
@@ -45,27 +46,27 @@ function ContactPage() {
                     <section className="info-card" aria-labelledby="contact-links-title">
                         <h2 id="contact-links-title">Bạn cần tìm gì?</h2>
                         <nav className="info-help-links" aria-label="Thông tin hỗ trợ">
-                            <a href="/san-pham">
+                            <Link to="/san-pham">
                                 <span>
                                     <strong>Tìm cây giống</strong>
                                     <span>Xem đặc điểm, giá và hướng dẫn chăm sóc từng cây.</span>
                                 </span>
                                 <span aria-hidden="true">→</span>
-                            </a>
-                            <a href="/gio-hang">
+                            </Link>
+                            <Link to="/gio-hang">
                                 <span>
                                     <strong>Kiểm tra giỏ hàng</strong>
                                     <span>Xem lại cây, số lượng và tiền hàng đã chọn.</span>
                                 </span>
                                 <span aria-hidden="true">→</span>
-                            </a>
-                            <a href="/gioi-thieu#chinh-sach-giao-cay">
+                            </Link>
+                            <Link to="/gioi-thieu#chinh-sach-giao-cay">
                                 <span>
                                     <strong>Phí và chính sách giao cây</strong>
                                     <span>Tham khảo phương thức giao, mức phí và thời gian nhận cây.</span>
                                 </span>
                                 <span aria-hidden="true">→</span>
-                            </a>
+                            </Link>
                         </nav>
                     </section>
                 </div>
@@ -89,7 +90,7 @@ function ContactPage() {
                             <p>
                                 Mở trang chi tiết cây để xem thông tin ánh sáng, tưới nước
                                 và chăm sóc. Bạn cũng có thể tham khảo thêm các bài
-                                trong <a href="/tin-tuc">trang tin tức</a>.
+                                trong <Link to="/tin-tuc">trang tin tức</Link>.
                             </p>
                         </details>
                         <details>
@@ -97,7 +98,7 @@ function ContactPage() {
                             <p>
                                 Tiền hàng là tổng đơn giá nhân số lượng của từng cây.
                                 Phí giao phụ thuộc phương thức giao được chọn.
-                                Bạn có thể xem lại <a href="/gioi-thieu#chinh-sach-mua-hang">chính sách mua cây</a>.
+                                Bạn có thể xem lại <Link to="/gioi-thieu#chinh-sach-mua-hang">chính sách mua cây</Link>.
                             </p>
                         </details>
                         <details>

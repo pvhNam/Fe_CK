@@ -1,4 +1,5 @@
-import {useEffect, useRef, useState} from 'react'
+import {Link, NavLink, useNavigate, useSearchParams} from 'react-router-dom'
+import {useCallback, useEffect, useRef, useState, type FormEvent} from 'react'
 import {useCart} from '../hooks/useCart'
 import '../style/Header.css'
 import plantLogo from '../assets/images/logo/footer-plant.jpg'
@@ -75,9 +76,23 @@ function Header() {
 
     const headerRef = useRef<HTMLElement>(null)
 
-    const currentPath = window.location.pathname
+    const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
+    const keyword = searchParams.get('q') ?? ''
     const {itemCount: cartCount} = useCart()
     const {count: favoriteCount} = useFavorites()
+
+    const closeMenu = useCallback(() => {
+        setOpenDropdown(null)
+        setMobileMenuOpen(false)
+    }, [])
+
+    function searchProducts(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault()
+        const query = String(new FormData(event.currentTarget).get('q') ?? '').trim()
+        closeMenu()
+        navigate(query ? `/san-pham?${new URLSearchParams({q: query})}` : '/san-pham')
+    }
 
     // Đóng menu khi bấm ra ngoài hoặc nhấn Escape
     useEffect(() => {
@@ -86,8 +101,7 @@ function Header() {
                 event.target instanceof Node &&
                 !headerRef.current?.contains(event.target)
             ) {
-                setOpenDropdown(null)
-                setMobileMenuOpen(false)
+                closeMenu()
             }
         }
 
@@ -122,15 +136,19 @@ function Header() {
 
         document.addEventListener('pointerdown', handleOutsideClick)
         document.addEventListener('keydown', handleEscape)
+        window.addEventListener('popstate', closeMenu)
 
         return () => {
             document.removeEventListener('pointerdown', handleOutsideClick)
             document.removeEventListener('keydown', handleEscape)
+            window.removeEventListener('popstate', closeMenu)
         }
-    }, [])
+    }, [closeMenu])
 
     return (
-        <header className="site-header" ref={headerRef}>
+        <header className="site-header" ref={headerRef} onClick={(event) => {
+            if (event.target instanceof Element && event.target.closest('a')) closeMenu()
+        }}>
 
             <div className="header-topbar">
                 <div className="header-container header-topbar-inner">
@@ -140,9 +158,9 @@ function Header() {
             </div>
 
             <div className="header-container header-main">
-                <a
+                <Link
                     className="header-brand"
-                    href="/"
+                    to="/"
                     aria-label="Mầm Xanh — Trang chủ"
                 >
                     <img src={plantLogo} alt="" width={56} height={56}/>
@@ -151,17 +169,20 @@ function Header() {
                         <strong>Mầm Xanh</strong>
                         <span>Ươm mầm cho cuộc sống</span>
                     </div>
-                </a>
+                </Link>
 
                 <form
                     className="header-search"
                     role="search"
                     action="/san-pham"
                     method="get"
+                    onSubmit={searchProducts}
                 >
                     <input
                         type="search"
                         name="q"
+                        key={keyword}
+                        defaultValue={keyword}
                         placeholder="Bạn muốn trồng cây gì?"
                         aria-label="Tìm kiếm cây giống"
                     />
@@ -175,10 +196,12 @@ function Header() {
                 </form>
 
                 <div className="header-actions">
-                    <a
+                    <span
                         className="header-action"
-                        href="/dang-nhap"
-                        aria-label="Đăng nhập tài khoản"
+                        role="link"
+                        aria-disabled="true"
+                        aria-label="Tài khoản, đăng nhập chưa khả dụng"
+                        title="Đăng nhập chưa khả dụng"
                     >
                         <svg className="header-icon" viewBox="0 0 24 24" aria-hidden="true">
                             <circle cx="12" cy="8" r="4"/>
@@ -186,16 +209,16 @@ function Header() {
                         </svg>
 
                         <span className="header-action-label">Tài khoản</span>
-                    </a>
-                    <a
+                    </span>
+                    <NavLink
                         className="header-action"
-                        href="/yeu-thich"
+                        to="/yeu-thich"
                         aria-label={`Cây yêu thích, đã lưu ${favoriteCount} cây`}
-                        aria-current={currentPath === '/yeu-thich' ? 'page' : undefined}
                     >
                         <span className="header-cart-icon">
                             <svg className="header-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M12 20.5s-7.5-4.6-9.3-9.2C1.5 8 3.6 4.5 7.1 4.5c2 0 3.6 1.1 4.9 2.9 1.3-1.8 2.9-2.9 4.9-2.9 3.5 0 5.6 3.5 4.4 6.8-1.8 4.6-9.3 9.2-9.3 9.2Z"/>
+                                <path
+                                    d="M12 20.5s-7.5-4.6-9.3-9.2C1.5 8 3.6 4.5 7.1 4.5c2 0 3.6 1.1 4.9 2.9 1.3-1.8 2.9-2.9 4.9-2.9 3.5 0 5.6 3.5 4.4 6.8-1.8 4.6-9.3 9.2-9.3 9.2Z"/>
                             </svg>
 
                             {favoriteCount > 0 && (
@@ -206,10 +229,10 @@ function Header() {
                         </span>
 
                         <span className="header-action-label">Yêu thích</span>
-                    </a>
-                    <a
+                    </NavLink>
+                    <NavLink
                         className="header-action"
-                        href="/gio-hang"
+                        to="/gio-hang"
                         aria-label={`Giỏ hàng có ${cartCount} sản phẩm`}
                     >
             <span className="header-cart-icon">
@@ -225,7 +248,7 @@ function Header() {
             </span>
 
                         <span className="header-action-label">Giỏ hàng</span>
-                    </a>
+                    </NavLink>
 
                     <button
                         type="button"
@@ -316,34 +339,30 @@ function Header() {
                                             hidden={openDropdown !== item.id}
                                         >
                                             <li>
-                                                <a className="header-dropdown-all" href={item.href}>
+                                                <Link className="header-dropdown-all" to={item.href}>
                                                     Xem tất cả {item.label.toLowerCase()}
-                                                </a>
+                                                </Link>
                                             </li>
 
                                             {item.children.map((plantName) => (
                                                 <li key={plantName}>
-                                                    <a
-                                                        href={`${item.href}&q=${encodeURIComponent(plantName)}`}
+                                                    <Link
+                                                        to={`${item.href}&q=${encodeURIComponent(plantName)}`}
                                                     >
                                                         {plantName}
-                                                    </a>
+                                                    </Link>
                                                 </li>
                                             ))}
                                         </ul>
                                     </>
                                 ) : (
-                                    <a
-                                        href={item.href}
-                                        className={`header-menu-link ${
-                                            currentPath === item.href ? 'is-active' : ''
-                                        }`}
-                                        aria-current={
-                                            currentPath === item.href ? 'page' : undefined
-                                        }
+                                    <NavLink
+                                        to={item.href}
+                                        end={item.href === '/'}
+                                        className={({isActive}) => `header-menu-link${isActive ? ' is-active' : ''}`}
                                     >
                                         {item.label}
-                                    </a>
+                                    </NavLink>
                                 )}
                             </li>
                         ))}

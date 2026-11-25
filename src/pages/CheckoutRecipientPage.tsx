@@ -1,3 +1,4 @@
+import {Link, useNavigate} from 'react-router-dom'
 import {useState} from 'react'
 import type {FormEvent} from 'react'
 import type {Customer} from '../types'
@@ -8,6 +9,7 @@ import {clearCompletedPayment} from '../utils/checkoutStorage'
 import '../style/CheckoutRecipientPage.css'
 
 export default function CheckoutRecipientPage() {
+    const navigate = useNavigate()
     const [initial] = useState(readRecipientDraft)
     const [customer, setCustomer] = useState<Customer>(initial.customer)
     const [errors, setErrors] = useState<RecipientErrors>({})
@@ -52,7 +54,7 @@ export default function CheckoutRecipientPage() {
             clearCompletedPayment()
             setCustomer(normalized)
             setStorageError(null)
-            window.location.assign('/thanh-toan/giao-hang')
+            navigate('/thanh-toan/giao-hang')
         } catch (error) {
             setStorageError(error instanceof Error ? error.message : 'Chưa lưu được thông tin người nhận.')
         }
@@ -63,7 +65,7 @@ export default function CheckoutRecipientPage() {
             <div className="recipient-container">
                 <nav className="recipient-steps" aria-label="Các bước mua hàng">
                     <ol>
-                        <li><a href="/gio-hang">Giỏ hàng</a></li>
+                        <li><Link to="/gio-hang">Giỏ hàng</Link></li>
                         <li aria-current="step">Người nhận</li>
                         <li>Giao hàng</li>
                     </ol>
@@ -90,7 +92,8 @@ export default function CheckoutRecipientPage() {
                                 onChange={event => updateField('name', event.target.value)}
                                 onBlur={() => validateField('name')}
                             />
-                            {errors.name && <p className="recipient-field-error" id="recipient-name-error" role="alert">{errors.name}</p>}
+                            {errors.name && <p className="recipient-field-error" id="recipient-name-error"
+                                               role="alert">{errors.name}</p>}
                         </div>
                         <div className="recipient-field">
                             <label htmlFor="recipient-phone">Số điện thoại <span aria-hidden="true">*</span></label>
@@ -108,7 +111,8 @@ export default function CheckoutRecipientPage() {
                                 onChange={event => updateField('phone', event.target.value)}
                                 onBlur={() => validateField('phone')}
                             />
-                            {errors.phone && <p className="recipient-field-error" id="recipient-phone-error" role="alert">{errors.phone}</p>}
+                            {errors.phone && <p className="recipient-field-error" id="recipient-phone-error"
+                                                role="alert">{errors.phone}</p>}
                         </div>
                         <div className="recipient-field recipient-field--wide">
                             <label htmlFor="recipient-region">Khu vực (tỉnh/thành phố) <span aria-hidden="true">*</span></label>
@@ -124,10 +128,12 @@ export default function CheckoutRecipientPage() {
                                 onChange={event => updateField('region', event.target.value)}
                                 onBlur={() => validateField('region')}
                             />
-                            {errors.region && <p className="recipient-field-error" id="recipient-region-error" role="alert">{errors.region}</p>}
+                            {errors.region && <p className="recipient-field-error" id="recipient-region-error"
+                                                 role="alert">{errors.region}</p>}
                         </div>
                         <div className="recipient-field recipient-field--wide">
-                            <label htmlFor="recipient-address">Địa chỉ chi tiết <span aria-hidden="true">*</span></label>
+                            <label htmlFor="recipient-address">Địa chỉ chi tiết <span
+                                aria-hidden="true">*</span></label>
                             <textarea
                                 id="recipient-address"
                                 name="address"
@@ -141,7 +147,8 @@ export default function CheckoutRecipientPage() {
                                 onChange={event => updateField('address', event.target.value)}
                                 onBlur={() => validateField('address')}
                             />
-                            {errors.address && <p className="recipient-field-error" id="recipient-address-error" role="alert">{errors.address}</p>}
+                            {errors.address && <p className="recipient-field-error" id="recipient-address-error"
+                                                  role="alert">{errors.address}</p>}
                         </div>
                         <div className="recipient-field recipient-field--wide">
                             <label htmlFor="recipient-note">Ghi chú (không bắt buộc)</label>
@@ -156,12 +163,13 @@ export default function CheckoutRecipientPage() {
                                 onChange={event => updateField('note', event.target.value)}
                                 onBlur={() => validateField('note')}
                             />
-                            {errors.note && <p className="recipient-field-error" id="recipient-note-error" role="alert">{errors.note}</p>}
+                            {errors.note && <p className="recipient-field-error" id="recipient-note-error"
+                                               role="alert">{errors.note}</p>}
                         </div>
                     </div>
 
                     <div className="recipient-actions">
-                        <a href="/gio-hang">← Quay lại giỏ hàng</a>
+                        <Link to="/gio-hang">← Quay lại giỏ hàng</Link>
                         <button type="submit">Lưu thông tin người nhận</button>
                     </div>
                 </form>

@@ -1,3 +1,4 @@
+import {Link} from 'react-router-dom'
 import {useRef, useState} from 'react'
 import type {KeyboardEvent, TouchEvent} from 'react'
 import NewsCard from '../components/NewsCard'
@@ -123,7 +124,7 @@ function HomePage() {
                                         aria-hidden={index !== currentSlide}
                                         inert={index !== currentSlide}
                                     >
-                                        <a className="home-slide-link" href={banner.href}>
+                                        <Link className="home-slide-link" to={banner.href}>
                                             <img
                                                 className="home-slide-image"
                                                 src={banner.imageUrl}
@@ -133,7 +134,7 @@ function HomePage() {
                                                 loading={index === 0 ? 'eager' : 'lazy'}
                                                 draggable={false}
                                             />
-                                        </a>
+                                        </Link>
                                     </article>
                                 ))}
                             </div>
@@ -193,18 +194,19 @@ function HomePage() {
                         {categories.length > 0 ? (
                             <div className="home-category-grid">
                                 {categories.map((category) => (
-                                    <a
+                                    <Link
                                         className="home-category-link"
-                                        href={`/san-pham?danhMuc=${category.id}`}
+                                        to={`/san-pham?danhMuc=${category.id}`}
                                         key={category.id}
                                     >
                                         {category.name}
                                         <span aria-hidden="true">→</span>
-                                    </a>
+                                    </Link>
                                 ))}
                             </div>
                         ) : (
-                            <StatePanel variant="empty" title="Chưa có danh mục cây giống">Danh mục sẽ được cập nhật sớm.</StatePanel>
+                            <StatePanel variant="empty" title="Chưa có danh mục cây giống">Danh mục sẽ được cập nhật
+                                sớm.</StatePanel>
                         )}
                     </div>
                 </section>
@@ -219,7 +221,7 @@ function HomePage() {
                     <div className="home-container">
                         <div className="home-section-heading">
                             <h2 id="featured-title">Cây giống nổi bật</h2>
-                            <a href="/san-pham">Xem tất cả cây giống →</a>
+                            <Link to="/san-pham">Xem tất cả cây giống →</Link>
                         </div>
 
                         {data.featuredProducts.data.length > 0 ? (
@@ -233,7 +235,8 @@ function HomePage() {
                                 ))}
                             </div>
                         ) : (
-                            <StatePanel variant="empty" title="Chưa có cây giống nổi bật">Xem toàn bộ cây giống ở trang sản phẩm.</StatePanel>
+                            <StatePanel variant="empty" title="Chưa có cây giống nổi bật">Xem toàn bộ cây giống ở trang
+                                sản phẩm.</StatePanel>
                         )}
                     </div>
                 </section>
@@ -244,17 +247,18 @@ function HomePage() {
                     <div className="home-container">
                         <div className="home-section-heading">
                             <h2 id="latest-news-title">Tin mới nhất</h2>
-                            <a href="/tin-tuc">Xem tất cả tin tức →</a>
+                            <Link to="/tin-tuc">Xem tất cả tin tức →</Link>
                         </div>
 
                         {data.latestNews.data.length > 0 ? (
                             <div className="news-grid">
                                 {data.latestNews.data.map((news) => (
-                                    <NewsCard key={news.id} news={news} />
+                                    <NewsCard key={news.id} news={news}/>
                                 ))}
                             </div>
                         ) : (
-                            <StatePanel variant="empty" title="Chưa có tin tức được đăng">Bài viết mới sẽ xuất hiện ở đây.</StatePanel>
+                            <StatePanel variant="empty" title="Chưa có tin tức được đăng">Bài viết mới sẽ xuất hiện ở
+                                đây.</StatePanel>
                         )}
                     </div>
                 </section>

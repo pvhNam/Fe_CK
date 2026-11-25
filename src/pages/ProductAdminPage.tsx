@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
-import type { Category, NewProduct, Product } from '../types'
-import { createProduct, getCategories, getProducts, updateProduct } from '../services/productService'
-import { formatVND } from '../utils/currency'
-import { DEFAULT_FILTERS, filterProducts } from '../utils/productFilters'
-import { EMPTY_PRODUCT_FORM, toFormValues } from '../utils/productForm'
+import {Link} from 'react-router-dom'
+import {useEffect, useRef, useState} from 'react'
+import type {Category, NewProduct, Product} from '../types'
+import {createProduct, getCategories, getProducts, updateProduct} from '../services/productService'
+import {formatVND} from '../utils/currency'
+import {DEFAULT_FILTERS, filterProducts} from '../utils/productFilters'
+import {EMPTY_PRODUCT_FORM, toFormValues} from '../utils/productForm'
 import Pagination from '../components/Pagination'
 import StatePanel from '../components/StatePanel'
 import ProductForm from '../components/ProductForm'
@@ -77,7 +78,7 @@ function ProductAdminPage() {
     const hiddenCount = products.length - activeCount
     const outOfStockCount = products.filter((product) => product.stock <= 0).length
 
-    const rows = filterProducts(products, { ...DEFAULT_FILTERS, keyword, categoryId })
+    const rows = filterProducts(products, {...DEFAULT_FILTERS, keyword, categoryId})
         .filter((product) => {
             if (status === 'active') return product.active
             if (status === 'hidden') return !product.active
@@ -108,7 +109,7 @@ function ProductAdminPage() {
 
     function goToPage(nextPage: number) {
         setPage(nextPage)
-        countRef.current?.scrollIntoView({ block: 'start' })
+        countRef.current?.scrollIntoView({block: 'start'})
     }
 
     function openForm(nextForm: FormState) {
@@ -127,7 +128,7 @@ function ProductAdminPage() {
             if (!result.ok) return result.message
 
             replaceProduct(result.data)
-            setNotice({ type: 'success', text: `Đã lưu thay đổi của "${result.data.name}".` })
+            setNotice({type: 'success', text: `Đã lưu thay đổi của "${result.data.name}".`})
         } else {
             const result = await createProduct(values)
             if (!result.ok) return result.message
@@ -138,7 +139,7 @@ function ProductAdminPage() {
             setCategoryId(null)
             setStatus('all')
             setPage(Math.ceil((products.length + 1) / PAGE_SIZE))
-            setNotice({ type: 'success', text: `Đã thêm "${result.data.name}" với mã #${result.data.id}.` })
+            setNotice({type: 'success', text: `Đã thêm "${result.data.name}" với mã #${result.data.id}.`})
         }
 
         return null
@@ -146,11 +147,11 @@ function ProductAdminPage() {
 
     async function toggleActive(product: Product) {
         setBusyId(product.id)
-        const result = await updateProduct(product.id, { active: !product.active })
+        const result = await updateProduct(product.id, {active: !product.active})
         setBusyId(null)
 
         if (!result.ok) {
-            setNotice({ type: 'error', text: `Chưa đổi được trạng thái của "${product.name}". ${result.message}` })
+            setNotice({type: 'error', text: `Chưa đổi được trạng thái của "${product.name}". ${result.message}`})
             return
         }
 
@@ -170,11 +171,11 @@ function ProductAdminPage() {
                     <div className="product-admin__intro">
                         <h1>Quản lý cây giống</h1>
                         <p>Cây không bán nữa thì ẩn đi thay vì xóa, để các đơn đã đặt vẫn giữ đúng thông tin.</p>
-                        <a className="product-page__back" href="/quan-ly/tin-tuc">Quản lý tin tức →</a>
+                        <Link className="product-page__back" to="/quan-ly/tin-tuc">Quản lý tin tức →</Link>
 
                     </div>
                     {ready && (
-                        <button type="button" className="product-admin__add" onClick={() => openForm({ mode: 'add' })}>
+                        <button type="button" className="product-admin__add" onClick={() => openForm({mode: 'add'})}>
                             + Thêm cây giống
                         </button>
                     )}
@@ -183,7 +184,8 @@ function ProductAdminPage() {
                 {loading && <StatePanel variant="loading">Đang tải danh sách cây...</StatePanel>}
 
                 {!loading && loadError && (
-                    <StatePanel variant="error" title="Chưa tải được danh sách cây" actionLabel="Thử lại" onAction={retry}>
+                    <StatePanel variant="error" title="Chưa tải được danh sách cây" actionLabel="Thử lại"
+                                onAction={retry}>
                         {loadError}
                     </StatePanel>
                 )}
@@ -272,7 +274,8 @@ function ProductAdminPage() {
                         </p>
 
                         {rows.length === 0 ? (
-                            <StatePanel variant="empty" title="Không tìm thấy cây phù hợp" actionLabel="Xóa bộ lọc" onAction={resetFilters}>
+                            <StatePanel variant="empty" title="Không tìm thấy cây phù hợp" actionLabel="Xóa bộ lọc"
+                                        onAction={resetFilters}>
                                 Không có cây nào khớp cùng lúc: {activeFilters.join(', ')}.
                             </StatePanel>
                         ) : (
@@ -300,19 +303,22 @@ function ProductAdminPage() {
                                                 <td data-label="Mã">#{product.id}</td>
                                                 <td data-label="Cây giống" className="is-name">
                                                     <div className="product-admin__product">
-                                                        <img src={product.imageUrl} alt="" width={48} height={48} loading="lazy" />
+                                                        <img src={product.imageUrl} alt="" width={48} height={48}
+                                                             loading="lazy"/>
                                                         <span>{product.name}</span>
                                                     </div>
                                                 </td>
                                                 <td data-label="Danh mục">{categoryNames.get(product.categoryId) ?? `Danh mục ${product.categoryId}`}</td>
-                                                <td data-label="Giá" className="is-number">{formatVND(product.price)}</td>
+                                                <td data-label="Giá"
+                                                    className="is-number">{formatVND(product.price)}</td>
                                                 <td data-label="Tồn kho mẫu" className="is-number">
                                                     {product.stock > 0 ? product.stock : (
                                                         <span className="product-admin__badge is-out">Hết hàng</span>
                                                     )}
                                                 </td>
                                                 <td data-label="Trạng thái">
-                                                        <span className={`product-admin__badge ${product.active ? 'is-active' : 'is-hidden'}`}>
+                                                        <span
+                                                            className={`product-admin__badge ${product.active ? 'is-active' : 'is-hidden'}`}>
                                                             {product.active ? STATUS_LABELS.active : STATUS_LABELS.hidden}
                                                         </span>
                                                 </td>
@@ -320,7 +326,7 @@ function ProductAdminPage() {
                                                     <div className="product-admin__actions">
                                                         <button
                                                             type="button"
-                                                            onClick={() => openForm({ mode: 'edit', product })}
+                                                            onClick={() => openForm({mode: 'edit', product})}
                                                             aria-label={`Sửa ${product.name}`}
                                                         >
                                                             Sửa

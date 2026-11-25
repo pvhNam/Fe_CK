@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type {Product} from '../types'
 import {formatVND} from '../utils/currency'
 import '../style/ProductCard.css'
@@ -33,7 +34,7 @@ function ProductCard({product, categoryName}: ProductCardProps) {
                 {categoryName && <p className="product-card__category">{categoryName}</p>}
 
                 <h3 className="product-card__name">
-                    <a href={`/san-pham/${product.id}`}>{product.name}</a>
+                    <Link to={`/san-pham/${product.id}`}>{product.name}</Link>
                 </h3>
 
                 <p className="product-card__spec">

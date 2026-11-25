@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import {useState} from 'react'
 import {useApiData} from '../hooks/useApiData'
 import {useCart} from '../hooks/useCart'
@@ -52,7 +53,7 @@ function CartRow({item, product, catalogReady}: {
             <div className="cart-row__product">
                 {product && <img src={product.imageUrl} alt={name} width={88} height={88}/>}
                 <div>
-                    {product?.active ? <a href={`/san-pham/${product.id}`}>{name}</a> : <strong>{name}</strong>}
+                    {product?.active ? <Link to={`/san-pham/${product.id}`}>{name}</Link> : <strong>{name}</strong>}
                     {product && <p>Còn {product.stock} cây</p>}
                 </div>
             </div>
@@ -181,11 +182,11 @@ function CartContents() {
                     </div>
                     {totalError && <p className="cart-error" role="alert">{totalError}</p>}
                     {total !== null && (
-                        <a className="cart-button cart-summary__checkout" href="/thanh-toan">
+                        <Link className="cart-button cart-summary__checkout" to="/thanh-toan">
                             Nhập thông tin người nhận
-                        </a>
+                        </Link>
                     )}
-                    <a className="cart-button" href="/san-pham">Tiếp tục mua sắm</a>
+                    <Link className="cart-button" to="/san-pham">Tiếp tục mua sắm</Link>
                 </aside>
             </div>
         </>
@@ -198,7 +199,7 @@ export default function CartPage() {
     return (
         <main className="cart-page">
             <div className="cart-container">
-                <a className="cart-back" href="/san-pham">← Tiếp tục mua sắm</a>
+                <Link className="cart-back" to="/san-pham">← Tiếp tục mua sắm</Link>
                 <header className="cart-heading">
                     <h1>Giỏ hàng của bạn</h1>
                     <p aria-live="polite">{itemCount} cây trong giỏ</p>
@@ -209,7 +210,7 @@ export default function CartPage() {
                         <h2>Giỏ hàng đang trống</h2>
                         <p>Chọn những cây giống yêu thích để bắt đầu khu vườn của bạn.</p>
                         <p>Tổng tiền hàng <strong>{formatVND(0)}</strong></p>
-                        <a className="cart-button" href="/san-pham">Tiếp tục mua sắm</a>
+                        <Link className="cart-button" to="/san-pham">Tiếp tục mua sắm</Link>
                     </section>
                 ) : <CartContents/>}
             </div>

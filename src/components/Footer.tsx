@@ -1,3 +1,4 @@
+import {Link} from 'react-router-dom'
 import '../style/Footer.css'
 import footerPlant from '../assets/images/logo/footer-plant.jpg'
 
@@ -47,9 +48,9 @@ function Footer() {
               Một chút xanh cho cuộc sống
             </span>
                         <nav className="footer-page-links" aria-label="Thông tin cửa hàng">
-                            <a href="/gioi-thieu">Giới thiệu Mầm Xanh</a>
-                            <a href="/lien-he">Liên hệ</a>
-                            <a href="/gioi-thieu#chinh-sach-mua-hang">Chính sách mua và giao cây</a>
+                            <Link to="/gioi-thieu">Giới thiệu Mầm Xanh</Link>
+                            <Link to="/lien-he">Liên hệ</Link>
+                            <Link to="/gioi-thieu#chinh-sach-mua-hang">Chính sách mua và giao cây</Link>
                         </nav>
                     </div>
 

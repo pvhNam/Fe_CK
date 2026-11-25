@@ -1,3 +1,4 @@
+import { Link, useSearchParams } from 'react-router-dom'
 import { useCallback } from 'react'
 import { useApiData } from '../hooks/useApiData'
 import { getOrderById } from '../services/orderService'
@@ -7,6 +8,8 @@ import { DELIVERY_LABELS, formatDateTime, PAYMENT_LABELS } from '../utils/orderD
 import OrderProgress from '../components/OrderProgress'
 import '../style/OrderConfirmationPage.css'
 import StatePanel from '../components/StatePanel'
+import { useRouteId } from '../hooks/useRouteId'
+import RouteError from '../route/Error'
 
 function OrderTracking({ order, onRefresh, refreshing }: { order: Order; onRefresh: () => void; refreshing: boolean }) {
     const paymentClass = `order-confirmation__status-value is-${order.paymentStatus}`
@@ -90,10 +93,11 @@ function OrderDetails({ order }: { order: Order }) {
     )
 }
 
-export default function OrderConfirmationPage({ orderId }: { orderId: number }) {
+function OrderConfirmation({ orderId }: { orderId: number }) {
     const loadOrder = useCallback(() => getOrderById(orderId), [orderId])
     const { data, retry } = useApiData(loadOrder)
-    const checkCart = new URLSearchParams(window.location.search).get('kiem-tra-gio') === '1'
+    const [searchParams] = useSearchParams()
+    const checkCart = searchParams.get('kiem-tra-gio') === '1'
     const refreshing = data === null
 
     return (
@@ -121,7 +125,12 @@ export default function OrderConfirmationPage({ orderId }: { orderId: number }) 
                     <OrderDetails order={data.data} />
                 </>
             )}
-            <a className="order-confirmation__continue" href="/san-pham">Tiếp tục mua sắm</a>
+            <Link className="order-confirmation__continue" to="/san-pham">Tiếp tục mua sắm</Link>
         </main>
     )
+}
+
+export default function OrderConfirmationPage() {
+    const orderId = useRouteId()
+    return orderId === null ? <RouteError /> : <OrderConfirmation key={orderId} orderId={orderId} />
 }

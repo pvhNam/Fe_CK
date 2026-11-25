@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import {Link} from 'react-router-dom'
 import {useApiData} from '../hooks/useApiData'
 import {getShippingMethods} from '../services/checkoutService'
 import {formatVND} from '../utils/currency'
@@ -14,16 +14,11 @@ const plantGroups = [
 function AboutPage() {
     const {data: shipping, retry} = useApiData(getShippingMethods)
 
-    useEffect(() => {
-        const sectionId = window.location.hash.slice(1)
-        document.getElementById(sectionId)?.scrollIntoView({block: 'start'})
-    }, [])
-
     return (
         <main className="info-page">
             <div className="info-container">
                 <nav className="info-breadcrumb" aria-label="Đường dẫn">
-                    <a href="/">Trang chủ</a>
+                    <Link to="/">Trang chủ</Link>
                     <span aria-hidden="true">/</span>
                     <span aria-current="page">Giới thiệu</span>
                 </nav>
@@ -42,8 +37,8 @@ function AboutPage() {
                             để vun trồng không gian xanh của riêng mình.
                         </p>
                         <div className="info-actions">
-                            <a className="info-button" href="/san-pham">Khám phá cây giống →</a>
-                            <a className="info-text-link" href="/lien-he">Thông tin liên hệ</a>
+                            <Link className="info-button" to="/san-pham">Khám phá cây giống →</Link>
+                            <Link className="info-text-link" to="/lien-he">Thông tin liên hệ</Link>
                         </div>
                     </div>
                     <img
@@ -71,12 +66,12 @@ function AboutPage() {
                     </div>
                     <div className="info-category-grid">
                         {plantGroups.map((group) => (
-                            <a className="info-card info-category" href={`/san-pham?danhMuc=${group.id}`}
-                               key={group.id}>
+                            <Link className="info-card info-category" to={`/san-pham?danhMuc=${group.id}`}
+                                  key={group.id}>
                                 <h3>{group.name}</h3>
                                 <p>{group.description}</p>
                                 <span aria-hidden="true">Xem cây giống →</span>
-                            </a>
+                            </Link>
                         ))}
                     </div>
                 </section>
@@ -100,7 +95,7 @@ function AboutPage() {
                                     nhận.
                                 </li>
                             </ol>
-                            <a className="info-text-link" href="/gio-hang">Xem giỏ hàng →</a>
+                            <Link className="info-text-link" to="/gio-hang">Xem giỏ hàng →</Link>
                         </section>
                         <section className="info-card" aria-labelledby="payment-policy-title">
                             <h3 id="payment-policy-title">Giá bán và thanh toán</h3>
@@ -163,7 +158,7 @@ function AboutPage() {
                                     gửi thông tin đơn hàng kèm ảnh cây để trao đổi.
                                 </li>
                             </ul>
-                            <a className="info-text-link" href="/lien-he">Liên hệ Mầm Xanh →</a>
+                            <Link className="info-text-link" to="/lien-he">Liên hệ Mầm Xanh →</Link>
                         </section>
                     </div>
                 </section>

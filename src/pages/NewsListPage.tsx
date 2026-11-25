@@ -1,3 +1,4 @@
+import {Link} from 'react-router-dom'
 import NewsCard from '../components/NewsCard'
 import {useApiData} from '../hooks/useApiData'
 import {getPublishedNews} from '../services/newsService'
@@ -13,7 +14,7 @@ function NewsListPage() {
             <div className="news-page__container">
                 <h1 className="news-visually-hidden">Tin tức Mầm Xanh</h1>
                 <nav className="news-breadcrumb" aria-label="Đường dẫn">
-                    <a href="/">Trang chủ</a>
+                    <Link to="/">Trang chủ</Link>
                     <span aria-hidden="true">/</span>
                     <span aria-current="page">Tin tức</span>
                 </nav>
@@ -32,7 +33,7 @@ function NewsListPage() {
                     </StatePanel>
                 )}
 
-                {latestNews && <NewsCard news={latestNews} featured />}
+                {latestNews && <NewsCard news={latestNews} featured/>}
 
                 {otherNews.length > 0 && (
                     <section className="news-section" aria-labelledby="recent-news-title">
@@ -41,7 +42,7 @@ function NewsListPage() {
                             <span>{otherNews.length} bài viết</span>
                         </div>
                         <div className="news-grid">
-                            {otherNews.map((news) => <NewsCard key={news.id} news={news} />)}
+                            {otherNews.map((news) => <NewsCard key={news.id} news={news}/>)}
                         </div>
                     </section>
                 )}
