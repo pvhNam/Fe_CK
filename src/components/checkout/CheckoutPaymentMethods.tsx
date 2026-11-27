@@ -8,6 +8,7 @@ import {submitCheckoutOrder} from '../../services/orderService'
 import {clearCheckoutDrafts, readPaymentDraft, writePaymentDraft} from '../../utils/checkoutStorage'
 import type {OnlinePaymentResult, PaymentDraft} from '../../utils/checkoutStorage'
 import {formatVND} from '../../utils/currency'
+import {rememberOrder} from '../../utils/orderHistoryStorage'
 
 type Props = {
     checkoutKey: string
@@ -95,6 +96,7 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
                 requestId,
                 requestFingerprint: JSON.stringify([checkoutKey, selected.id]),
             }, Boolean(draft.requestId))
+            const historySaved = result.ok && rememberOrder(result.data.id)
             if (!mounted.current) return
             if (!result.ok) {
                 setOrderError(result.message)
@@ -106,15 +108,15 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
                 paymentStatus: order.paymentStatus, onlineResult: order.paymentStatus === 'paid' ? 'success' : null,
             }
             if (!persist(completed)) setDraft(completed)
-            const confirmationUrl = `/don-hang/${order.id}/xac-nhan`
+            const query = new URLSearchParams()
+            if (!historySaved) query.set('loi-lich-su', '1')
             try {
                 clearCart(totals.items)
                 clearCheckoutDrafts()
             } catch {
-                navigate(`${confirmationUrl}?kiem-tra-gio=1`, {replace: true})
-                return
+                query.set('kiem-tra-gio', '1')
             }
-            navigate(confirmationUrl, {replace: true})
+            navigate({pathname: `/don-hang/${order.id}/xac-nhan`, search: query.toString()}, {replace: true})
         } catch {
             setOrderError('Chưa xác nhận được đơn hàng. Vui lòng thử lại.')
         } finally {

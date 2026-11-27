@@ -12,6 +12,7 @@
     "db:reset": "node -e \"require('fs').copyFileSync('db.seed.json', 'db.json')\""
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.3.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-router-dom": "^6.30.6"

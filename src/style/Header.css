@@ -193,6 +193,14 @@
     white-space: nowrap;
 }
 
+.header-order-history {
+    min-width: 40px;
+}
+
+.header-action i {
+    font-size: 20px;
+}
+
 .header-action[aria-disabled="true"] {
     color: var(--text-muted);
 }
