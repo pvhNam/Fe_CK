@@ -203,10 +203,7 @@ function Header() {
                         aria-label="Tài khoản, đăng nhập chưa khả dụng"
                         title="Đăng nhập chưa khả dụng"
                     >
-                        <svg className="header-icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <circle cx="12" cy="8" r="4"/>
-                            <path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
-                        </svg>
+                        <i className="fa-regular fa-user" aria-hidden="true"/>
 
                         <span className="header-action-label">Tài khoản</span>
                     </span>
@@ -216,10 +213,7 @@ function Header() {
                         aria-label={`Cây yêu thích, đã lưu ${favoriteCount} cây`}
                     >
                         <span className="header-cart-icon">
-                            <svg className="header-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                <path
-                                    d="M12 20.5s-7.5-4.6-9.3-9.2C1.5 8 3.6 4.5 7.1 4.5c2 0 3.6 1.1 4.9 2.9 1.3-1.8 2.9-2.9 4.9-2.9 3.5 0 5.6 3.5 4.4 6.8-1.8 4.6-9.3 9.2-9.3 9.2Z"/>
-                            </svg>
+                            <i className="fa-regular fa-heart" aria-hidden="true"/>
 
                             {favoriteCount > 0 && (
                                 <span className="header-cart-count" aria-hidden="true">
@@ -235,19 +229,21 @@ function Header() {
                         to="/gio-hang"
                         aria-label={`Giỏ hàng có ${cartCount} sản phẩm`}
                     >
-            <span className="header-cart-icon">
-              <svg className="header-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M2 3h3l3 12h11l3-9H6"/>
-                <circle cx="9" cy="20" r="1"/>
-                <circle cx="18" cy="20" r="1"/>
-              </svg>
-
-              <span className="header-cart-count" aria-hidden="true">
-                {cartCount}
-              </span>
-            </span>
+                        <span className="header-cart-icon">
+                            <i className="fa-solid fa-cart-shopping" aria-hidden="true"/>
+                            <span className="header-cart-count" aria-hidden="true">{cartCount}</span>
+                        </span>
 
                         <span className="header-action-label">Giỏ hàng</span>
+                    </NavLink>
+                    <NavLink
+                        className="header-action header-order-history"
+                        to="/lich-su-don-hang"
+                        aria-label="Lịch sử đơn hàng"
+                        title="Lịch sử đơn hàng"
+                    >
+                        <i className="fa-solid fa-clock-rotate-left" aria-hidden="true"/>
+                        <span className="header-action-label">Lịch sử</span>
                     </NavLink>
 
                     <button

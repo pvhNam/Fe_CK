@@ -1,5 +1,6 @@
 import {StrictMode} from 'react'
 import {createRoot} from 'react-dom/client'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 import './style/index.css'
 import App from './App.tsx'
 import CartProvider from './context/CartProvider'

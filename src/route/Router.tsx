@@ -13,6 +13,7 @@ import ContactPage from '../pages/ContactPage'
 import CheckoutShippingPage from '../pages/CheckoutShippingPage'
 import CheckoutPaymentPage from '../pages/CheckoutPaymentPage'
 import OrderConfirmationPage from '../pages/OrderConfirmationPage'
+import OrderHistoryPage from '../pages/OrderHistoryPage'
 import ProductAdminPage from '../pages/ProductAdminPage'
 import NewsAdminPage from '../pages/NewsAdminPage'
 import OrderAdminPage from '../pages/OrderAdminPage'
@@ -43,6 +44,7 @@ export default function Router() {
                         <Route path="phuong-thuc-thanh-toan" element={<CheckoutPaymentPage/>}/>
                     </Route>
                     <Route path="don-hang/:id/xac-nhan" element={<OrderConfirmationPage/>}/>
+                    <Route path="lich-su-don-hang" element={<OrderHistoryPage/>}/>
                     <Route path="quan-ly">
                         <Route index element={<Navigate to="san-pham" replace/>}/>
                         <Route path="san-pham" element={<ProductAdminPage/>}/>
