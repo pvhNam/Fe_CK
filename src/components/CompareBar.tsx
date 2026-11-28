@@ -9,6 +9,8 @@ function CompareBar() {
 
     if (count === 0 || pathname === '/so-sanh') return null
 
+    const canCompare = count >= 2
+
     return (
         <aside className="compare-bar" aria-label="Cây đang chọn để so sánh">
             <div className="compare-bar__main">
@@ -19,11 +21,22 @@ function CompareBar() {
                     <button type="button" className="compare-bar__clear" onClick={clearCompare}>
                         Bỏ chọn hết
                     </button>
-                    <Link className="compare-bar__go" to="/so-sanh">
-                        So sánh ngay
-                    </Link>
+                    {canCompare ? (
+                        <Link className="compare-bar__go" to="/so-sanh">
+                            So sánh ngay
+                        </Link>
+                    ) : (
+                        <button type="button" className="compare-bar__go" disabled aria-describedby="compare-bar-hint">
+                            So sánh ngay
+                        </button>
+                    )}
                 </div>
             </div>
+            {!canCompare && (
+                <p className="compare-bar__hint" id="compare-bar-hint">
+                    Chọn thêm ít nhất 1 cây nữa để so sánh.
+                </p>
+            )}
             <p className="compare-bar__notice" role="status">
                 {notice && (
                     <>
