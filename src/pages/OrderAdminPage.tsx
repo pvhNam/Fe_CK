@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react'
-import type { Order, PaymentCode, PaymentMethod, ShippingMethod } from '../types'
-import { getOrders, updateOrder } from '../services/orderService'
-import { getPaymentMethods, getShippingMethods } from '../services/checkoutService'
+import { useState } from 'react'
+import type { Order, PaymentCode } from '../types'
+import { useAdminOrdersQuery, useEditOrderMutation, usePaymentsQuery, useShippingQuery } from '../store/adminApi'
 import { formatVND } from '../utils/currency'
 import {
     DELIVERY_LABELS,
@@ -19,44 +18,25 @@ import '../style/ProductAdminPage.css'
 import '../style/OrderAdminPage.css'
 
 function OrderAdminPage() {
-    const [orders, setOrders] = useState<Order[]>([])
-    const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([])
-    const [shippingMethods, setShippingMethods] = useState<ShippingMethod[]>([])
-    const [loading, setLoading] = useState(true)
-    const [loadError, setLoadError] = useState('')
-    const [reloadKey, setReloadKey] = useState(0)
+    const ordersQuery = useAdminOrdersQuery()
+    const paymentsQuery = usePaymentsQuery()
+    const shippingQuery = useShippingQuery()
+    const [editOrder] = useEditOrderMutation()
     const [selectedId, setSelectedId] = useState<number | null>(null)
     const [viewedId, setViewedId] = useState<number | null>(null)
 
-    useEffect(() => {
-        let ignore = false
-
-        Promise.all([getOrders(), getPaymentMethods(), getShippingMethods()]).then(
-            ([orderResult, paymentResult, shippingResult]) => {
-                if (ignore) return
-
-                if (orderResult.ok) {
-                    setOrders(orderResult.data)
-                    setLoadError('')
-                } else {
-                    setLoadError(orderResult.message)
-                }
-
-                if (paymentResult.ok) setPaymentMethods(paymentResult.data)
-                if (shippingResult.ok) setShippingMethods(shippingResult.data)
-                setLoading(false)
-            },
-        )
-
-        return () => {
-            ignore = true
-        }
-    }, [reloadKey])
+    const orderResult = ordersQuery.data
+    const orders = orderResult?.ok ? orderResult.data : []
+    const paymentMethods = paymentsQuery.data?.ok ? paymentsQuery.data.data : []
+    const shippingMethods = shippingQuery.data?.ok ? shippingQuery.data.data : []
+    const loading = !orderResult || (ordersQuery.isFetching && !orderResult.ok)
+    const loadError = !loading && !orderResult.ok ? orderResult.message : ''
+    const reloading = ordersQuery.isFetching
 
     function reload() {
-        setLoading(true)
-        setLoadError('')
-        setReloadKey((key) => key + 1)
+        void ordersQuery.refetch()
+        void paymentsQuery.refetch()
+        void shippingQuery.refetch()
     }
 
     function openDetail(id: number) {
@@ -87,11 +67,8 @@ function OrderAdminPage() {
     }
 
     async function saveOrder(id: number, changes: OrderChanges): Promise<string | null> {
-        const result = await updateOrder(id, changes)
-        if (!result.ok) return result.message
-
-        setOrders((list) => list.map((order) => (order.id === result.data.id ? result.data : order)))
-        return null
+        const result = await editOrder({ id, changes }).unwrap()
+        return result.ok ? null : result.message
     }
 
     const ready = !loading && !loadError
@@ -109,8 +86,8 @@ function OrderAdminPage() {
                         <p>Xem đơn khách đã đặt: người nhận, cây đã mua, tổng tiền, cách trả tiền và cách giao.</p>
                     </div>
                     {ready && (
-                        <button type="button" className="product-admin__add" onClick={reload}>
-                            Tải lại đơn
+                        <button type="button" className="product-admin__add" onClick={reload} disabled={reloading}>
+                            {reloading ? 'Đang tải...' : 'Tải lại đơn'}
                         </button>
                     )}
                 </header>

@@ -4,6 +4,7 @@ import {readStoredCart} from '../utils/cartStorage'
 import {readRecipientDraft} from '../utils/recipientStorage'
 import {readPaymentDraft, readShippingMethodId, type PaymentDraft} from '../utils/checkoutStorage'
 import {purchaseApi} from './purchaseApi'
+import {compareReducer} from './compareSlice'
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -37,7 +38,7 @@ export const {cartLoaded, cartErrorChanged} = cartSlice.actions
 export const {recipientChanged, shippingChanged, paymentChanged, couponChanged, checkoutReloaded} = checkoutSlice.actions
 export {checkoutDraft}
 export const store = configureStore({
-    reducer: {cart: cartSlice.reducer, checkout: checkoutSlice.reducer, [purchaseApi.reducerPath]: purchaseApi.reducer},
+    reducer: {cart: cartSlice.reducer, checkout: checkoutSlice.reducer, compare: compareReducer, [purchaseApi.reducerPath]: purchaseApi.reducer},
     middleware: defaults => defaults().concat(purchaseApi.middleware),
 })
 export const usePurchaseSelector = useSelector.withTypes<ReturnType<typeof store.getState>>()

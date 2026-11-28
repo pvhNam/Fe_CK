@@ -1,7 +1,12 @@
 import {Link} from 'react-router-dom'
-import {useEffect, useRef, useState} from 'react'
-import type {Category, NewProduct, Product} from '../types'
-import {createProduct, getCategories, getProducts, updateProduct} from '../services/productService'
+import {useRef, useState} from 'react'
+import type {NewProduct, Product} from '../types'
+import {
+    useAddProductMutation,
+    useAdminCategoriesQuery,
+    useAdminProductsQuery,
+    useEditProductMutation,
+} from '../store/adminApi'
 import {formatVND} from '../utils/currency'
 import {DEFAULT_FILTERS, filterProducts} from '../utils/productFilters'
 import {EMPTY_PRODUCT_FORM, toFormValues} from '../utils/productForm'
@@ -26,11 +31,10 @@ const STATUS_LABELS: Record<StatusFilter, string> = {
 }
 
 function ProductAdminPage() {
-    const [products, setProducts] = useState<Product[]>([])
-    const [categories, setCategories] = useState<Category[]>([])
-    const [loading, setLoading] = useState(true)
-    const [loadError, setLoadError] = useState('')
-    const [reloadKey, setReloadKey] = useState(0)
+    const productsQuery = useAdminProductsQuery()
+    const categoriesQuery = useAdminCategoriesQuery()
+    const [addProduct] = useAddProductMutation()
+    const [editProduct] = useEditProductMutation()
 
     const [keyword, setKeyword] = useState('')
     const [categoryId, setCategoryId] = useState<number | null>(null)
@@ -43,32 +47,15 @@ function ProductAdminPage() {
     const [busyId, setBusyId] = useState<number | null>(null)
     const [savedId, setSavedId] = useState<number | null>(null)
 
-    useEffect(() => {
-        let ignore = false
-
-        Promise.all([getProducts(), getCategories()]).then(([productResult, categoryResult]) => {
-            if (ignore) return
-
-            if (productResult.ok) {
-                setProducts(productResult.data)
-                setLoadError('')
-            } else {
-                setLoadError(productResult.message)
-            }
-
-            if (categoryResult.ok) setCategories(categoryResult.data)
-            setLoading(false)
-        })
-
-        return () => {
-            ignore = true
-        }
-    }, [reloadKey])
+    const productResult = productsQuery.data
+    const products = productResult?.ok ? productResult.data : []
+    const categories = categoriesQuery.data?.ok ? categoriesQuery.data.data : []
+    const loading = !productResult || (productsQuery.isFetching && !productResult.ok)
+    const loadError = !loading && !productResult.ok ? productResult.message : ''
 
     function retry() {
-        setLoading(true)
-        setLoadError('')
-        setReloadKey((key) => key + 1)
+        void productsQuery.refetch()
+        void categoriesQuery.refetch()
     }
 
     const ready = !loading && !loadError
@@ -117,23 +104,17 @@ function ProductAdminPage() {
         setNotice(null)
     }
 
-    function replaceProduct(saved: Product) {
-        setProducts((list) => list.map((product) => (product.id === saved.id ? saved : product)))
-        setSavedId(saved.id)
-    }
-
     async function saveProduct(values: NewProduct): Promise<string | null> {
         if (form?.mode === 'edit') {
-            const result = await updateProduct(form.product.id, values)
+            const result = await editProduct({id: form.product.id, changes: values}).unwrap()
             if (!result.ok) return result.message
 
-            replaceProduct(result.data)
+            setSavedId(result.data.id)
             setNotice({type: 'success', text: `Đã lưu thay đổi của "${result.data.name}".`})
         } else {
-            const result = await createProduct(values)
+            const result = await addProduct(values).unwrap()
             if (!result.ok) return result.message
 
-            setProducts((list) => [...list, result.data])
             setSavedId(result.data.id)
             setKeyword('')
             setCategoryId(null)
@@ -147,7 +128,7 @@ function ProductAdminPage() {
 
     async function toggleActive(product: Product) {
         setBusyId(product.id)
-        const result = await updateProduct(product.id, {active: !product.active})
+        const result = await editProduct({id: product.id, changes: {active: !product.active}}).unwrap()
         setBusyId(null)
 
         if (!result.ok) {
@@ -155,7 +136,7 @@ function ProductAdminPage() {
             return
         }
 
-        replaceProduct(result.data)
+        setSavedId(result.data.id)
         setNotice({
             type: 'success',
             text: result.data.active

@@ -1,58 +1,58 @@
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import {useCallback, useEffect, useMemo} from 'react'
 import type {ReactNode} from 'react'
 import {COMPARE_LIMIT, COMPARE_STORAGE_KEY, readStoredCompare, writeStoredCompare} from '../utils/compareStorage'
+import {store, usePurchaseSelector} from '../store/purchaseStore'
+import {
+    compareCleared,
+    compareLoaded,
+    compareNoticeCleared,
+    compareRemoved,
+    compareStorageErrorChanged,
+    compareToggled,
+} from '../store/compareSlice'
 import {CompareContext} from './CompareContext'
 import type {CompareContextValue} from './CompareContext'
 
+function saveCompare() {
+    try {
+        writeStoredCompare(store.getState().compare.ids)
+        store.dispatch(compareStorageErrorChanged(null))
+    } catch (error) {
+        store.dispatch(compareStorageErrorChanged(error instanceof Error ? error.message : 'Không lưu được danh sách so sánh'))
+    }
+}
+
 export default function CompareProvider({children}: { children: ReactNode }) {
-    const [initial] = useState(readStoredCompare)
-    const [ids, setIds] = useState(initial.ids)
-    const [storageError, setStorageError] = useState(initial.error)
-    const [notice, setNotice] = useState<string | null>(null)
-    const currentIds = useRef(initial.ids)
+    const {ids, notice, storageError} = usePurchaseSelector((state) => state.compare)
 
     useEffect(() => {
         function handleStorage(event: StorageEvent) {
             if (event.key !== null && event.key !== COMPARE_STORAGE_KEY) return
-            const stored = readStoredCompare()
-            currentIds.current = stored.ids
-            setIds(stored.ids)
-            setStorageError(stored.error)
+            store.dispatch(compareLoaded(readStoredCompare()))
         }
 
         window.addEventListener('storage', handleStorage)
         return () => window.removeEventListener('storage', handleStorage)
     }, [])
 
-    const commit = useCallback((next: number[]) => {
-        currentIds.current = next
-        setIds(next)
-        setNotice(null)
-        try {
-            writeStoredCompare(next)
-            setStorageError(null)
-        } catch (error) {
-            setStorageError(error instanceof Error ? error.message : 'Không lưu được danh sách so sánh')
-        }
+    const toggleCompare = useCallback((productId: number) => {
+        store.dispatch(compareToggled(productId))
+        saveCompare()
     }, [])
 
-    const toggleCompare = useCallback((productId: number) => {
-        const current = currentIds.current
-        if (current.includes(productId)) {
-            commit(current.filter((id) => id !== productId))
-        } else if (current.length >= COMPARE_LIMIT) {
-            setNotice(`Chỉ so sánh tối đa ${COMPARE_LIMIT} cây. Bỏ chọn một cây trước khi thêm cây khác.`)
-        } else {
-            commit([...current, productId])
-        }
-    }, [commit])
-
     const removeCompare = useCallback((productIds: readonly number[]) => {
-        commit(currentIds.current.filter((id) => !productIds.includes(id)))
-    }, [commit])
+        store.dispatch(compareRemoved(productIds))
+        saveCompare()
+    }, [])
 
-    const clearCompare = useCallback(() => commit([]), [commit])
-    const clearNotice = useCallback(() => setNotice(null), [])
+    const clearCompare = useCallback(() => {
+        store.dispatch(compareCleared())
+        saveCompare()
+    }, [])
+
+    const clearNotice = useCallback(() => {
+        store.dispatch(compareNoticeCleared())
+    }, [])
 
     const value = useMemo<CompareContextValue>(() => ({
         ids,
