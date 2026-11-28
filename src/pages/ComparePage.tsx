@@ -7,6 +7,7 @@ import { getCategories, getProducts } from '../services/productService'
 import { formatVND } from '../utils/currency'
 import { parseCareGuide } from '../utils/careGuide'
 import { COMPARE_LIMIT } from '../utils/compareStorage'
+import { careLevelLabel, sunlightLabel } from '../utils/plantConditions'
 import AddToCartForm from '../components/AddToCartForm'
 import StatePanel from '../components/StatePanel'
 import '../style/ProductListPage.css'
@@ -49,6 +50,8 @@ function ComparePage() {
         { label: 'Danh mục', cells: (product) => categoryNames.get(product.categoryId) ?? '—' },
         { label: 'Chiều cao', cells: (product) => `Khoảng ${product.heightCm} cm` },
         { label: 'Quy cách bầu', cells: (product) => product.bagSize },
+        { label: 'Ánh sáng', cells: (product) => sunlightLabel(product.sunlight) },
+        { label: 'Độ dễ chăm', cells: (product) => careLevelLabel(product.careLevel) },
         { label: 'Tình trạng', cells: (product) => (product.stock > 0 ? `Còn ${product.stock} cây` : 'Hết hàng') },
         ...careLabels.map((label) => ({ label, cells: (_: Product, index: number) => cares[index].get(label) ?? '—' })),
     ]

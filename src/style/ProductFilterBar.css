@@ -1,6 +1,6 @@
 .filter-bar {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     align-items: end;
     gap: 16px;
     margin-bottom: 24px;
@@ -8,6 +8,10 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     background: var(--beige);
+}
+
+.filter-bar__field--search {
+    grid-column: span 2;
 }
 
 .filter-bar__field {

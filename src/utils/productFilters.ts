@@ -1,4 +1,4 @@
-import type { Product } from '../types'
+import type { CareLevel, Product, Sunlight } from '../types'
 
 export type PriceRangeId = 'all' | 'under-20k' | '20k-50k' | 'over-50k'
 export type SortOrder = 'default' | 'price-asc' | 'price-desc'
@@ -7,6 +7,8 @@ export type ProductFilterValues = {
     keyword: string
     categoryId: number | null
     priceRange: PriceRangeId
+    sunlight: Sunlight | 'all'
+    careLevel: CareLevel | 'all'
     sort: SortOrder
 }
 
@@ -34,6 +36,8 @@ export const DEFAULT_FILTERS: ProductFilterValues = {
     keyword: '',
     categoryId: null,
     priceRange: 'all',
+    sunlight: 'all',
+    careLevel: 'all',
     sort: 'default',
 }
 
@@ -71,6 +75,8 @@ export function hasActiveFilters(filters: ProductFilterValues): boolean {
         filters.keyword.trim() !== '' ||
         filters.categoryId !== null ||
         filters.priceRange !== 'all' ||
+        filters.sunlight !== 'all' ||
+        filters.careLevel !== 'all' ||
         filters.sort !== 'default'
     )
 }
@@ -83,7 +89,9 @@ export function filterProducts(products: Product[], filters: ProductFilterValues
             matchesKeyword(product.name, filters.keyword) &&
             (filters.categoryId === null || product.categoryId === filters.categoryId) &&
             product.price >= range.min &&
-            product.price <= range.max,
+            product.price <= range.max &&
+            (filters.sunlight === 'all' || product.sunlight === filters.sunlight) &&
+            (filters.careLevel === 'all' || product.careLevel === filters.careLevel),
     )
 
     if (filters.sort === 'price-asc') result.sort((a, b) => a.price - b.price)
