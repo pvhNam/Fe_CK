@@ -1,24 +1,24 @@
 import {Link} from 'react-router-dom'
 import {useEffect, useRef, useState} from 'react'
 import CheckoutPaymentMethods from '../components/checkout/CheckoutPaymentMethods'
-import {useApiData} from '../hooks/useApiData'
+import {useShippingData, useCouponsData} from '../store/purchaseApi'
 import {useCart} from '../hooks/useCart'
 import {useCheckoutTotals} from '../hooks/useCheckoutTotals'
-import {getCoupons, getShippingMethods} from '../services/checkoutService'
+import {useDispatch} from 'react-redux'
 import {couponDiscount} from '../utils/coupon'
 import type {Customer} from '../types'
-import {readShippingMethodId} from '../utils/checkoutStorage'
+import {usePurchaseSelector, couponChanged} from '../store/purchaseStore'
 import {formatVND} from '../utils/currency'
 import {normalizeRecipient, validateRecipient} from '../utils/recipient'
-import {readRecipientDraft} from '../utils/recipientStorage'
 import '../style/CheckoutRecipientPage.css'
 import StatePanel from '../components/StatePanel'
 
 function PaymentStep({customer, shippingMethodId}: { customer: Customer; shippingMethodId: number }) {
     const {items} = useCart()
-    const shipping = useApiData(getShippingMethods)
-    const coupons = useApiData(getCoupons)
-    const [code, setCode] = useState('')
+    const shipping = useShippingData()
+    const coupons = useCouponsData()
+    const dispatch = useDispatch()
+    const code = usePurchaseSelector(state => state.checkout.coupon)
     const [checkedAt, setCheckedAt] = useState(Date.now)
     const [placing, setPlacing] = useState(false)
     const shippingMethod = shipping.data?.ok ? shipping.data.data.find(method => method.id === shippingMethodId) : undefined
@@ -57,7 +57,7 @@ function PaymentStep({customer, shippingMethodId}: { customer: Customer; shippin
             <label htmlFor="checkout-coupon">Mã giảm giá</label>
             <select id="checkout-coupon" value={code} disabled={placing || !coupons.data?.ok}
                     onFocus={() => setCheckedAt(Date.now())}
-                    onChange={event => {setCheckedAt(Date.now()); setCode(event.target.value)}}>
+                    onChange={event => {setCheckedAt(Date.now()); dispatch(couponChanged(event.target.value))}}>
                 <option value="">Không dùng mã</option>
                 {coupons.data?.ok && coupons.data.data.map(entry => (
                     <option key={entry.code} value={entry.code} disabled={!couponDiscount(entry, totals.subtotal, checkedAt)}>
@@ -92,8 +92,8 @@ function PaymentStep({customer, shippingMethodId}: { customer: Customer; shippin
 
 export default function CheckoutPaymentPage() {
     const {items, storageError} = useCart()
-    const [draft] = useState(readRecipientDraft)
-    const [shippingMethodId] = useState(readShippingMethodId)
+    const draft = usePurchaseSelector(state => state.checkout.recipient)
+    const shippingMethodId = usePurchaseSelector(state => state.checkout.shippingId)
     const headingRef = useRef<HTMLHeadingElement>(null)
     const validRecipient = !draft.error && Object.keys(validateRecipient(draft.customer)).length === 0
 

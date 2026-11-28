@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom'
 import {useState} from 'react'
-import {useApiData} from '../hooks/useApiData'
+import {useProductsData} from '../store/purchaseApi'
 import {useCart} from '../hooks/useCart'
-import {getProducts} from '../services/productService'
 import type {CartItem, Product} from '../types'
 import {calculateCartTotals, calculateItemTotal} from '../utils/cart'
 import {formatVND} from '../utils/currency'
@@ -132,7 +131,7 @@ function CartRow({item, product, catalogReady}: {
 
 function CartContents() {
     const {items} = useCart()
-    const {data: result, retry} = useApiData(getProducts)
+    const {data: result, retry} = useProductsData()
     const products = result?.ok && Array.isArray(result.data) ? result.data : []
     const productById = new Map(products.map(product => [product.id, product]))
     let loadError = ''

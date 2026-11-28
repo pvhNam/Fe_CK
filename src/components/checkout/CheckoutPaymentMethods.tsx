@@ -2,11 +2,11 @@ import {Link, useNavigate} from 'react-router-dom'
 import {useEffect, useRef, useState} from 'react'
 import type {CartTotals, Coupon, Customer, PaymentMethod, ShippingMethod} from '../../types'
 import {couponDiscount} from '../../utils/coupon'
-import {useApiData} from '../../hooks/useApiData'
+import {purchaseApi, usePaymentsData} from '../../store/purchaseApi'
 import {useCart} from '../../hooks/useCart'
-import {getPaymentMethods} from '../../services/checkoutService'
-import {submitCheckoutOrder} from '../../services/orderService'
-import {clearCheckoutDrafts, readPaymentDraft, writePaymentDraft} from '../../utils/checkoutStorage'
+import {useDispatch} from 'react-redux'
+import {paymentChanged, checkoutReloaded, checkoutDraft, usePurchaseSelector} from '../../store/purchaseStore'
+import {clearCheckoutDrafts, writePaymentDraft} from '../../utils/checkoutStorage'
 import type {OnlinePaymentResult, PaymentDraft} from '../../utils/checkoutStorage'
 import {formatVND} from '../../utils/currency'
 import {rememberOrder} from '../../utils/orderHistoryStorage'
@@ -23,8 +23,10 @@ type Props = {
 export default function CheckoutPaymentMethods({checkoutKey, customer, shippingMethod, totals, coupon, onSubmitting}: Props) {
     const navigate = useNavigate()
     const {clearCart} = useCart()
-    const {data, retry} = useApiData(getPaymentMethods)
-    const [draft, setDraft] = useState(readPaymentDraft)
+    const {data, retry} = usePaymentsData()
+    const dispatch = useDispatch()
+    const draft = usePurchaseSelector(state => state.checkout.payment)
+    const [submitOrder] = purchaseApi.usePlaceOrderMutation()
     const [saveError, setSaveError] = useState(false)
     const [submitting, setSubmitting] = useState(false)
     const [orderError, setOrderError] = useState('')
@@ -48,7 +50,7 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
             setSaveError(true)
             return false
         }
-        setDraft(next)
+        dispatch(paymentChanged(next))
         setSaveError(false)
         return true
     }
@@ -89,7 +91,7 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
             const attempt = {...draft, requestId}
             if (!draft.requestId && !persist(attempt)) return
             const now = new Date().toISOString()
-            const result = await submitCheckoutOrder({
+            const result = await submitOrder([{
                 ...totals,
                 customer,
                 shippingMethod,
@@ -103,8 +105,9 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
                 statusHistory: [{status: 'pending', at: now}],
                 requestId,
                 requestFingerprint: JSON.stringify([checkoutKey, selected.id]),
-            }, Boolean(draft.requestId))
+            }, Boolean(draft.requestId)]).unwrap()
             const historySaved = result.ok && rememberOrder(result.data.id)
+            if (historySaved) dispatch(purchaseApi.util.invalidateTags(['History']))
             if (!mounted.current) return
             if (!result.ok) {
                 setOrderError(result.message)
@@ -115,12 +118,13 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
                 ...attempt, orderId: order.id, paymentMethodId: order.paymentMethodId, code: order.paymentMethod.code,
                 paymentStatus: order.paymentStatus, onlineResult: order.paymentStatus === 'paid' ? 'success' : null,
             }
-            if (!persist(completed)) setDraft(completed)
+            if (!persist(completed)) dispatch(paymentChanged(completed))
             const query = new URLSearchParams()
             if (!historySaved) query.set('loi-lich-su', '1')
             try {
                 clearCart(totals.items)
                 clearCheckoutDrafts()
+                dispatch(checkoutReloaded(checkoutDraft()))
             } catch {
                 query.set('kiem-tra-gio', '1')
             }

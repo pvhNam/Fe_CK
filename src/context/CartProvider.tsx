@@ -1,4 +1,5 @@
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import {useCallback, useEffect, useMemo} from 'react'
+import {store, usePurchaseSelector, cartLoaded, cartErrorChanged} from '../store/purchaseStore'
 import type {ReactNode} from 'react'
 import type {CartItem, CartProduct} from '../types'
 import {calculateCartTotals} from '../utils/cart'
@@ -8,17 +9,12 @@ import {CartContext} from './CartContext'
 import type {CartContextValue} from './CartContext'
 
 export default function CartProvider({children}: { children: ReactNode }) {
-    const [initial] = useState(readStoredCart)
-    const [items, setItems] = useState(initial.items)
-    const [storageError, setStorageError] = useState(initial.error)
-    const currentItems = useRef(initial.items)
+    const {items, error: storageError} = usePurchaseSelector(state => state.cart)
 
     useEffect(() => {
         function refreshCart() {
             const stored = readStoredCart()
-            currentItems.current = stored.items
-            setItems(stored.items)
-            setStorageError(stored.error)
+            store.dispatch(cartLoaded(stored))
         }
         function onStorage(event: StorageEvent) {
             if (event.storageArea === window.localStorage && (event.key === CART_STORAGE_KEY || event.key === null)) refreshCart()
@@ -38,36 +34,34 @@ export default function CartProvider({children}: { children: ReactNode }) {
         try {
             writeStoredCart(next)
         } catch (error) {
-            setStorageError(error instanceof Error ? error.message : 'Không lưu được giỏ hàng')
+            store.dispatch(cartErrorChanged(error instanceof Error ? error.message : 'Không lưu được giỏ hàng'))
             throw error
         }
-        currentItems.current = next
-        setItems(next)
-        setStorageError(null)
+        store.dispatch(cartLoaded({items: next, error: null}))
     }, [])
 
     const addItem = useCallback((product: CartProduct, quantity = 1) => {
-        commit(addCartItem(currentItems.current, product, quantity))
+        commit(addCartItem(store.getState().cart.items, product, quantity))
     }, [commit])
 
     const setQuantity = useCallback((product: CartProduct, quantity: number) => {
-        commit(setCartItemQuantity(currentItems.current, product, quantity))
+        commit(setCartItemQuantity(store.getState().cart.items, product, quantity))
     }, [commit])
 
     const increaseQuantity = useCallback((product: CartProduct) => {
-        const item = currentItems.current.find(item => item.productId === product.id)
+        const item = store.getState().cart.items.find(item => item.productId === product.id)
         if (!item) throw new Error('Sản phẩm chưa có trong giỏ hàng')
         setQuantity(product, item.quantity + 1)
     }, [setQuantity])
 
     const decreaseQuantity = useCallback((product: CartProduct) => {
-        const item = currentItems.current.find(item => item.productId === product.id)
+        const item = store.getState().cart.items.find(item => item.productId === product.id)
         if (!item) throw new Error('Sản phẩm chưa có trong giỏ hàng')
         if (item.quantity > 1) setQuantity(product, item.quantity - 1)
     }, [setQuantity])
 
     const removeItem = useCallback((productId: number) => {
-        commit(removeCartItem(currentItems.current, productId))
+        commit(removeCartItem(store.getState().cart.items, productId))
     }, [commit])
 
     const clearCart = useCallback((purchased?: readonly CartItem[]) => {
@@ -82,9 +76,9 @@ export default function CartProvider({children}: { children: ReactNode }) {
         })).filter(item => item.quantity > 0)
         commit(remaining)
     }, [commit])
-    const clearStorageError = useCallback(() => setStorageError(null), [])
+    const clearStorageError = useCallback(() => {store.dispatch(cartErrorChanged(null))}, [])
     const getTotals = useCallback((products: readonly CartProduct[], shippingFee = 0) => {
-        return calculateCartTotals(currentItems.current, products, shippingFee)
+        return calculateCartTotals(store.getState().cart.items, products, shippingFee)
     }, [])
 
     const value = useMemo<CartContextValue>(() => ({
