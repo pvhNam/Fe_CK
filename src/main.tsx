@@ -6,6 +6,7 @@ import './style/index.css'
 import App from './App.tsx'
 import CartProvider from './context/CartProvider'
 import FavoritesProvider from './context/FavoritesProvider'
+import CompareProvider from './context/CompareProvider'
 import {store} from './redux/store'
 
 
@@ -14,7 +15,9 @@ createRoot(document.getElementById('root')!).render(
         <Provider store={store}>
             <CartProvider>
                 <FavoritesProvider>
-                    <App/>
+                    <CompareProvider>
+                        <App/>
+                    </CompareProvider>
                 </FavoritesProvider>
             </CartProvider>
         </Provider>
