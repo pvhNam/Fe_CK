@@ -1,11 +1,8 @@
-import {configureStore} from '@reduxjs/toolkit'
+import {store} from '../store/purchaseStore'
 import {readAuthSession} from '../utils/authStorage'
-import authReducer, {sessionChanged} from './authSlice'
+import {sessionChanged} from './authSlice'
 
-export const store = configureStore({
-    reducer: {auth: authReducer},
-    preloadedState: {auth: {user: readAuthSession()}},
-})
+export {store}
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
