@@ -7,6 +7,7 @@ import {
     type ProductFormErrors,
     type ProductFormValues,
 } from '../utils/productForm'
+import { CARE_LEVEL_OPTIONS, SUNLIGHT_OPTIONS } from '../utils/plantConditions'
 import '../style/ProductForm.css'
 
 type ProductFormProps = {
@@ -188,6 +189,32 @@ function ProductForm({ title, initialValues, categories, takenNames, onSave, onC
                             <span className="product-form__hint">
                                 Túi đất đựng cây con. Bầu ươm: túi lớn cho cây ăn quả, hoa. Bầu nhỏ: túi nhỏ cho rau, gia vị.
                             </span>
+                        </label>
+
+                        <label className="product-form__field">
+                            Ánh sáng
+                            <select
+                                id="product-sunlight"
+                                value={values.sunlight}
+                                onChange={(event) => update('sunlight', event.target.value as ProductFormValues['sunlight'])}
+                            >
+                                {SUNLIGHT_OPTIONS.map((option) => (
+                                    <option key={option.id} value={option.id}>{option.label}</option>
+                                ))}
+                            </select>
+                        </label>
+
+                        <label className="product-form__field">
+                            Độ dễ chăm
+                            <select
+                                id="product-careLevel"
+                                value={values.careLevel}
+                                onChange={(event) => update('careLevel', event.target.value as ProductFormValues['careLevel'])}
+                            >
+                                {CARE_LEVEL_OPTIONS.map((option) => (
+                                    <option key={option.id} value={option.id}>{option.label}</option>
+                                ))}
+                            </select>
                         </label>
 
                         <label className="product-form__field is-span-2">

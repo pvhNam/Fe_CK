@@ -13,6 +13,7 @@ import { useRouteId } from '../hooks/useRouteId'
 import RouteError from '../route/Error'
 import RelatedProducts from '../components/RelatedProducts'
 import CompareButton from '../components/CompareButton'
+import { careLevelLabel, sunlightLabel } from '../utils/plantConditions'
 
 function ProductDetail({productId}: { productId: number }) {
     const load = useCallback(() => getProductById(productId), [productId])
@@ -59,6 +60,14 @@ function ProductDetail({productId}: { productId: number }) {
                                 <div>
                                     <dt>Quy cách</dt>
                                     <dd>{product.bagSize}</dd>
+                                </div>
+                                <div>
+                                    <dt>Ánh sáng</dt>
+                                    <dd>{sunlightLabel(product.sunlight)}</dd>
+                                </div>
+                                <div>
+                                    <dt>Độ dễ chăm</dt>
+                                    <dd>{careLevelLabel(product.careLevel)}</dd>
                                 </div>
                                 <div>
                                     <dt>Tình trạng</dt>
