@@ -1,17 +1,20 @@
 import {useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 import {Link} from 'react-router-dom'
 import AuthCard from '../components/AuthCard'
-import {useAuth} from '../hooks/useAuth'
+import {logout, selectAuthUser} from '../redux/authSlice'
+import type {AppDispatch} from '../redux/store'
 
 export default function AccountPage() {
-    const {user, logout} = useAuth()
+    const user = useSelector(selectAuthUser)
+    const dispatch = useDispatch<AppDispatch>()
     const [error, setError] = useState('')
 
     if (!user) return null
 
     function endSession() {
         try {
-            logout()
+            dispatch(logout())
         } catch {
             setError('Chưa thể đăng xuất. Vui lòng thử lại.')
         }

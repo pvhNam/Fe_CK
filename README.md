@@ -32,6 +32,7 @@ Sản phẩm được bán theo **cây hoặc bầu giống**, kèm chiều cao,
 - Chi tiết cây: ảnh, giá, chiều cao, quy cách bầu, số lượng còn, hướng dẫn chăm sóc, chọn số lượng và thêm vào giỏ.
 - Giỏ hàng lưu bằng `localStorage`: đổi số lượng, xóa cây, tính tiền.
 - Danh sách cây yêu thích: bấm trái tim trên thẻ hoặc trang chi tiết, xem lại ở trang yêu thích, không cần tài khoản.
+- Tài khoản khách hàng: đăng ký, đăng nhập, xem tên và email đã đăng ký, đăng xuất.
 - Đặt hàng ba bước: nhập người nhận, chọn cách giao, chọn cách trả tiền (COD hoặc online mô phỏng).
 - Trang xác nhận đơn: hiện mã đơn, cây đã mua, tổng tiền, trạng thái giao hàng và nút tải lại trạng thái.
 - Tin tức, trang giới thiệu và trang liên hệ.
@@ -58,12 +59,13 @@ Hướng dẫn thao tác chi tiết có ảnh nằm ở [docs/huong-dan-quan-ly.
 | --- | --- |
 | React 19 | Xây dựng giao diện theo component |
 | React Router DOM 6 | Khai báo đường dẫn và chuyển trang trong ứng dụng |
+| Redux Toolkit và React Redux | Chia sẻ trạng thái đăng nhập giữa các trang |
 | TypeScript | Kiểu dữ liệu cho sản phẩm, đơn hàng và các hàm xử lý |
 | Vite 8 | Chạy môi trường phát triển và đóng gói |
 | JSON Server 0.17.4 | Fake API đọc và ghi `db.json` |
 | HTML, CSS | Bố cục, định dạng và giao diện responsive |
 | Context API và hooks | Quản lý trạng thái giỏ hàng và cây yêu thích |
-| localStorage, sessionStorage | Lưu giỏ hàng, cây yêu thích và bản nháp đặt hàng trên trình duyệt |
+| localStorage, sessionStorage | Lưu tài khoản, phiên đăng nhập, giỏ hàng, cây yêu thích và bản nháp đặt hàng trên trình duyệt |
 | ESLint | Kiểm tra mã nguồn |
 | WebStorm | Viết mã và chạy dự án |
 | Git, GitHub | Quản lý phiên bản và phối hợp làm việc nhóm |
@@ -176,6 +178,8 @@ Layout dùng `Outlet` để hiển thị trang con giữa header và footer. Tro
 | Giới thiệu, liên hệ | `/gioi-thieu`, `/lien-he` |
 | Giỏ hàng | `/gio-hang` |
 | Cây yêu thích | `/yeu-thich` |
+| Đăng nhập, đăng ký | `/dang-nhap`, `/dang-ky` |
+| Tài khoản cá nhân | `/tai-khoan` |
 | Đặt hàng | `/thanh-toan` |
 | Giao hàng, thanh toán | `/thanh-toan/giao-hang`, `/thanh-toan/phuong-thuc-thanh-toan` |
 | Xác nhận đơn | `/don-hang/1/xac-nhan` |
@@ -200,6 +204,16 @@ Layout dùng `Outlet` để hiển thị trang con giữa header và footer. Tro
 | `npm run api` báo cổng 3001 đang bận | Đang có một Terminal khác chạy API. Tắt Terminal đó rồi chạy lại. |
 | PowerShell báo "running scripts is disabled" | Dùng `npm.cmd` thay cho `npm`, hoặc chạy một lần `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`. |
 | `npm run dev` báo phiên bản Node không hợp lệ | Cài Node.js bản LTS mới (22 hoặc 24), mở lại Terminal rồi chạy lại. |
+
+### 7.9 Sử dụng tài khoản khách hàng
+
+1. Mở website qua localhost hoặc HTTPS. Bấm **Tài khoản → Đăng ký**, nhập họ tên, email và mật khẩu ít nhất 8 ký tự.
+2. Sau khi tạo tài khoản, nhập mật khẩu tại trang đăng nhập. Trang **Tài khoản của tôi** hiển thị họ tên, email và nút **Đăng xuất**.
+3. Mở `/tai-khoan` sau khi đăng xuất sẽ chuyển về trang đăng nhập. Khách vãng lai vẫn có thể mua cây.
+
+Tài khoản và giá trị băm của mật khẩu lưu trong `localStorage` của trình duyệt. Phiên đăng nhập lưu trong `sessionStorage` của tab. Dùng email và mật khẩu mẫu khi trình bày chức năng này.
+
+Redux lưu hồ sơ của người đang đăng nhập trong `state.auth.user`. Header và route tài khoản đọc chung trạng thái đó qua `useSelector`. Trang đăng nhập và nút đăng xuất dùng `dispatch` để cập nhật phiên.
 
 ## 8. Fake API và dữ liệu
 
@@ -248,7 +262,6 @@ Quy tắc đơn hàng:
 ## 10. Hướng phát triển
 
 - Kết nối backend và cơ sở dữ liệu thật thay cho JSON Server.
-- Bổ sung đăng ký, đăng nhập và phân quyền cho trang quản lý.
 - Bổ sung đánh giá sản phẩm và lịch sử mua hàng theo tài khoản.
 - Tích hợp cổng thanh toán và đơn vị vận chuyển thật.
 

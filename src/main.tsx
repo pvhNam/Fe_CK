@@ -1,21 +1,22 @@
 import {StrictMode} from 'react'
 import {createRoot} from 'react-dom/client'
+import {Provider} from 'react-redux'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import './style/index.css'
 import App from './App.tsx'
 import CartProvider from './context/CartProvider'
 import FavoritesProvider from './context/FavoritesProvider'
-import AuthProvider from './context/AuthProvider'
+import {store} from './redux/store'
 
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <CartProvider>
-            <FavoritesProvider>
-                <AuthProvider>
+        <Provider store={store}>
+            <CartProvider>
+                <FavoritesProvider>
                     <App/>
-                </AuthProvider>
-            </FavoritesProvider>
-        </CartProvider>
+                </FavoritesProvider>
+            </CartProvider>
+        </Provider>
     </StrictMode>,
 )

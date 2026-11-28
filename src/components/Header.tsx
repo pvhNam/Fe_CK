@@ -1,10 +1,11 @@
 import {Link, NavLink, useNavigate, useSearchParams} from 'react-router-dom'
+import {useSelector} from 'react-redux'
 import {useCallback, useEffect, useRef, useState, type FormEvent} from 'react'
 import {useCart} from '../hooks/useCart'
 import '../style/Header.css'
 import plantLogo from '../assets/images/logo/footer-plant.jpg'
 import {useFavorites} from '../hooks/useFavorites'
-import {useAuth} from '../hooks/useAuth'
+import {selectAuthUser} from '../redux/authSlice'
 
 type MenuItem = {
     id: string
@@ -82,7 +83,7 @@ function Header() {
     const keyword = searchParams.get('q') ?? ''
     const {itemCount: cartCount} = useCart()
     const {count: favoriteCount} = useFavorites()
-    const {user} = useAuth()
+    const user = useSelector(selectAuthUser)
 
     const closeMenu = useCallback(() => {
         setOpenDropdown(null)

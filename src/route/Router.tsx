@@ -1,4 +1,5 @@
 import {BrowserRouter, Navigate, Outlet, Route, Routes} from 'react-router-dom'
+import {useSelector} from 'react-redux'
 import Layout from './Layout'
 import RouteError from './Error'
 import HomePage from '../pages/HomePage'
@@ -21,10 +22,10 @@ import FavoritesPage from '../pages/FavoritesPage'
 import LoginPage from '../pages/LoginPage'
 import RegisterPage from '../pages/RegisterPage'
 import AccountPage from '../pages/AccountPage'
-import {useAuth} from '../hooks/useAuth'
+import {selectAuthUser} from '../redux/authSlice'
 
 function RequireAuth() {
-    const {user} = useAuth()
+    const user = useSelector(selectAuthUser)
     return user ? <Outlet/> : <Navigate to="/dang-nhap" replace/>
 }
 

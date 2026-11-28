@@ -1,12 +1,15 @@
 import {useState, type FormEvent} from 'react'
 import {Link, Navigate, useLocation} from 'react-router-dom'
+import {useDispatch, useSelector} from 'react-redux'
 import AuthCard from '../components/AuthCard'
 import PasswordField from '../components/PasswordField'
-import {useAuth} from '../hooks/useAuth'
+import {login, selectAuthUser} from '../redux/authSlice'
+import type {AppDispatch} from '../redux/store'
 import {AccountError} from '../utils/authStorage'
 
 export default function LoginPage() {
-    const {user, login} = useAuth()
+    const user = useSelector(selectAuthUser)
+    const dispatch = useDispatch<AppDispatch>()
     const {state} = useLocation()
     const registeredEmail = typeof state?.registeredEmail === 'string' ? state.registeredEmail : ''
     const [error, setError] = useState('')
@@ -21,7 +24,7 @@ export default function LoginPage() {
         setError('')
         setBusy(true)
         try {
-            await login(String(form.get('email')), String(form.get('password')))
+            await dispatch(login(String(form.get('email')), String(form.get('password'))))
         } catch (cause) {
             setError(cause instanceof AccountError ? cause.message : 'Chưa thể đăng nhập. Vui lòng thử lại.')
         } finally {

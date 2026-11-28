@@ -1,12 +1,13 @@
 import {useState, type FormEvent} from 'react'
 import {Link, Navigate, useNavigate} from 'react-router-dom'
+import {useSelector} from 'react-redux'
 import AuthCard from '../components/AuthCard'
 import PasswordField from '../components/PasswordField'
-import {useAuth} from '../hooks/useAuth'
+import {selectAuthUser} from '../redux/authSlice'
 import {AccountError, registerAccount} from '../utils/authStorage'
 
 export default function RegisterPage() {
-    const {user} = useAuth()
+    const user = useSelector(selectAuthUser)
     const navigate = useNavigate()
     const [error, setError] = useState('')
     const [busy, setBusy] = useState(false)
