@@ -201,10 +201,6 @@
     font-size: 20px;
 }
 
-.header-action[aria-disabled="true"] {
-    color: var(--text-muted);
-}
-
 a.header-action:hover {
     color: var(--green);
 }

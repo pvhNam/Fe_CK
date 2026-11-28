@@ -5,13 +5,16 @@ import './style/index.css'
 import App from './App.tsx'
 import CartProvider from './context/CartProvider'
 import FavoritesProvider from './context/FavoritesProvider'
+import AuthProvider from './context/AuthProvider'
 
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <CartProvider>
             <FavoritesProvider>
-                <App/>
+                <AuthProvider>
+                    <App/>
+                </AuthProvider>
             </FavoritesProvider>
         </CartProvider>
     </StrictMode>,

@@ -1,4 +1,4 @@
-import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom'
+import {BrowserRouter, Navigate, Outlet, Route, Routes} from 'react-router-dom'
 import Layout from './Layout'
 import RouteError from './Error'
 import HomePage from '../pages/HomePage'
@@ -18,6 +18,15 @@ import ProductAdminPage from '../pages/ProductAdminPage'
 import NewsAdminPage from '../pages/NewsAdminPage'
 import OrderAdminPage from '../pages/OrderAdminPage'
 import FavoritesPage from '../pages/FavoritesPage'
+import LoginPage from '../pages/LoginPage'
+import RegisterPage from '../pages/RegisterPage'
+import AccountPage from '../pages/AccountPage'
+import {useAuth} from '../hooks/useAuth'
+
+function RequireAuth() {
+    const {user} = useAuth()
+    return user ? <Outlet/> : <Navigate to="/dang-nhap" replace/>
+}
 
 export default function Router() {
     return (
@@ -38,6 +47,11 @@ export default function Router() {
                     <Route path="goc-cham-soc" element={<Navigate to="/#footer-care-title" replace/>}/>
                     <Route path="yeu-thich" element={<FavoritesPage/>}/>
                     <Route path="gio-hang" element={<CartPage/>}/>
+                    <Route path="dang-nhap" element={<LoginPage/>}/>
+                    <Route path="dang-ky" element={<RegisterPage/>}/>
+                    <Route element={<RequireAuth/>}>
+                        <Route path="tai-khoan" element={<AccountPage/>}/>
+                    </Route>
                     <Route path="thanh-toan">
                         <Route index element={<CheckoutRecipientPage/>}/>
                         <Route path="giao-hang" element={<CheckoutShippingPage/>}/>

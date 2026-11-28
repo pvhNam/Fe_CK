@@ -4,6 +4,7 @@ import {useCart} from '../hooks/useCart'
 import '../style/Header.css'
 import plantLogo from '../assets/images/logo/footer-plant.jpg'
 import {useFavorites} from '../hooks/useFavorites'
+import {useAuth} from '../hooks/useAuth'
 
 type MenuItem = {
     id: string
@@ -81,6 +82,7 @@ function Header() {
     const keyword = searchParams.get('q') ?? ''
     const {itemCount: cartCount} = useCart()
     const {count: favoriteCount} = useFavorites()
+    const {user} = useAuth()
 
     const closeMenu = useCallback(() => {
         setOpenDropdown(null)
@@ -196,17 +198,15 @@ function Header() {
                 </form>
 
                 <div className="header-actions">
-                    <span
+                    <NavLink
                         className="header-action"
-                        role="link"
-                        aria-disabled="true"
-                        aria-label="Tài khoản, đăng nhập chưa khả dụng"
-                        title="Đăng nhập chưa khả dụng"
+                        to={user ? '/tai-khoan' : '/dang-nhap'}
+                        aria-label={user ? 'Tài khoản của tôi' : 'Đăng nhập tài khoản'}
                     >
                         <i className="fa-regular fa-user" aria-hidden="true"/>
 
                         <span className="header-action-label">Tài khoản</span>
-                    </span>
+                    </NavLink>
                     <NavLink
                         className="header-action"
                         to="/yeu-thich"
