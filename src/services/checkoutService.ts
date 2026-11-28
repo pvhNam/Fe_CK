@@ -1,6 +1,17 @@
-import type { PaymentMethod, ShippingMethod } from '../types'
+import type { Coupon, PaymentMethod, ShippingMethod } from '../types'
 import { getJson } from './api'
 import type { ApiResult } from './api'
+
+export async function getCoupons(): Promise<ApiResult<Coupon[]>> {
+    const result = await getJson<Coupon[]>('/coupons')
+    if (!result.ok) return result
+    if (!Array.isArray(result.data) || result.data.some(c => !c || typeof c.code !== 'string' || !c.code.trim()
+        || !Number.isSafeInteger(c.amount) || c.amount <= 0 || !Number.isSafeInteger(c.minSubtotal)
+        || c.minSubtotal < 0 || !Number.isFinite(Date.parse(c.expiresAt)))) {
+        return {ok: false, status: 200, message: 'Dữ liệu mã giảm giá không hợp lệ.'}
+    }
+    return result
+}
 
 export async function getShippingMethods(): Promise<ApiResult<ShippingMethod[]>> {
     const result = await getJson<ShippingMethod[]>('/shippingMethods')

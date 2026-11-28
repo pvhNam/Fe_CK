@@ -4,7 +4,8 @@ import CheckoutPaymentMethods from '../components/checkout/CheckoutPaymentMethod
 import {useApiData} from '../hooks/useApiData'
 import {useCart} from '../hooks/useCart'
 import {useCheckoutTotals} from '../hooks/useCheckoutTotals'
-import {getShippingMethods} from '../services/checkoutService'
+import {getCoupons, getShippingMethods} from '../services/checkoutService'
+import {couponDiscount} from '../utils/coupon'
 import type {Customer} from '../types'
 import {readShippingMethodId} from '../utils/checkoutStorage'
 import {formatVND} from '../utils/currency'
@@ -16,6 +17,10 @@ import StatePanel from '../components/StatePanel'
 function PaymentStep({customer, shippingMethodId}: { customer: Customer; shippingMethodId: number }) {
     const {items} = useCart()
     const shipping = useApiData(getShippingMethods)
+    const coupons = useApiData(getCoupons)
+    const [code, setCode] = useState('')
+    const [checkedAt, setCheckedAt] = useState(Date.now)
+    const [placing, setPlacing] = useState(false)
     const shippingMethod = shipping.data?.ok ? shipping.data.data.find(method => method.id === shippingMethodId) : undefined
     const {totals, error, loading, retry} = useCheckoutTotals(items, shippingMethod?.fee ?? 0)
 
@@ -41,26 +46,46 @@ function PaymentStep({customer, shippingMethodId}: { customer: Customer; shippin
     )
 
     const recipient = normalizeRecipient(customer)
-    const checkoutKey = JSON.stringify([recipient, shippingMethod.id, totals.shippingFee, totals.items])
+    const coupon = coupons.data?.ok ? coupons.data.data.find(entry => entry.code === code) : undefined
+    const discount = coupon ? couponDiscount(coupon, totals.subtotal, checkedAt) : 0
+    const quote = coupon && discount ? {...totals, couponCode: coupon.code, discount, total: totals.total - discount} : totals
+    const checkoutKey = JSON.stringify([recipient, shippingMethod.id, totals.shippingFee, totals.items,
+        ...(discount ? [code, discount] : [])])
 
     return (
         <>
+            <label htmlFor="checkout-coupon">Mã giảm giá</label>
+            <select id="checkout-coupon" value={code} disabled={placing || !coupons.data?.ok}
+                    onFocus={() => setCheckedAt(Date.now())}
+                    onChange={event => {setCheckedAt(Date.now()); setCode(event.target.value)}}>
+                <option value="">Không dùng mã</option>
+                {coupons.data?.ok && coupons.data.data.map(entry => (
+                    <option key={entry.code} value={entry.code} disabled={!couponDiscount(entry, totals.subtotal, checkedAt)}>
+                        {entry.code} · Giảm {formatVND(entry.amount)} · Đơn từ {formatVND(entry.minSubtotal)}
+                        {checkedAt > Date.parse(entry.expiresAt) ? ' · Đã hết hạn' : ''}
+                    </option>
+                ))}
+            </select>
+            {coupons.data && !coupons.data.ok && <p role="status">{coupons.data.message}{' '}
+                <button type="button" onClick={coupons.retry}>Tải lại mã giảm giá</button></p>}
             <dl className="recipient-shipping__totals checkout-payment__totals" aria-label="Tổng tiền và phí giao hàng">
                 <div>
                     <dt>Tiền hàng</dt>
                     <dd>{formatVND(totals.subtotal)}</dd>
                 </div>
+                {discount > 0 && <div><dt>Giảm giá</dt><dd>−{formatVND(discount)}</dd></div>}
                 <div>
                     <dt>Phí giao hàng</dt>
                     <dd>{formatVND(totals.shippingFee)}</dd>
                 </div>
                 <div>
                     <dt>Tổng thanh toán</dt>
-                    <dd>{formatVND(totals.total)}</dd>
+                    <dd>{formatVND(quote.total)}</dd>
                 </div>
             </dl>
             <CheckoutPaymentMethods key={checkoutKey} checkoutKey={checkoutKey}
-                                    customer={recipient} shippingMethod={shippingMethod} totals={totals}/>
+                                    customer={recipient} shippingMethod={shippingMethod} totals={quote}
+                                    coupon={coupon} onSubmitting={setPlacing}/>
         </>
     )
 }

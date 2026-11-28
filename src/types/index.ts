@@ -80,6 +80,7 @@ export type OrderItem = {
 }
 
 export type NewOrder = {
+    couponCode?: string
     customer: Customer
     items: OrderItem[]
     shippingMethodId: number
@@ -106,8 +107,17 @@ export type CartQuote = {
 }
 
 export type CartTotals = CartQuote & {
+    discount?: number
+    couponCode?: string
     shippingFee: number
     total: number
+}
+
+export type Coupon = {
+    code: string
+    amount: number
+    minSubtotal: number
+    expiresAt: string
 }
 
 export type QuoteRequest = {
