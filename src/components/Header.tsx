@@ -81,7 +81,8 @@ function Header() {
     const navigate = useNavigate()
     const [searchParams] = useSearchParams()
     const keyword = searchParams.get('q') ?? ''
-    const {itemCount: cartCount} = useCart()
+    const {items} = useCart()
+    const cartCount = items.length
     const {count: favoriteCount} = useFavorites()
     const user = useSelector(selectAuthUser)
 
@@ -228,7 +229,7 @@ function Header() {
                     <NavLink
                         className="header-action"
                         to="/gio-hang"
-                        aria-label={`Giỏ hàng có ${cartCount} sản phẩm`}
+                        aria-label={`Giỏ hàng có ${cartCount} loại sản phẩm`}
                     >
                         <span className="header-cart-icon">
                             <i className="fa-solid fa-cart-shopping" aria-hidden="true"/>

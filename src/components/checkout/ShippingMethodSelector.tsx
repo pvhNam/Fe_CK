@@ -1,18 +1,21 @@
 import {Link, useNavigate} from 'react-router-dom'
 import {useState} from 'react'
 import {useCart} from '../../hooks/useCart'
-import {useApiData} from '../../hooks/useApiData'
-import {getShippingMethods} from '../../services/checkoutService'
+import {useShippingData} from '../../store/purchaseApi'
+import {useDispatch} from 'react-redux'
+import {shippingChanged, usePurchaseSelector} from '../../store/purchaseStore'
 import {useCheckoutTotals} from '../../hooks/useCheckoutTotals'
-import {readShippingMethodId, writeShippingMethodId} from '../../utils/checkoutStorage'
+import {writeShippingMethodId} from '../../utils/checkoutStorage'
 import {formatVND} from '../../utils/currency'
 import StatePanel from '../../components/StatePanel'
 
 export default function ShippingMethodSelector() {
     const navigate = useNavigate()
     const {items, storageError} = useCart()
-    const shipping = useApiData(getShippingMethods)
-    const [selectedId, setSelectedId] = useState(readShippingMethodId)
+    const shipping = useShippingData()
+    const dispatch = useDispatch()
+    const savedId = usePurchaseSelector(state => state.checkout.shippingId)
+    const [selectedId, setSelectedId] = useState(savedId)
     const [saveError, setSaveError] = useState(false)
     const methods = shipping.data?.ok ? shipping.data.data : []
     const selected = methods.find(method => method.id === selectedId)
@@ -23,6 +26,7 @@ export default function ShippingMethodSelector() {
         if (!selected || !totals?.items.length) return
         try {
             writeShippingMethodId(selected.id)
+            dispatch(shippingChanged(selected.id))
         } catch {
             setSaveError(true)
             return

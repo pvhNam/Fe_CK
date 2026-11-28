@@ -267,6 +267,39 @@
     cursor: pointer;
 }
 
+.checkout-coupon {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: clamp(12px, 3vw, 20px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--green-light);
+}
+
+.checkout-coupon label {
+    color: var(--green-dark);
+    font-weight: 600;
+}
+
+.checkout-coupon select {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--white);
+    color: var(--text);
+    font: inherit;
+}
+
+.checkout-coupon select:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 2px;
+}
+
 .checkout-payment__totals {
     margin-top: 0;
 }

@@ -1,12 +1,12 @@
 import {Link, Navigate} from 'react-router-dom'
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useRef} from 'react'
 import ShippingMethodSelector from '../components/checkout/ShippingMethodSelector'
-import {readRecipientDraft} from '../utils/recipientStorage'
+import {usePurchaseSelector} from '../store/purchaseStore'
 import {validateRecipient} from '../utils/recipient'
 import '../style/CheckoutRecipientPage.css'
 
 export default function CheckoutShippingPage() {
-    const [draft] = useState(readRecipientDraft)
+    const draft = usePurchaseSelector(state => state.checkout.recipient)
     const headingRef = useRef<HTMLHeadingElement>(null)
     const validRecipient = !draft.error && Object.keys(validateRecipient(draft.customer)).length === 0
 

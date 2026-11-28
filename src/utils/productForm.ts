@@ -1,4 +1,4 @@
-import type { BagSize, NewProduct, Product } from '../types'
+import type { BagSize, CareLevel, NewProduct, Product, Sunlight } from '../types'
 
 export const BAG_SIZES: BagSize[] = ['Bầu ươm', 'Bầu nhỏ']
 
@@ -9,6 +9,8 @@ export type ProductFormValues = {
     stock: string
     heightCm: string
     bagSize: BagSize
+    sunlight: Sunlight
+    careLevel: CareLevel
     imageUrl: string
     description: string
     careGuide: string
@@ -24,6 +26,8 @@ export const EMPTY_PRODUCT_FORM: ProductFormValues = {
     stock: '',
     heightCm: '',
     bagSize: 'Bầu nhỏ',
+    sunlight: 'full',
+    careLevel: 'easy',
     imageUrl: '',
     description: '',
     careGuide: '',
@@ -38,6 +42,8 @@ export function toFormValues(product: Product): ProductFormValues {
         stock: String(product.stock),
         heightCm: String(product.heightCm),
         bagSize: product.bagSize,
+        sunlight: product.sunlight,
+        careLevel: product.careLevel,
         imageUrl: product.imageUrl,
         description: product.description,
         careGuide: product.careGuide,
@@ -105,6 +111,8 @@ export function validateProductForm(
             stock,
             heightCm,
             bagSize: values.bagSize,
+            sunlight: values.sunlight,
+            careLevel: values.careLevel,
             imageUrl,
             description,
             careGuide,

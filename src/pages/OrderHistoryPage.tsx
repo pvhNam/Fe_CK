@@ -1,15 +1,11 @@
-import {useCallback} from 'react'
 import {Link} from 'react-router-dom'
-import {useApiData} from '../hooks/useApiData'
-import {getOrderById} from '../services/orderService'
+import {purchaseApi, useOrderData} from '../store/purchaseApi'
 import {formatVND} from '../utils/currency'
 import {DELIVERY_LABELS, PAYMENT_LABELS, formatDateTime} from '../utils/orderDisplay'
-import {readOrderIds} from '../utils/orderHistoryStorage'
 import '../style/OrderConfirmationPage.css'
 
 function HistoryEntry({id}: {id: number}) {
-    const load = useCallback(() => getOrderById(id), [id])
-    const {data, retry} = useApiData(load)
+    const {data, retry} = useOrderData(id)
     return (
         <article className="order-confirmation__panel">
             <h2><Link to={`/don-hang/${id}/xac-nhan`}>Đơn #{id}</Link></h2>
@@ -29,12 +25,13 @@ function HistoryEntry({id}: {id: number}) {
 }
 
 export default function OrderHistoryPage() {
-    const ids = readOrderIds()
+    const {data: ids, isError, refetch} = purchaseApi.useHistoryQuery()
     return (
         <main className="order-confirmation">
             <h1>Lịch sử đơn hàng</h1>
-            {ids.length === 0 && <p>Chưa có đơn hàng nào được lưu trên trình duyệt này.</p>}
-            {ids.map(id => <HistoryEntry key={id} id={id}/>)}
+            {isError && <p role="alert">Không đọc được lịch sử đơn. <button onClick={refetch}>Thử lại</button></p>}
+            {ids?.length === 0 && <p>Chưa có đơn hàng nào được lưu trên trình duyệt này.</p>}
+            {ids?.map(id => <HistoryEntry key={id} id={id}/>)}
             <Link className="order-confirmation__continue" to="/san-pham">Tiếp tục mua sắm</Link>
         </main>
     )

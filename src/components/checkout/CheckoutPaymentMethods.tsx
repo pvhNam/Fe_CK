@@ -1,27 +1,32 @@
 import {Link, useNavigate} from 'react-router-dom'
 import {useEffect, useRef, useState} from 'react'
-import type {CartTotals, Customer, PaymentMethod, ShippingMethod} from '../../types'
-import {useApiData} from '../../hooks/useApiData'
+import type {CartTotals, Coupon, Customer, PaymentMethod, ShippingMethod} from '../../types'
+import {couponDiscount} from '../../utils/coupon'
+import {purchaseApi, usePaymentsData} from '../../store/purchaseApi'
 import {useCart} from '../../hooks/useCart'
-import {getPaymentMethods} from '../../services/checkoutService'
-import {submitCheckoutOrder} from '../../services/orderService'
-import {clearCheckoutDrafts, readPaymentDraft, writePaymentDraft} from '../../utils/checkoutStorage'
+import {useDispatch} from 'react-redux'
+import {paymentChanged, checkoutReloaded, checkoutDraft, usePurchaseSelector} from '../../store/purchaseStore'
+import {clearCheckoutDrafts, writePaymentDraft} from '../../utils/checkoutStorage'
 import type {OnlinePaymentResult, PaymentDraft} from '../../utils/checkoutStorage'
 import {formatVND} from '../../utils/currency'
 import {rememberOrder} from '../../utils/orderHistoryStorage'
 
 type Props = {
+    coupon?: Coupon
+    onSubmitting: (value: boolean) => void
     checkoutKey: string
     customer: Customer
     shippingMethod: ShippingMethod
     totals: CartTotals
 }
 
-export default function CheckoutPaymentMethods({checkoutKey, customer, shippingMethod, totals}: Props) {
+export default function CheckoutPaymentMethods({checkoutKey, customer, shippingMethod, totals, coupon, onSubmitting}: Props) {
     const navigate = useNavigate()
     const {clearCart} = useCart()
-    const {data, retry} = useApiData(getPaymentMethods)
-    const [draft, setDraft] = useState(readPaymentDraft)
+    const {data, retry} = usePaymentsData()
+    const dispatch = useDispatch()
+    const draft = usePurchaseSelector(state => state.checkout.payment)
+    const [submitOrder] = purchaseApi.usePlaceOrderMutation()
     const [saveError, setSaveError] = useState(false)
     const [submitting, setSubmitting] = useState(false)
     const [orderError, setOrderError] = useState('')
@@ -45,7 +50,7 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
             setSaveError(true)
             return false
         }
-        setDraft(next)
+        dispatch(paymentChanged(next))
         setSaveError(false)
         return true
     }
@@ -73,7 +78,12 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
 
     async function placeOrder() {
         if (sending.current || !canPlaceOrder || !selected || !draft || draft.orderId) return
+        if (coupon && !couponDiscount(coupon, totals.subtotal)) {
+            setOrderError('Mã giảm giá không còn hợp lệ. Vui lòng chọn lại hoặc bỏ mã.')
+            return
+        }
         sending.current = true
+        onSubmitting(true)
         setSubmitting(true)
         setOrderError('')
         try {
@@ -81,7 +91,7 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
             const attempt = {...draft, requestId}
             if (!draft.requestId && !persist(attempt)) return
             const now = new Date().toISOString()
-            const result = await submitCheckoutOrder({
+            const result = await submitOrder([{
                 ...totals,
                 customer,
                 shippingMethod,
@@ -95,8 +105,9 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
                 statusHistory: [{status: 'pending', at: now}],
                 requestId,
                 requestFingerprint: JSON.stringify([checkoutKey, selected.id]),
-            }, Boolean(draft.requestId))
+            }, Boolean(draft.requestId)]).unwrap()
             const historySaved = result.ok && rememberOrder(result.data.id)
+            if (historySaved) dispatch(purchaseApi.util.invalidateTags(['History']))
             if (!mounted.current) return
             if (!result.ok) {
                 setOrderError(result.message)
@@ -107,12 +118,13 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
                 ...attempt, orderId: order.id, paymentMethodId: order.paymentMethodId, code: order.paymentMethod.code,
                 paymentStatus: order.paymentStatus, onlineResult: order.paymentStatus === 'paid' ? 'success' : null,
             }
-            if (!persist(completed)) setDraft(completed)
+            if (!persist(completed)) dispatch(paymentChanged(completed))
             const query = new URLSearchParams()
             if (!historySaved) query.set('loi-lich-su', '1')
             try {
                 clearCart(totals.items)
                 clearCheckoutDrafts()
+                dispatch(checkoutReloaded(checkoutDraft()))
             } catch {
                 query.set('kiem-tra-gio', '1')
             }
@@ -121,6 +133,7 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
             setOrderError('Chưa xác nhận được đơn hàng. Vui lòng thử lại.')
         } finally {
             sending.current = false
+            onSubmitting(false)
             setSubmitting(false)
         }
     }
@@ -147,9 +160,9 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
     let message = ''
     if (selected?.code === 'COD') message = 'Đã chọn COD. Chưa thanh toán.'
     if (selected?.code === 'ONLINE_DEMO') {
-        if (paid) message = 'Thanh toán mô phỏng thành công. Đã thanh toán.'
-        else if (draft?.onlineResult === 'failure') message = 'Thanh toán mô phỏng thất bại. Bạn có thể thử lại.'
-        else if (draft?.onlineResult === 'cancelled') message = 'Đã hủy thanh toán mô phỏng. Bạn có thể thử lại.'
+        if (paid) message = 'Thanh toán thành công. Đã thanh toán.'
+        else if (draft?.onlineResult === 'failure') message = 'Thanh toán thất bại. Bạn có thể thử lại.'
+        else if (draft?.onlineResult === 'cancelled') message = 'Đã hủy thanh toán. Bạn có thể thử lại.'
         else message = 'Chưa thanh toán.'
     }
 
@@ -170,8 +183,7 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
                 <p className="recipient-message is-error" role="alert">Không lưu được lựa chọn thanh toán. Vui lòng thử
                     lại.</p>}
             {selected?.code === 'ONLINE_DEMO' && !paid && (
-                <button className="recipient-shipping__retry" type="button" onClick={() => choose(selected)}>Mô phỏng
-                    lại thanh toán</button>
+                <button className="recipient-shipping__retry" type="button" onClick={() => choose(selected)}>Thanh toán lại</button>
             )}
             {orderError && <p className="recipient-message is-error" role="alert">{orderError}</p>}
             <div className="recipient-actions">
@@ -185,7 +197,7 @@ export default function CheckoutPaymentMethods({checkoutKey, customer, shippingM
                         event.preventDefault()
                         finishSimulation('cancelled')
                     }}>
-                <h2 id="payment-demo-title">Thanh toán online mô phỏng</h2>
+                <h2 id="payment-demo-title">Thanh toán online</h2>
                 <p>Tổng thanh toán <strong>{formatVND(totals.total)}</strong></p>
                 <div className="recipient-actions checkout-payment__dialog-actions">
                     <button type="button" onClick={() => finishSimulation('success')}>Thành công</button>

@@ -1,7 +1,5 @@
 import { Link, useSearchParams } from 'react-router-dom'
-import { useCallback } from 'react'
-import { useApiData } from '../hooks/useApiData'
-import { getOrderById } from '../services/orderService'
+import {useOrderData} from '../store/purchaseApi'
 import type { Order } from '../types'
 import { formatVND } from '../utils/currency'
 import { DELIVERY_LABELS, formatDateTime, PAYMENT_LABELS } from '../utils/orderDisplay'
@@ -94,8 +92,7 @@ function OrderDetails({ order }: { order: Order }) {
 }
 
 function OrderConfirmation({ orderId }: { orderId: number }) {
-    const loadOrder = useCallback(() => getOrderById(orderId), [orderId])
-    const { data, retry } = useApiData(loadOrder)
+    const {data, retry} = useOrderData(orderId)
     const [searchParams] = useSearchParams()
     const checkCart = searchParams.get('kiem-tra-gio') === '1'
     const refreshing = data === null

@@ -12,6 +12,8 @@ import FavoriteButton from '../components/FavoriteButton'
 import { useRouteId } from '../hooks/useRouteId'
 import RouteError from '../route/Error'
 import RelatedProducts from '../components/RelatedProducts'
+import CompareButton from '../components/CompareButton'
+import { careLevelLabel, sunlightLabel } from '../utils/plantConditions'
 
 function ProductDetail({productId}: { productId: number }) {
     const load = useCallback(() => getProductById(productId), [productId])
@@ -60,12 +62,21 @@ function ProductDetail({productId}: { productId: number }) {
                                     <dd>{product.bagSize}</dd>
                                 </div>
                                 <div>
+                                    <dt>Ánh sáng</dt>
+                                    <dd>{sunlightLabel(product.sunlight)}</dd>
+                                </div>
+                                <div>
+                                    <dt>Độ dễ chăm</dt>
+                                    <dd>{careLevelLabel(product.careLevel)}</dd>
+                                </div>
+                                <div>
                                     <dt>Tình trạng</dt>
                                     <dd>{product.stock > 0 ? `Còn ${product.stock} cây` : 'Hết hàng'}</dd>
                                 </div>
                             </dl>
                             <AddToCartForm product={product} />
                             <FavoriteButton product={product} variant="detail" />
+                            <CompareButton product={product} variant="detail" />
                             <p>{product.description}</p>
                             <h2>Hướng dẫn chăm sóc</h2>
                             <ul className="care-guide">

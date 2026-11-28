@@ -1,23 +1,23 @@
 import {Link, useNavigate} from 'react-router-dom'
 import {useState} from 'react'
 import type {FormEvent} from 'react'
-import type {Customer} from '../types'
+import {useDispatch} from 'react-redux'
+import {usePurchaseSelector, recipientChanged, paymentChanged} from '../store/purchaseStore'
 import {normalizeRecipient, RECIPIENT_LIMITS, validateRecipient} from '../utils/recipient'
 import type {RecipientErrors, RecipientField} from '../utils/recipient'
-import {readRecipientDraft, writeRecipientDraft} from '../utils/recipientStorage'
+import {writeRecipientDraft} from '../utils/recipientStorage'
 import {clearCompletedPayment} from '../utils/checkoutStorage'
 import '../style/CheckoutRecipientPage.css'
 
 export default function CheckoutRecipientPage() {
     const navigate = useNavigate()
-    const [initial] = useState(readRecipientDraft)
-    const [customer, setCustomer] = useState<Customer>(initial.customer)
+    const dispatch = useDispatch()
+    const {customer, error: storageError} = usePurchaseSelector(state => state.checkout.recipient)
+    const completed = usePurchaseSelector(state => state.checkout.payment?.orderId)
     const [errors, setErrors] = useState<RecipientErrors>({})
-    const [storageError, setStorageError] = useState(initial.error)
 
     function updateField(field: RecipientField, value: string) {
         const next = {...customer, [field]: value}
-        setCustomer(next)
         if (errors[field]) {
             const message = validateRecipient(next)[field]
             setErrors(current => ({...current, [field]: message}))
@@ -25,9 +25,9 @@ export default function CheckoutRecipientPage() {
 
         try {
             writeRecipientDraft(next)
-            setStorageError(null)
+            dispatch(recipientChanged({customer: next, error: null}))
         } catch (error) {
-            setStorageError(error instanceof Error ? error.message : 'Chưa lưu được thông tin người nhận.')
+            dispatch(recipientChanged({customer: next, error: error instanceof Error ? error.message : 'Chưa lưu được thông tin người nhận.'}))
         }
     }
 
@@ -52,11 +52,11 @@ export default function CheckoutRecipientPage() {
         try {
             writeRecipientDraft(normalized)
             clearCompletedPayment()
-            setCustomer(normalized)
-            setStorageError(null)
+            if (completed) dispatch(paymentChanged(null))
+            dispatch(recipientChanged({customer: normalized, error: null}))
             navigate('/thanh-toan/giao-hang')
         } catch (error) {
-            setStorageError(error instanceof Error ? error.message : 'Chưa lưu được thông tin người nhận.')
+            dispatch(recipientChanged({customer: normalized, error: error instanceof Error ? error.message : 'Chưa lưu được thông tin người nhận.'}))
         }
     }
 

@@ -19,6 +19,7 @@ import ProductAdminPage from '../pages/ProductAdminPage'
 import NewsAdminPage from '../pages/NewsAdminPage'
 import OrderAdminPage from '../pages/OrderAdminPage'
 import FavoritesPage from '../pages/FavoritesPage'
+import ComparePage from '../pages/ComparePage'
 import LoginPage from '../pages/LoginPage'
 import RegisterPage from '../pages/RegisterPage'
 import AccountPage from '../pages/AccountPage'
@@ -47,6 +48,7 @@ export default function Router() {
                     <Route path="lien-he" element={<ContactPage/>}/>
                     <Route path="goc-cham-soc" element={<Navigate to="/#footer-care-title" replace/>}/>
                     <Route path="yeu-thich" element={<FavoritesPage/>}/>
+                    <Route path="so-sanh" element={<ComparePage/>}/>
                     <Route path="gio-hang" element={<CartPage/>}/>
                     <Route path="dang-nhap" element={<LoginPage/>}/>
                     <Route path="dang-ky" element={<RegisterPage/>}/>

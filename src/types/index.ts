@@ -13,6 +13,10 @@ export type Banner = {
 
 export type BagSize = 'Bầu ươm' | 'Bầu nhỏ'
 
+export type Sunlight = 'full' | 'partial' | 'shade'
+
+export type CareLevel = 'easy' | 'medium' | 'hard'
+
 export type NewProduct = {
     name: string
     categoryId: number
@@ -20,6 +24,8 @@ export type NewProduct = {
     stock: number
     heightCm: number
     bagSize: BagSize
+    sunlight: Sunlight
+    careLevel: CareLevel
     imageUrl: string
     description: string
     careGuide: string
@@ -80,6 +86,7 @@ export type OrderItem = {
 }
 
 export type NewOrder = {
+    couponCode?: string
     customer: Customer
     items: OrderItem[]
     shippingMethodId: number
@@ -106,8 +113,17 @@ export type CartQuote = {
 }
 
 export type CartTotals = CartQuote & {
+    discount?: number
+    couponCode?: string
     shippingFee: number
     total: number
+}
+
+export type Coupon = {
+    code: string
+    amount: number
+    minSubtotal: number
+    expiresAt: string
 }
 
 export type QuoteRequest = {

@@ -4,6 +4,7 @@ import {formatVND} from '../utils/currency'
 import '../style/ProductCard.css'
 import FavoriteButton from './FavoriteButton'
 import AddToCartForm from './AddToCartForm'
+import CompareButton from './CompareButton'
 
 type ProductCardProps = {
     product: Product
@@ -43,6 +44,7 @@ function ProductCard({product, categoryName}: ProductCardProps) {
 
                 <p className="product-card__price">{formatVND(product.price)}</p>
                 <AddToCartForm product={product} showQuantity={false}/>
+                <CompareButton product={product}/>
             </div>
         </article>
     )
