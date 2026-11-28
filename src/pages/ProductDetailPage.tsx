@@ -12,6 +12,7 @@ import FavoriteButton from '../components/FavoriteButton'
 import { useRouteId } from '../hooks/useRouteId'
 import RouteError from '../route/Error'
 import RelatedProducts from '../components/RelatedProducts'
+import CompareButton from '../components/CompareButton'
 
 function ProductDetail({productId}: { productId: number }) {
     const load = useCallback(() => getProductById(productId), [productId])
@@ -66,6 +67,7 @@ function ProductDetail({productId}: { productId: number }) {
                             </dl>
                             <AddToCartForm product={product} />
                             <FavoriteButton product={product} variant="detail" />
+                            <CompareButton product={product} variant="detail" />
                             <p>{product.description}</p>
                             <h2>Hướng dẫn chăm sóc</h2>
                             <ul className="care-guide">

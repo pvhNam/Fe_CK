@@ -3,6 +3,7 @@ import {Outlet, useLocation, useNavigationType} from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ContactIcons from '../components/ContactIcons'
+import CompareBar from '../components/CompareBar'
 import '../style/App.css'
 
 export default function Layout() {
@@ -41,6 +42,7 @@ export default function Layout() {
             <Outlet/>
             <Footer/>
             <ContactIcons/>
+            <CompareBar/>
         </div>
     )
 }
